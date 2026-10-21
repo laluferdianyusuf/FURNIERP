@@ -1,0 +1,6 @@
+{
+  "name": "FurniERP - Atelier Furniture ERP",
+  "description": "Sistem ERP komprehensif operasional dan finansial atelier mebel: POS kasir showroom, pesanan kustom & SPK bengkel, BOM HPP, persediaan kayu & barang jadi, cash flow riil, piutang, serta analisis laba rugi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

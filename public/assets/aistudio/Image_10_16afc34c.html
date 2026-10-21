@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-fixed-dim":"#eabea1","on-background":"#1c1c19","primary":"#5f402a","surface-dim":"#dcdad5","outline":"#82746d","on-secondary-container":"#795f51","surface":"#fcf9f4","secondary-fixed-dim":"#e1c0af","error":"#ba1a1a","on-surface":"#1c1c19","primary-container":"#795740","on-primary-fixed-variant":"#5f402a","inverse-surface":"#31302d","on-primary-container":"#fdcfb2","on-secondary":"#ffffff","background":"#fcf9f4","on-secondary-fixed":"#29170d","error-container":"#ffdad6","on-secondary-fixed-variant":"#594235","outline-variant":"#d4c3ba","tertiary":"#61401f","surface-container-lowest":"#ffffff","on-tertiary":"#ffffff","on-tertiary-fixed":"#2d1600","tertiary-container":"#7b5734","on-tertiary-container":"#ffd0a7","surface-tint":"#795740","secondary-container":"#ffdbca","surface-container-low":"#f6f3ee","surface-container-highest":"#e5e2dd","surface-bright":"#fcf9f4","primary-fixed":"#ffdcc6","on-primary-fixed":"#2d1605","on-tertiary-fixed-variant":"#61401f","inverse-primary":"#eabea1","inverse-on-surface":"#f3f0eb","on-error-container":"#93000a","tertiary-fixed-dim":"#eebd93","on-surface-variant":"#50453e","on-error":"#ffffff","surface-container-high":"#ebe8e3","secondary-fixed":"#ffdbca","surface-variant":"#e5e2dd","on-primary":"#ffffff","tertiary-fixed":"#ffdcbf","surface-container":"#f0ede9","secondary":"#73594b"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","gutter-compact":"0.5rem","space-xs":"0.25rem","margin-mobile":"1rem","gutter":"1rem","space-xl":"2rem","space-md":"1rem","margin":"1.5rem","space-lg":"1.5rem"},"fontFamily":{"headline-lg":["Plus Jakarta Sans"],"financial-sm":["Inter"],"financial-lg":["Inter"],"label-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"financial-md":["Inter"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"financial-xl":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"500"}],"financial-lg":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"financial-xl":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-primary z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-md pt-space-lg pb-space-md"><div class="flex items-center gap-space-sm"><img alt="FurniERP Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UMfI2EWyHZej3Vl2CBTGXgMvWw3_8s_RBfsjsKMmLR2TXSjntXE3HZjisYZNTejx8nwxl7W23o3JjtOSD1MCp2qC0wFyw7CW_WnOUi3YwMGzmn9MpsMF_LZ0ZLK0jeBQIztyiG3uqPTh3PdwSHWnvzBavmNtaNegn-WrU6nhDKAUESQPo6KnnGqacMdf84l_soAnPU_xsSxb7fPhD_1U_WKNKCiL3dlqXeqXXoMNBn3Niy_uLYeY1QUV0"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FurniERP</span><div class="flex items-center gap-1.5 mt-0.5"><span class="font-label-sm text-label-sm text-primary-fixed-dim">Atelier Operations</span><span class="px-1.5 py-0.2 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm">Owner Mode</span></div></div></div></div><nav class="flex flex-col px-space-sm space-y-space-md mt-space-sm" data-active-classes="bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full"><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Utama</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="dashboard" href="#">Dashboard</a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Operasional</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="pos" href="#">Penjualan / POS</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="orders" href="#">Pesanan</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="customers" href="#">Pelanggan</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="products" href="#">Produk</a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Persediaan</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="inventory" href="#">Stok Selesai</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="raw-materials" href="#">Bahan Baku</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="production" href="#">Produksi</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="shipping" href="#">Pengiriman</a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Keuangan</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="cash-flow" href="#">Cash Flow</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="expenses" href="#">Pengeluaran</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="receivables" href="#">Piutang</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="financial-reports" href="#">Laporan Keuangan</a></div><div class="flex flex-col gap-0.5 pb-space-lg"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Lainnya</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="ai-advisor" href="#">Tanya AI</a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="settings" href="#">Pengaturan</a></div></nav></div></aside><div class="pl-60 min-h-screen flex flex-col bg-background"><header class="fixed top-0 left-60 right-0 h-16 z-40 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-base">storefront</span><span>FurniERP</span><span class="text-outline-variant">/</span><span class="text-on-surface font-medium">Executive Overview</span></div><div class="hidden xl:flex items-center bg-surface-container px-space-sm py-1.5 rounded-lg w-80 text-on-surface-variant focus-within:ring-1 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><span class="material-symbols-outlined text-base mr-2 text-outline">search</span><input class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari transaksi, produk, pelanggan..." type="text"/><kbd class="text-label-sm font-label-sm bg-surface-container-high px-1.5 py-0.5 rounded text-on-surface-variant">/</kbd></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-base text-primary">calendar_today</span><span>Rabu, 23 Okt 2024</span></div><div class="relative flex items-center"><button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors relative" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-semibold text-on-error">2</span></button></div><button class="flex items-center gap-1.5 bg-primary-container text-on-primary px-space-md py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-base">add</span><span>+ Transaksi</span></button><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjD297V4VN7MHXlVKzV90nFbA3hKCfuzzCFZsl3NBYl1BhN8BEp94sbq65nMXFktn77ePVRM2RcGcmQ0x_HmDtuMVbA7xYRGN8CBLhrRl9bbhG9E-aFGkKD8IUCBTxrR9I8bAhFTiYgSdLJ4oeCQsyq17Qx_8hGK1U41HZiCSjZD84I6aqIrf9CrOmuialhvjh31HEq4__Kfx8RjnuqNd4p-Im2E8L5-8qAOPttoNzyW0oUZstpRy2"/><div class="hidden lg:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface font-medium leading-tight">Hendra Wijaya</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Owner</span></div></div></div></header><main class="w-full pt-16 bg-background flex-1 px-space-lg py-space-lg"><div class="flex flex-col w-full">
+<!-- Sub-Header / Control Bar -->
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md mb-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm tracking-wider uppercase">
+<span>FurniERP</span>
+<span>/</span>
+<span>Operasional</span>
+<span>/</span>
+<span class="text-primary font-semibold">Manajemen Produk</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-semibold tracking-tight">Katalog &amp; Manajemen Produk</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+        Kelola struktur HPP (Harga Pokok Produksi), penetapan tier harga otomatis (Retail, Reseller, Grosir), serta sinkronisasi stok fisik vs reservasi SPK.
+      </p>
+</div>
+<!-- Global Actions -->
+<div class="flex items-center flex-wrap gap-space-sm">
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-surface-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Export Katalog CSV/PDF</span>
+</button>
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-surface-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Penyesuaian Massal Tier &amp; HPP</span>
+</button>
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>+ Tambah Produk Baru</span>
+</button>
+</div>
+</div>
+<!-- Metric Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-lg">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Total Produk Terdaftar</span>
+<span class="p-1.5 rounded-lg bg-surface-container-low text-primary">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+</span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-on-surface tracking-tight mb-1">124 SKU</div>
+<div class="font-financial-sm text-financial-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+<span>86 Ready Stock</span>
+<span class="text-outline-variant">•</span>
+<span>38 Custom / PO MTO</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Nilai Persediaan HPP</span>
+<span class="p-1.5 rounded-lg bg-surface-container-low text-primary">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-financial-xl text-financial-xl text-on-surface tracking-tight">Rp 384.200.000</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-surface-container text-primary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span>+5.4%
+          </span>
+</div>
+<div class="font-financial-sm text-financial-sm text-on-surface-variant">
+          Total 148 unit mebel jadi di gudang &amp; showroom
+        </div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Rata-Rata Margin Kotor</span>
+<span class="p-1.5 rounded-lg bg-surface-container-low text-primary">
+<span class="material-symbols-outlined text-[18px]">pie_chart</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-financial-xl text-financial-xl text-on-surface tracking-tight">42.8%</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-secondary-container text-on-secondary-fixed">Target: &gt;40%</span>
+</div>
+<div class="font-financial-sm text-financial-sm text-on-surface-variant truncate">
+          Retail ~48% • Reseller ~38% • Grosir ~32%
+        </div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-error">Peringatan Buffer Stok</span>
+<span class="p-1.5 rounded-lg bg-error-container text-on-error-container">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-financial-xl text-financial-xl text-error tracking-tight">4 SKU Kritis</span>
+<a class="font-label-sm text-label-sm text-primary hover:underline flex items-center gap-0.5" href="#">
+            Tinjau 4 SKU <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</a>
+</div>
+<div class="font-financial-sm text-financial-sm text-on-surface-variant">
+          Di bawah buffer minimum, butuh penerbitan SPK
+        </div>
+</div>
+</div>
+</div>
+<!-- Filter & Utility Toolbar -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm mb-space-md flex flex-col gap-3">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm">
+<!-- Search Input -->
+<div class="relative flex-1 max-w-xl">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-20 py-2 bg-surface-container-low rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-all" placeholder="Cari nama mebel, SKU (e.g. TB-TRM-200), material kayu, dimensi..." type="text"/>
+<span class="absolute right-3 top-2 px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-[10px]">Ctrl + K</span>
+</div>
+<!-- Controls Right: Sorting & Display Toggle -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-lg">
+<span class="font-label-sm text-label-sm text-secondary">Tipe:</span>
+<select class="bg-transparent font-label-md text-label-md text-on-surface focus:outline-none cursor-pointer">
+<option>Semua Status</option>
+<option>Ready Stock</option>
+<option>Custom / PO (MTO)</option>
+</select>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-lg">
+<span class="font-label-sm text-label-sm text-secondary">Sortir:</span>
+<select class="bg-transparent font-label-md text-label-md text-on-surface focus:outline-none cursor-pointer">
+<option>Margin Tertinggi (%)</option>
+<option>Stok Fisik Terbanyak</option>
+<option>Stok Kritis / Menipis</option>
+<option>HPP Tertinggi</option>
+</select>
+</div>
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="p-1 rounded bg-surface-container-lowest text-primary shadow-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">table_rows</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Pills Bar -->
+<div class="flex items-center justify-between gap-2 pt-2 overflow-x-auto">
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm transition-colors" type="button">
+          Semua Kategori (124)
+        </button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+          Meja Makan &amp; Kursi (42)
+        </button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+          Sofa &amp; Living (34)
+        </button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+          Kamar Tidur &amp; Lemari (28)
+        </button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+          Office &amp; Custom Proyek (20)
+        </button>
+</div>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant hidden md:inline-block">
+        Menampilkan 1-6 dari 124 produk
+      </span>
+</div>
+</div>
+<!-- Main Content Split Workspace -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+<!-- Left: Data Grid / High-Density Ledger Table (70% on XL: 8 columns) -->
+<div class="lg:col-span-8 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-secondary font-label-sm text-label-sm uppercase tracking-wider select-none">
+<th class="py-3 px-space-md font-semibold">Produk &amp; Spesifikasi</th>
+<th class="py-3 px-space-sm font-semibold text-center">Tipe / PO</th>
+<th class="py-3 px-space-sm font-semibold text-right">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary">lock</span>
+                  HPP (COGS)
+                </span>
+</th>
+<th class="py-3 px-space-md font-semibold">3-Tier Harga &amp; Margin</th>
+<th class="py-3 px-space-md font-semibold text-right">Posisi Stok</th>
+<th class="py-3 px-space-sm font-semibold text-center">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm">
+<!-- Row 1: SELECTED ACTIVE ITEM (TB-TRM-200) -->
+<tr class="bg-surface-container-low/70 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Editorial studio photo of a massive solid suar wood dining table with live edge slab top, matte polyurethane finish, heavy matte black steel legs in an architectural loft setting with warm cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2hGN7-jtQwSJHE5tiWbx-_4IW9wWvvyj9nm2iL0oNgKt6wHMwPCQqGai6WxtpKykXVJN08usl9oDFh139VvP2jUtccSoXHddYB74BXxeMmm2XYA60yMhbgJvDyyyXX-fQvUURz6i50Ii9utHC3xvpnr21HY2DNOdnt4ic1aliX1YyadWwXo0cM4C9m6cSgg7gg6bNBa135CshiMLi3Ka2_M_VxNTcVyRIkctLyG1oOhAw4JSZ49A_"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Meja Makan Trembesi 200cm</span>
+<span class="px-1.5 py-0.2 rounded bg-primary text-on-primary text-[10px] font-mono font-medium">TB-TRM-200</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kayu Suar Utuh • 200×90×78cm • Kaki Besi</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container text-primary">
+                  Ready Stock
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 2.850.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 4 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-lowest p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">4.800K</span>
+<span class="text-[10px] text-primary font-medium">+40.6%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5 bg-surface-container-low/50 rounded">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">4.500K</span>
+<span class="text-[10px] text-secondary font-medium">+36.7%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">4.200K</span>
+<span class="text-[10px] text-outline font-medium">+32.1%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">notification_important</span>
+                    1 Siap Jual
+                  </span>
+<span class="text-[10px] text-on-surface-variant">Fisik 3 • SPK 2</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" title="Edit Formula" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" title="Cetak Barcode Label" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Sofa Scandinavian -->
+<tr class="hover:bg-surface-container-low/40 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Editorial product photo of an artisanal 3-seater Scandinavian sofa upholstered in textured warm oatmeal linen fabric with solid tapered walnut wood legs in a serene minimalist Japanese modern living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJoLzMBzizY32-aLmy4RDOTvgolTGjvTkvodoWLWFprsesaGWDf8qm80BcUz2a4UPHv5lfoz4FFNRNGGnHqU89Gf38bsTU3JqggNeE9Gt5FH3OvRfrq7QeeH04NwHTn0Y3QUtniA8CuPg66lxy2qxg_dBGOVWxKEvUeEXbXMnFpUyHgQs8G26xmBf2-J4D74Jg7TwH5DqcrhbWFqfQFs9vnIcPh3vRZd7zDC6-dJuGzjGRAMdlWoVc"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Sofa 3-Seater Malmo Linen</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface text-[10px] font-mono font-medium">SF-MLM-03</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kain Linen Belgia • Busa Royal LG • Rangka Jati</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-low text-secondary">
+                  Ready Stock
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 3.150.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 6 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low/40 p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">5.850K</span>
+<span class="text-[10px] text-primary font-medium">+46.1%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">5.200K</span>
+<span class="text-[10px] text-secondary font-medium">+39.4%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">4.800K</span>
+<span class="text-[10px] text-outline font-medium">+34.3%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-primary">6 Siap Jual</span>
+<span class="text-[10px] text-on-surface-variant">Fisik 7 • SPK 1</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Lemari Kayu Jati Solid -->
+<tr class="hover:bg-surface-container-low/40 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Editorial catalog photograph of a tall mid-century modern solid teak wood wardrobe credenza with cane rattan door accents and brass hardware, warm directional daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoUAVNJ-bDddBKURtNHebYYneMlIh5OO5SGbRc9cZEHOj7WOz8aKM8gM-95-POG7be5Qs33_f29WK2fp7mpdb2mZSp4ej9eLDuQ-Suwzk1_tWvn1I-yIEkf7OMxNAAKpOCQL1Rwc5UlHOL6xyPsfUItFMn5GgQxbkq5AIFJCjaL9Byo1ZyX_GUKvRBhoCa5LQWhFUaJeSee6ih18rsprtLYDcVG5KXqLy2Y3ogqpwfyMs64MEZFWF5"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Lemari Pakaian Jati 3 Pintu Rotan</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface text-[10px] font-mono font-medium">LM-JTR-3P</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kayu Jati Solid Perhutani • Anyaman Rotan Alami</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-container text-on-secondary-fixed">
+                  PO 14-21 Hari
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 5.400.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 8 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low/40 p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">9.800K</span>
+<span class="text-[10px] text-primary font-medium">+44.8%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">8.900K</span>
+<span class="text-[10px] text-secondary font-medium">+39.3%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">8.200K</span>
+<span class="text-[10px] text-outline font-medium">+34.1%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-secondary">MTO (On Dem.)</span>
+<span class="text-[10px] text-on-surface-variant">Fisik 0 • SPK Aktif 3</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Kursi Makan Wishbone Kayu Jati -->
+<tr class="hover:bg-surface-container-low/40 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Modern artisanal solid teak dining chair inspired by Hans Wegner Wishbone design with handwoven paper cord seat, warm studio lighting with natural wood grain texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgTsoWd8gHYhLWx_-1BS6S0hv7KkwzynIjth4HzAY-Zc8lQoiTId82semxoEvMk35TGCqLwST-h8G4pJtkWUMrsy5J5ZW3VaTRyDp5N6fxVH76_HEi7RwhZAM0fG1nK3U3p3XU71ntzq5abu9QNkULG4-Qkr7ZYYg8oAMTacLGYErwWVABNYYV2ZUc6FX14W954T6F1HvIedyQ32D-ogeUdvkV-9v1ED_0dVXOn6elyndFsTLSRGay"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Kursi Makan Wishbone CH24 Jati</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface text-[10px] font-mono font-medium">KR-WBN-01</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kayu Jati Solid • Dudukan Paper Cord Denmark</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-low text-secondary">
+                  Ready Stock
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 650.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 3 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low/40 p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">1.250K</span>
+<span class="text-[10px] text-primary font-medium">+48.0%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">1.050K</span>
+<span class="text-[10px] text-secondary font-medium">+38.1%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">920K</span>
+<span class="text-[10px] text-outline font-medium">+29.3%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-primary">18 Siap Jual</span>
+<span class="text-[10px] text-on-surface-variant">Fisik 24 • SPK 6</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Credenza TV / Buffet Minimalis -->
+<tr class="hover:bg-surface-container-low/40 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Editorial presentation of a horizontal low credenza TV console crafted in natural smoked oak and solid sungkai wood, fluted wood slat sliding doors, minimalist Japanese aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2rRcs80J0EtdpBFMZ6RccuAq-ip9N45AgKRT6TP5Jf-wKig9IBiSq-MlDB8CmTac99RZiH-WO2vBNjLwlfhP1NHD9d5E7PGBV7_eV4HthzE92fkVBG-NqzepK_rbNPaDWr1v-6pkumETwCjGXfago-QyEx55kqVrpHMl7R0nm9yD9hKXBuOMqQ6DpLrXJeUE6ds6DPIKq2SnTsTkN97g0gzVUPw0jTJ269M_-zK2ZjdaIITO-uiJv"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Credenza TV Slats Sungkai 180cm</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface text-[10px] font-mono font-medium">CR-SK-180</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kayu Sungkai Solid • Pintu Kisi Slats • Soft-close</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-low text-secondary">
+                  Ready Stock
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 2.100.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 5 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low/40 p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">3.850K</span>
+<span class="text-[10px] text-primary font-medium">+45.4%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">3.400K</span>
+<span class="text-[10px] text-secondary font-medium">+38.2%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">3.100K</span>
+<span class="text-[10px] text-outline font-medium">+32.2%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-primary">4 Siap Jual</span>
+<span class="text-[10px] text-on-surface-variant">Fisik 5 • SPK 1</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Tempat Tidur Kanopi Jati -->
+<tr class="hover:bg-surface-container-low/40 transition-colors cursor-pointer group">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Editorial interior photography of a luxurious king-size solid teak four-poster canopy bed frame in an Indonesian tropical sanctuary villa bedroom with soft linen draping" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXC5UG3v3aHXwgViE50IiuiCEkaTLWJk1BGepozoyh-Ua8xc8cU4mF_ikN0giQc9oLqvFDOT19LtLDdBWx7KQWEIpdzFYvatnYqEJG1O6vZNJ1czADLCLh-0qbsb_kiwLfwR3vVUBVeJhSikidS6BH3ky10oxNKOZg4xs5-TFQpVU0MC8BiFKGiQWhvEzr3dGSKx1yTBZQm3j3t4epoiBeLko0J6q3gkdIczYQe3y6Rv9Vsh-Mh1do"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface truncate">Tempat Tidur Kanopi King 180×200</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface text-[10px] font-mono font-medium">BD-CNP-180</span>
+</div>
+<span class="font-label-sm text-[11px] text-secondary truncate">Kayu Jati Grade A TPK • Konstruksi Knock-down</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-container text-on-secondary-fixed">
+                  PO 14-21 Hari
+                </span>
+</td>
+<td class="py-3 px-space-sm text-right">
+<div class="font-financial-md text-financial-md text-on-surface font-semibold">Rp 5.100.000</div>
+<div class="text-[10px] text-on-surface-variant font-mono">BOM 7 Komponen</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low/40 p-1 rounded-lg">
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Retail</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">9.200K</span>
+<span class="text-[10px] text-primary font-medium">+44.5%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Reseller</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">8.300K</span>
+<span class="text-[10px] text-secondary font-medium">+38.5%</span>
+</div>
+<div class="flex flex-col text-left px-1.5 py-0.5">
+<span class="text-[10px] uppercase font-semibold text-secondary">Grosir</span>
+<span class="font-financial-sm text-financial-sm text-on-surface font-semibold">7.650K</span>
+<span class="text-[10px] text-outline font-medium">+33.3%</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md text-right">
+<div class="flex flex-col items-end">
+<span class="font-financial-sm text-financial-sm font-semibold text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">block</span>
+                    0 Siap Jual
+                  </span>
+<span class="text-[10px] text-on-surface-variant">Fisik 2 • SPK 2</span>
+</div>
+</td>
+<td class="py-3 px-space-sm text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-secondary" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="flex flex-col sm:flex-row items-center justify-between p-space-md bg-surface-container-low/40 gap-space-sm select-none">
+<div class="flex items-center gap-2">
+<span class="font-financial-sm text-financial-sm text-on-surface-variant">Baris per halaman:</span>
+<select class="bg-surface-container-lowest font-financial-sm text-financial-sm text-on-surface px-2 py-1 rounded-lg focus:outline-none cursor-pointer">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant ml-2">Total 124 Mebel</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container disabled:opacity-30" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-financial-sm text-financial-sm font-semibold flex items-center justify-center" type="button">1</button>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-financial-sm text-financial-sm flex items-center justify-center" type="button">2</button>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-financial-sm text-financial-sm flex items-center justify-center" type="button">3</button>
+<span class="px-1 text-outline font-financial-sm">...</span>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-financial-sm text-financial-sm flex items-center justify-center" type="button">21</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right: Product Inspector / Detail Drawer Preview (30% on XL: 4 columns) -->
+<div class="lg:col-span-4 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm p-space-md gap-space-md">
+<!-- Panel Header & Badges -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">visibility</span>
+            Detail Produk Terpilih
+          </span>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error-container text-on-error-container flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+            Stok Menipis
+          </span>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-16 h-16 rounded-xl object-cover bg-surface-container flex-shrink-0 shadow-xs" data-alt="Close up architectural detail photograph of solid live edge suar wood dining table showing the natural deep warm wood grain, organic live edge curvature, and precision matte industrial finish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsPJG6KzxAnjMmG_ax-H_RcHg6UCuF0z1oN1Lvi4GydEIjV-MTJj2aEnw61LJWcyr83fEd3FB5y__MOUbm5JLxW_iya3azwZfSxsqO6OOGon8dIJSO6a3h_U1pkf2zv90QJUoN4nYIGZYapqFgbje1u6Ya-UryVYC1HhpuX-E1jsx6hn1MWHqv0VTnMswNJcG9I4gX3BQS5GzHq8A0-NNDBi0ioBTm-YxzMI_T01ed9PFgUMGHi8sD"/>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold leading-snug">
+              Meja Makan Trembesi 200cm
+            </h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-mono text-[11px] font-medium text-primary px-1.5 py-0.2 rounded bg-surface-container">
+                SKU: TB-TRM-200
+              </span>
+<span class="text-[11px] text-on-surface-variant">Meja Makan</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dimensi & Spesifikasi Material -->
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col gap-1.5">
+<span class="font-label-sm text-[11px] font-semibold uppercase tracking-wider text-secondary">
+          Spesifikasi Kayu &amp; Dimensi
+        </span>
+<div class="grid grid-cols-2 gap-2 text-[12px] font-body-sm text-on-surface">
+<div>
+<span class="text-on-surface-variant block text-[10px]">Dimensi P×L×T:</span>
+<span class="font-medium font-mono">200 × 90 × 78 cm</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-[10px]">Tebal Daun Meja:</span>
+<span class="font-medium font-mono">8 cm Solid Slab</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-[10px]">Jenis Kayu:</span>
+<span class="font-medium">Kayu Suar / Trembesi</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-[10px]">Finishing:</span>
+<span class="font-medium">Natural Matte PU</span>
+</div>
+<div class="col-span-2">
+<span class="text-on-surface-variant block text-[10px]">Konstruksi Kaki:</span>
+<span class="font-medium">Besi Hollow 4×8cm Sandblast Powder Coating</span>
+</div>
+</div>
+</div>
+<!-- Owner Cost Breakdown (HPP/COGS) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary">lock</span>
+            Struktur HPP Internal (BOM)
+          </span>
+<span class="font-financial-sm text-financial-sm font-semibold text-primary">Rp 2.850.000</span>
+</div>
+<!-- Inline Visual Breakdown Bar -->
+<div class="w-full h-2 rounded-full overflow-hidden flex bg-surface-container-high">
+<div class="h-full bg-primary" style="width: 58%;" title="Kayu Log Suar: 58%"></div>
+<div class="h-full bg-secondary" style="width: 19%;" title="Tukang Kayu: 19%"></div>
+<div class="h-full bg-tertiary" style="width: 12%;" title="Finishing Melamic: 12%"></div>
+<div class="h-full bg-outline" style="width: 11%;" title="Besi &amp; Hardware: 11%"></div>
+</div>
+<div class="flex flex-col gap-1 text-[12px] font-body-sm text-on-surface divide-y divide-surface-container-low">
+<div class="flex items-center justify-between py-1">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+              Bahan Baku Log Trembesi Utuh
+            </span>
+<span class="font-mono font-medium">Rp 1.650.000</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+              Upah Jasa Tukang Kayu / Perakitan
+            </span>
+<span class="font-mono font-medium">Rp 550.000</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+              Bahan &amp; Jasa Finishing PU Sanded
+            </span>
+<span class="font-mono font-medium">Rp 350.000</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+              Kaki Besi Hollow &amp; Hardware Baut
+            </span>
+<span class="font-mono font-medium">Rp 300.000</span>
+</div>
+</div>
+</div>
+<!-- 3-Tier Margin Simulator Card -->
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col gap-2">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-secondary">
+          Kalkulator &amp; Simulasi Tier Harga
+        </span>
+<div class="flex flex-col gap-1.5">
+<!-- Retail -->
+<div class="bg-surface-container-lowest p-2 rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] font-semibold text-secondary uppercase">Tier 1: Retail End-User</span>
+<span class="font-financial-md text-financial-md font-semibold text-on-surface">Rp 4.800.000</span>
+</div>
+<div class="text-right">
+<span class="text-[11px] font-semibold text-primary block">+Rp 1.950.000</span>
+<span class="text-[10px] text-on-surface-variant font-mono">Margin 40.6%</span>
+</div>
+</div>
+<!-- Reseller -->
+<div class="bg-surface-container-lowest p-2 rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] font-semibold text-secondary uppercase">Tier 2: Reseller / Desainer Interior</span>
+<span class="font-financial-md text-financial-md font-semibold text-on-surface">Rp 4.500.000</span>
+</div>
+<div class="text-right">
+<span class="text-[11px] font-semibold text-primary block">+Rp 1.650.000</span>
+<span class="text-[10px] text-on-surface-variant font-mono">Margin 36.7%</span>
+</div>
+</div>
+<!-- Grosir -->
+<div class="bg-surface-container-lowest p-2 rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] font-semibold text-secondary uppercase">Tier 3: Grosir Proyek B2B (&gt;3 Unit)</span>
+<span class="font-financial-md text-financial-md font-semibold text-on-surface">Rp 4.200.000</span>
+</div>
+<div class="text-right">
+<span class="text-[11px] font-semibold text-primary block">+Rp 1.350.000</span>
+<span class="text-[10px] text-on-surface-variant font-mono">Margin 32.1%</span>
+</div>
+</div>
+</div>
+<!-- Nego Floor Warning Indicator -->
+<div class="p-2 rounded bg-surface-container flex items-start gap-2 text-[11px] font-body-sm text-on-surface">
+<span class="material-symbols-outlined text-primary text-[16px] flex-shrink-0 mt-0.5">verified_user</span>
+<div>
+<span class="font-semibold text-on-surface">Batas Bawah Nego (Owner Floor): </span>
+<span class="font-mono font-semibold text-primary">Rp 3.900.000</span>
+<p class="text-on-surface-variant text-[10px] mt-0.5 leading-tight">
+              Sistem kasir POS akan meminta otorisasi PIN jika harga dinego di bawah Rp 3.900.000 (margin kotor &lt; 25%).
+            </p>
+</div>
+</div>
+</div>
+<!-- Live Stock & Reservation Details -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-[11px] font-semibold uppercase tracking-wider text-secondary">
+          Alokasi Stok &amp; Reservasi SPK
+        </span>
+<div class="grid grid-cols-2 gap-2 text-[12px]">
+<div class="bg-surface-container-low p-2 rounded-lg">
+<span class="text-on-surface-variant block text-[10px]">Fisik Gudang Showroom:</span>
+<span class="font-financial-md font-semibold text-on-surface">3 Unit</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg">
+<span class="text-on-surface-variant block text-[10px]">Booking SPK (PO #2410-089):</span>
+<span class="font-financial-md font-semibold text-secondary">2 Unit</span>
+</div>
+<div class="bg-error-container/40 p-2 rounded-lg">
+<span class="text-on-error-container block text-[10px]">Stok Siap Jual:</span>
+<span class="font-financial-md font-semibold text-error">1 Unit</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg">
+<span class="text-on-surface-variant block text-[10px]">Titik Pesan Ulang (Buffer):</span>
+<span class="font-financial-md font-semibold text-on-surface">2 Unit</span>
+</div>
+</div>
+</div>
+<!-- Action CTAs -->
+<div class="flex flex-col gap-2 pt-1 mt-auto">
+<button class="w-full py-2.5 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary transition-colors shadow-sm flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">calculate</span>
+<span>Edit Formula HPP &amp; Tier Harga</span>
+</button>
+<button class="w-full py-2.5 px-4 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-surface-container transition-colors shadow-sm flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">precision_manufacturing</span>
+<span>Buat SPK Produksi Baru (Restock)</span>
+</button>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-fixed-dim":"#eabea1","on-background":"#1c1c19","primary":"#5f402a","surface-dim":"#dcdad5","outline":"#82746d","on-secondary-container":"#795f51","surface":"#fcf9f4","secondary-fixed-dim":"#e1c0af","error":"#ba1a1a","on-surface":"#1c1c19","primary-container":"#795740","on-primary-fixed-variant":"#5f402a","inverse-surface":"#31302d","on-primary-container":"#fdcfb2","on-secondary":"#ffffff","background":"#fcf9f4","on-secondary-fixed":"#29170d","error-container":"#ffdad6","on-secondary-fixed-variant":"#594235","outline-variant":"#d4c3ba","tertiary":"#61401f","surface-container-lowest":"#ffffff","on-tertiary":"#ffffff","on-tertiary-fixed":"#2d1600","tertiary-container":"#7b5734","on-tertiary-container":"#ffd0a7","surface-tint":"#795740","secondary-container":"#ffdbca","surface-container-low":"#f6f3ee","surface-container-highest":"#e5e2dd","surface-bright":"#fcf9f4","primary-fixed":"#ffdcc6","on-primary-fixed":"#2d1605","on-tertiary-fixed-variant":"#61401f","inverse-primary":"#eabea1","inverse-on-surface":"#f3f0eb","on-error-container":"#93000a","tertiary-fixed-dim":"#eebd93","on-surface-variant":"#50453e","on-error":"#ffffff","surface-container-high":"#ebe8e3","secondary-fixed":"#ffdbca","surface-variant":"#e5e2dd","on-primary":"#ffffff","tertiary-fixed":"#ffdcbf","surface-container":"#f0ede9","secondary":"#73594b"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","gutter-compact":"0.5rem","space-xs":"0.25rem","margin-mobile":"1rem","gutter":"1rem","space-xl":"2rem","space-md":"1rem","margin":"1.5rem","space-lg":"1.5rem"},"fontFamily":{"headline-lg":["Plus Jakarta Sans"],"financial-sm":["Inter"],"financial-lg":["Inter"],"label-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"financial-md":["Inter"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"financial-xl":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"500"}],"financial-lg":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"financial-xl":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-primary z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-md pt-space-lg pb-space-md"><div class="flex items-center gap-space-sm"><img alt="FurniERP Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UMfI2EWyHZej3Vl2CBTGXgMvWw3_8s_RBfsjsKMmLR2TXSjntXE3HZjisYZNTejx8nwxl7W23o3JjtOSD1MCp2qC0wFyw7CW_WnOUi3YwMGzmn9MpsMF_LZ0ZLK0jeBQIztyiG3uqPTh3PdwSHWnvzBavmNtaNegn-WrU6nhDKAUESQPo6KnnGqacMdf84l_soAnPU_xsSxb7fPhD_1U_WKNKCiL3dlqXeqXXoMNBn3Niy_uLYeY1QUV0"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FurniERP</span><div class="flex items-center gap-1.5 mt-0.5"><span class="font-label-sm text-label-sm text-primary-fixed-dim">Atelier Operations</span><span class="px-1.5 py-0.2 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm">Owner Mode</span></div></div></div></div><nav class="flex flex-col px-space-sm space-y-space-md mt-space-sm" data-active-classes="bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full"><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Utama</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="dashboard" href="#"><span>Dashboard</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Operasional</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="pos" href="#"><span>Penjualan / POS</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="orders" href="#"><span>Pesanan</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="customers" href="#"><span>Pelanggan</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="products" href="#"><span>Produk</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Persediaan</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="inventory" href="#"><span>Stok Selesai</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="raw-materials" href="#"><span>Bahan Baku</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="production" href="#"><span>Produksi</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="shipping" href="#"><span>Pengiriman</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Keuangan</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="cash-flow" href="#"><span>Cash Flow</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="expenses" href="#"><span>Pengeluaran</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="receivables" href="#"><span>Piutang</span></a><a class="flex items-center px-space-sm py-2 rounded-lg transition-colors font-body-sm text-body-sm bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full pl-5" data-path="financial-reports" href="#"><span>Laporan Keuangan</span></a></div><div class="flex flex-col gap-0.5 pb-space-lg"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Lainnya</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="ai-advisor" href="#"><span>Tanya AI</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="settings" href="#"><span>Pengaturan</span></a></div></nav></div></aside><div class="pl-60 min-h-screen flex flex-col bg-background"><header class="fixed top-0 left-60 right-0 h-16 z-40 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-base">storefront</span><span>FurniERP</span><span class="text-outline-variant">/</span><span>Keuangan</span><span class="text-outline-variant">/</span><span class="text-on-surface font-semibold">Laporan Keuangan &amp; Laba Rugi</span></div><div class="hidden xl:flex items-center bg-surface-container px-space-sm py-1.5 rounded-lg w-80 text-on-surface-variant focus-within:ring-1 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><span class="material-symbols-outlined text-base mr-2 text-outline">search</span><input class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari transaksi, produk, pelanggan..." type="text"/><kbd class="text-label-sm font-label-sm bg-surface-container-high px-1.5 py-0.5 rounded text-on-surface-variant">/</kbd></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-base text-primary">calendar_today</span><span>Rabu, 23 Okt 2024</span></div><div class="relative flex items-center"><button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors relative" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-semibold text-on-error">2</span></button></div><button class="flex items-center gap-1.5 bg-primary-container text-on-primary px-space-md py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-base">add</span><span>+ Transaksi</span></button><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjD297V4VN7MHXlVKzV90nFbA3hKCfuzzCFZsl3NBYl1BhN8BEp94sbq65nMXFktn77ePVRM2RcGcmQ0x_HmDtuMVbA7xYRGN8CBLhrRl9bbhG9E-aFGkKD8IUCBTxrR9I8bAhFTiYgSdLJ4oeCQsyq17Qx_8hGK1U41HZiCSjZD84I6aqIrf9CrOmuialhvjh31HEq4__Kfx8RjnuqNd4p-Im2E8L5-8qAOPttoNzyW0oUZstpRy2"/><div class="hidden lg:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface font-medium leading-tight">Hendra Wijaya</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Owner</span></div></div></div></header><main class="w-full pt-16 bg-background flex-1 px-space-lg py-space-lg"><div class="flex flex-col w-full space-y-space-lg">
+<!-- TOP HEADER & CONTROLS BAR -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-col space-y-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded bg-secondary-container text-on-secondary-fixed">
+<span class="material-symbols-outlined text-base">account_balance</span>
+</span>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Laporan Keuangan &amp; Analisis Laba Rugi</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl">
+        Laporan performa finansial komprehensif berbasis akrual, analisis laba kotor per kategori mebel, dan audit beban operasional bengkel.
+      </p>
+</div>
+<!-- Quick Action Toolbars -->
+<div class="flex flex-wrap items-center gap-2">
+<!-- Period Selector -->
+<div class="inline-flex p-1 bg-surface-container rounded-lg">
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-on-surface shadow-sm font-semibold transition-all" type="button">
+          Bulan Ini (Okt 2024)
+        </button>
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" type="button">
+          Kuartal 3 (Q3 2024)
+        </button>
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" type="button">
+          Tahun Berjalan (YTD)
+        </button>
+<button class="px-2.5 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">tune</span>
+          Kustom
+        </button>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-lowest text-primary rounded-lg font-label-md text-label-md shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-base">picture_as_pdf</span>
+<span>Lap. Akuntan</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-lowest text-on-surface rounded-lg font-label-md text-label-md shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-base">table_view</span>
+<span>XLSX</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all" type="button">
+<span class="material-symbols-outlined text-base">lock_clock</span>
+<span>Tutup Buku Bulan Ini</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Accounting Standards Notification Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between px-space-md py-2.5 bg-surface-container-low rounded-xl gap-2 shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-lg">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">
+        Metode Pencatatan: <span class="text-primary font-bold">Akrual Proporsional</span> • Dasar HPP: <span class="text-primary font-bold">FIFO / Pesanan Kustom (Job-Order Costing)</span>
+</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant font-financial-sm text-financial-sm">
+<span class="flex items-center gap-1">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-600"></span> Status Buku: Terverifikasi
+      </span>
+<span>|</span>
+<span>Mata Uang: IDR (Rp)</span>
+</div>
+</div>
+<!-- EXECUTIVE FINANCIAL KPI CARDS (5-METRIC HIGH-DENSITY GRID) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- 1. Net Sales -->
+<div class="flex flex-col p-space-md bg-surface-container-lowest rounded-xl shadow-sm justify-between space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Pendapatan Bersih</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 font-financial-sm text-financial-sm font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">trending_up</span> +14.2%
+        </span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-on-surface tracking-tight font-bold">Rp 184.500.000</div>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">
+          Kotor: Rp 192.0M <span class="text-error font-medium">(Diskon Rp 7.5M)</span>
+</p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 88%;"></div>
+</div>
+</div>
+<!-- 2. COGS / HPP -->
+<div class="flex flex-col p-space-md bg-surface-container-lowest rounded-xl shadow-sm justify-between space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Beban Pokok (HPP)</span>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant px-1.5 py-0.5 rounded bg-surface-container">
+          57.1% Omzet
+        </span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-on-surface tracking-tight font-bold">Rp 105.350.000</div>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">
+          Kayu: 64.2M • Upah: 28.5M • Fin: 12.6M
+        </p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden flex">
+<div class="bg-tertiary h-1.5" style="width: 61%;"></div>
+<div class="bg-primary-container h-1.5" style="width: 27%;"></div>
+<div class="bg-outline h-1.5" style="width: 12%;"></div>
+</div>
+</div>
+<!-- 3. Gross Profit -->
+<div class="flex flex-col p-space-md bg-surface-container-lowest rounded-xl shadow-sm justify-between space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Laba Kotor (Gross)</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-financial-sm text-financial-sm font-semibold">
+          Target &gt;40%
+        </span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-emerald-800 tracking-tight font-bold">Rp 79.150.000</div>
+<p class="font-financial-sm text-financial-sm text-emerald-700 mt-1 font-medium">
+          Margin: 42.9% <span class="text-on-surface-variant font-normal">(Sehat atelier mebel)</span>
+</p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-emerald-700 h-1.5 rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+<!-- 4. Operational Expense (OPEX) -->
+<div class="flex flex-col p-space-md bg-surface-container-lowest rounded-xl shadow-sm justify-between space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Beban Operasional</span>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant px-1.5 py-0.5 rounded bg-surface-container">
+          14.5% Omzet
+        </span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-on-surface tracking-tight font-bold">Rp 26.750.000</div>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">
+          Gaji Staf, Sewa Showroom &amp; Kiln Dry
+        </p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 29%;"></div>
+</div>
+</div>
+<!-- 5. Net Operational Profit -->
+<div class="flex flex-col p-space-md bg-surface-container-lowest rounded-xl shadow-sm justify-between space-y-3 bg-gradient-to-br from-surface-container-lowest to-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Laba Bersih (Net)</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-fixed text-primary font-financial-sm text-financial-sm font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">check_circle</span> +Rp 6.8M
+        </span>
+</div>
+<div>
+<div class="font-financial-xl text-financial-xl text-primary tracking-tight font-bold">Rp 52.400.000</div>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">
+          Net Margin: <span class="text-primary font-semibold">28.4%</span> (Sebelum Pajak)
+        </p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+<!-- RECONCILIATION & OWNER CASH FLOW INSIGHT CALLOUT (CRITICAL PRD MANDATE) -->
+<div class="p-space-md bg-surface-container-lowest rounded-xl shadow-sm flex flex-col md:flex-row items-stretch gap-space-md">
+<!-- Icon & Title badge -->
+<div class="flex md:flex-col items-center justify-center p-space-md bg-surface-container rounded-lg min-w-[200px] text-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-1">balance</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Rekonsiliasi Owner</span>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-0.5">Akrual vs Riil Kas</span>
+</div>
+<!-- Core Breakdown Columns -->
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-space-md items-center py-1">
+<!-- Accrual Profit -->
+<div class="flex flex-col pl-2">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-wider">Laba Bersih Akrual</span>
+<span class="font-financial-lg text-financial-lg text-on-surface font-bold mt-1">Rp 52.400.000</span>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-0.5">Pendapatan tuntas - HPP &amp; Beban</span>
+</div>
+<!-- Real Cash Flow -->
+<div class="flex flex-col pl-2">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-wider">Arus Kas Bersih Riil</span>
+<span class="font-financial-lg text-financial-lg text-emerald-800 font-bold mt-1">+Rp 63.650.000</span>
+<span class="font-financial-sm text-financial-sm text-emerald-700 mt-0.5">Termasuk DP Kustom &amp; Pelunasan Piutang</span>
+</div>
+<!-- Variance Insight -->
+<div class="flex flex-col p-3 bg-secondary-container/40 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">insights</span>
+<span class="font-label-sm text-label-sm font-bold text-on-secondary-fixed">Surplus Kas: +Rp 11.250.000</span>
+</div>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">
+          Dipengaruhi penagihan piutang grosir lama <span class="font-semibold text-on-surface">Rp 78.9M</span> &amp; penerimaan DP termin kustom aktif.
+        </p>
+</div>
+</div>
+</div>
+<!-- MAIN DENSE CONTENT: 3:2 SPLIT LAYOUT -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT 7 COLS: FORMAL ACCRUAL P&L STATEMENT (STANDAR AKUNTANSI INDONESIA) -->
+<div class="xl:col-span-7 flex flex-col space-y-space-md">
+<!-- Card Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col space-y-space-md">
+<!-- Header with Sub-tabs -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-sm gap-2">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Format Laporan Laba Rugi (P&amp;L)</h2>
+<p class="font-financial-sm text-financial-sm text-on-surface-variant">Periode 1 Okt 2024 - 31 Okt 2024 • Job-Order Costing</p>
+</div>
+<div class="inline-flex p-0.5 bg-surface-container rounded-lg">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-md bg-surface-container-lowest text-primary font-semibold shadow-sm">P&amp;L Lengkap</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-md text-on-surface-variant hover:text-on-surface">Ringkasan</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-md text-on-surface-variant hover:text-on-surface">Perbandingan Q3</button>
+</div>
+</div>
+<!-- The Structured Accounting Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-2.5 px-3 rounded-l-md font-semibold">Deskripsi Akun Finansial</th>
+<th class="py-2.5 px-3 text-right font-semibold">Sub-Akun (Rp)</th>
+<th class="py-2.5 px-3 text-right rounded-r-md font-semibold">Jumlah Total (Rp)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-financial-md text-financial-md">
+<!-- 1. PENDAPATAN USAHA -->
+<tr class="bg-surface-container/30">
+<td class="py-2 px-3 font-label-md text-label-md font-bold text-primary tracking-wider uppercase" colspan="3">
+                  1. Pendapatan Usaha (Revenue)
+                </td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Penjualan Mebel Ready Stock (Showroom)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">112.500.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Penjualan Mebel Kustom / MTO (SPK Workshop)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">79.500.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Pendapatan Jasa Perakitan &amp; Finishing Khusus</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">4.200.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors text-error">
+<td class="py-2 px-3 pl-6">(Potongan Penjualan &amp; Diskon Nego Kasir)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm font-mono">(11.700.000)</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="bg-surface-container-low font-semibold text-on-surface">
+<td class="py-2.5 px-3 pl-6 font-bold text-primary">Total Pendapatan Bersih (Net Sales)</td>
+<td class="py-2.5 px-3 text-right"></td>
+<td class="py-2.5 px-3 text-right font-bold font-mono text-on-surface">184.500.000</td>
+</tr>
+<!-- 2. BEBAN POKOK PENJUALAN (HPP) -->
+<tr class="bg-surface-container/30">
+<td class="py-2 px-3 font-label-md text-label-md font-bold text-primary tracking-wider uppercase pt-4" colspan="3">
+                  2. Beban Pokok Penjualan (HPP / COGS)
+                </td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Persediaan Awal Barang Jadi &amp; Bahan Mentah</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">438.450.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Pembelian Kayu Log Jati &amp; Suar Perhutani</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">48.200.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Pembelian Busa D28, Kain Jok, Cat PU &amp; Thinner</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">18.600.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Upah Tenaga Kerja Langsung (Borongan Tukang Kayu)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">28.500.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Overhead Bengkel (Amplas, Baut, Listrik Kiln Dry Oven)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">14.400.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors text-on-surface-variant">
+<td class="py-2 px-3 pl-6 text-error">(Dikurangi Persediaan Akhir Bulan Okt 2024)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-error font-mono">(444.350.000)</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="bg-surface-container-low font-semibold text-on-surface">
+<td class="py-2.5 px-3 pl-6 font-bold text-on-surface">Total Beban Pokok Penjualan (HPP)</td>
+<td class="py-2.5 px-3 text-right"></td>
+<td class="py-2.5 px-3 text-right font-bold font-mono text-error">(105.350.000)</td>
+</tr>
+<!-- LABA KOTOR SUB-TOTAL ROW -->
+<tr class="bg-secondary-container/20">
+<td class="py-3 px-3 font-headline-sm text-headline-sm font-bold text-emerald-900">LABA KOTOR (GROSS PROFIT)</td>
+<td class="py-3 px-3 text-right font-label-md text-label-md font-semibold text-emerald-800">Margin: 42.9%</td>
+<td class="py-3 px-3 text-right font-financial-lg text-financial-lg font-bold font-mono text-emerald-800">79.150.000</td>
+</tr>
+<!-- 3. BEBAN OPERASIONAL & UMUM -->
+<tr class="bg-surface-container/30">
+<td class="py-2 px-3 font-label-md text-label-md font-bold text-primary tracking-wider uppercase pt-4" colspan="3">
+                  3. Beban Operasional &amp; Administrasi (OPEX)
+                </td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Gaji Staf Kantor, Kasir &amp; Desainer 3D SketchUp</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">12.500.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Sewa Showroom Utama &amp; Kantor Penjualan</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">5.000.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Listrik Showroom, Air &amp; Internet Workshop Fiber</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">3.250.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Biaya Pengiriman, Tol &amp; Solar Truk Pick-up L300</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">3.600.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Pemeliharaan Mesin Spindle, Kompresor &amp; Mata Pisau</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">1.400.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2 px-3 pl-6 text-on-surface">Pemasaran, Iklan Meta &amp; Cetak Katalog Mebel</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant font-mono">1.000.000</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<tr class="bg-surface-container-low font-semibold text-on-surface">
+<td class="py-2.5 px-3 pl-6 font-bold text-on-surface">Total Beban Operasional (OPEX)</td>
+<td class="py-2.5 px-3 text-right"></td>
+<td class="py-2.5 px-3 text-right font-bold font-mono text-error">(26.750.000)</td>
+</tr>
+<!-- LABA BERSIH SEBELUM PAJAK (EBIT) -->
+<tr class="bg-surface-container-high/60 font-semibold text-on-surface">
+<td class="py-2.5 px-3 font-bold text-on-surface">LABA OPERASIONAL SEBELUM PAJAK (EBIT)</td>
+<td class="py-2.5 px-3 text-right font-financial-sm text-financial-sm text-on-surface-variant">28.4% Omzet</td>
+<td class="py-2.5 px-3 text-right font-bold font-mono text-primary text-financial-md">52.400.000</td>
+</tr>
+<!-- PAJAK PPH FINAL PP 55/2022 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors text-on-surface-variant">
+<td class="py-2 px-3 pl-6">Estimasi PPh Final UMKM PP 55/2022 (0.5% dari Omzet)</td>
+<td class="py-2 px-3 text-right font-financial-sm text-financial-sm font-mono text-error">(922.500)</td>
+<td class="py-2 px-3 text-right"></td>
+</tr>
+<!-- FINAL NET PROFIT AFTER TAX -->
+<tr class="bg-primary text-on-primary font-bold">
+<td class="py-3 px-3 rounded-l-md font-headline-sm text-headline-sm tracking-tight">LABA BERSIH SETELAH PAJAK (EAT)</td>
+<td class="py-3 px-3 text-right font-label-md text-label-md text-primary-fixed">Net Margin: 27.9%</td>
+<td class="py-3 px-3 rounded-r-md text-right font-financial-lg text-financial-lg font-mono tracking-tight text-white">Rp 51.477.500</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footnote audit trail -->
+<div class="flex items-center justify-between pt-2 text-on-surface-variant font-financial-sm text-financial-sm">
+<span>Dicetak otomatis oleh Sistem ERP • Akuntan Penanggung: Hendra Wijaya (Owner)</span>
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+            Nilai Stok Real: Rp 444.350.000 (Opname 22 Okt)
+          </span>
+</div>
+</div>
+</div>
+<!-- RIGHT 5 COLS: PROFITABILITY BY CATEGORY & FINANCIAL HEALTH METRICS -->
+<div class="xl:col-span-5 flex flex-col space-y-space-md">
+<!-- WIDGET 1: GROSS MARGIN PER CATEGORY -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col space-y-space-sm">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">category</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Laba Kotor per Kategori Mebel</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Okt 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Peringkat margin berdasarkan efisiensi bahan baku kayu dan jam borongan tukang.
+        </p>
+<!-- Category 1 -->
+<div class="p-3 bg-surface-container-low rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Meja Makan Solid (Trembesi &amp; Jati)</span>
+<span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 text-label-sm font-label-sm font-semibold">Margin Tertinggi ⭐</span>
+</div>
+<span class="font-financial-lg text-financial-lg font-bold text-emerald-800">47.5%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-emerald-700 h-2 rounded-full" style="width: 47.5%;"></div>
+</div>
+<div class="flex items-center justify-between font-financial-sm text-financial-sm text-on-surface-variant">
+<span>Omzet: <strong class="text-on-surface">Rp 78.400.000</strong></span>
+<span>HPP: Rp 41.200.000</span>
+<span class="text-emerald-700 font-semibold">Laba: Rp 37.2M</span>
+</div>
+</div>
+<!-- Category 2 -->
+<div class="p-3 bg-surface-container-low rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Proyek Interior &amp; Custom B2B</span>
+<span class="font-financial-lg text-financial-lg font-bold text-emerald-800">44.9%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-emerald-700 h-2 rounded-full" style="width: 44.9%;"></div>
+</div>
+<div class="flex items-center justify-between font-financial-sm text-financial-sm text-on-surface-variant">
+<span>Omzet: <strong class="text-on-surface">Rp 21.500.000</strong></span>
+<span>HPP: Rp 11.850.000</span>
+<span class="text-emerald-700 font-semibold">Laba: Rp 9.65M</span>
+</div>
+</div>
+<!-- Category 3 -->
+<div class="p-3 bg-surface-container-low rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Sofa Living (Kain Linen / Busa D28)</span>
+<span class="font-financial-lg text-financial-lg font-bold text-on-surface">38.8%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 38.8%;"></div>
+</div>
+<div class="flex items-center justify-between font-financial-sm text-financial-sm text-on-surface-variant">
+<span>Omzet: <strong class="text-on-surface">Rp 48.200.000</strong></span>
+<span>HPP: Rp 29.500.000</span>
+<span class="text-primary font-semibold">Laba: Rp 18.7M</span>
+</div>
+</div>
+<!-- Category 4 -->
+<div class="p-3 bg-surface-container-low rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Lemari &amp; Tempat Tidur Minimalis</span>
+<span class="font-financial-lg text-financial-lg font-bold text-on-surface">37.4%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 37.4%;"></div>
+</div>
+<div class="flex items-center justify-between font-financial-sm text-financial-sm text-on-surface-variant">
+<span>Omzet: <strong class="text-on-surface">Rp 36.400.000</strong></span>
+<span>HPP: Rp 22.800.000</span>
+<span class="text-primary font-semibold">Laba: Rp 13.6M</span>
+</div>
+</div>
+</div>
+<!-- WIDGET 2: ESSENTIAL FINANCIAL HEALTH RATIOS -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col space-y-space-sm">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">query_stats</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Rasio Keuangan &amp; Likuiditas</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-label-sm text-label-sm font-semibold">Skor Sehat: A</span>
+</div>
+<div class="grid grid-cols-2 gap-2.5 pt-1">
+<div class="p-2.5 bg-surface-container rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Gross Margin</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-financial-lg text-financial-lg font-bold text-emerald-800">42.9%</span>
+<span class="font-label-sm text-label-sm text-emerald-700 font-semibold">(Target &gt;40%)</span>
+</div>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">Kuat menahan inflasi kayu</span>
+</div>
+<div class="p-2.5 bg-surface-container rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Net Margin</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-financial-lg text-financial-lg font-bold text-emerald-800">28.4%</span>
+<span class="font-label-sm text-label-sm text-emerald-700 font-semibold">(Sangat Sehat)</span>
+</div>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">Efisiensi operasional bengkel</span>
+</div>
+<div class="p-2.5 bg-surface-container rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Rasio OPEX</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-financial-lg text-financial-lg font-bold text-on-surface">14.5%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">dari omzet</span>
+</div>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">Standar industri 15%-20%</span>
+</div>
+<div class="p-2.5 bg-surface-container rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Ketahanan Kas Bengkel</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-financial-lg text-financial-lg font-bold text-primary">8.1 Bulan</span>
+</div>
+<span class="font-financial-sm text-financial-sm text-on-surface-variant mt-1">Kas Rp 215.8M cukup aman</span>
+</div>
+</div>
+</div>
+<!-- WIDGET 3: STRATEGIC OWNER NOTES & ACTION PLAN -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col space-y-2.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">psychology_alt</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Catatan Strategis Owner Hendra</h3>
+</div>
+<div class="space-y-2 text-on-surface font-body-sm text-body-sm">
+<div class="flex items-start gap-2 p-2 rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-base text-primary mt-0.5">arrows_output</span>
+<p>
+<strong class="font-semibold text-on-surface">Kenaikan Kayu Jati:</strong> Terjadi kenaikan log jati Perhutani +4% bulan ini. Telah diimbangi dengan perbaikan pola potong mesin CNC yang menekan limbah (waste) trembesi hingga 6.8%.
+            </p>
+</div>
+<div class="flex items-start gap-2 p-2 rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-base text-primary mt-0.5">store</span>
+<p>
+<strong class="font-semibold text-on-surface">Retail vs B2B:</strong> Grosir perhotelan menyerap 46% volume produksi dengan margin 32.1%. Retail showroom menyumbang margin bersih tertinggi 48.2%. Disarankan promosi meja solid diperluas di bulan November.
+            </p>
+</div>
+</div>
+<button class="w-full mt-1 py-2 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+          Tambah Memo Finansial Owner
+        </button>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

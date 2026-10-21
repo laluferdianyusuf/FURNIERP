@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed-variant":"#594235","primary-fixed-dim":"#eabea1","error":"#ba1a1a","secondary-fixed-dim":"#e1c0af","surface-bright":"#fcf9f4","on-background":"#1c1c19","surface-variant":"#e5e2dd","on-primary-fixed-variant":"#5f402a","inverse-on-surface":"#f3f0eb","surface-dim":"#dcdad5","surface-tint":"#795740","outline":"#82746d","tertiary-container":"#7b5734","inverse-primary":"#eabea1","secondary-fixed":"#ffdbca","surface-container-lowest":"#ffffff","inverse-surface":"#31302d","on-error":"#ffffff","tertiary":"#61401f","primary-container":"#795740","on-primary":"#ffffff","on-surface":"#1c1c19","on-secondary-fixed":"#29170d","primary-fixed":"#ffdcc6","surface-container-highest":"#e5e2dd","tertiary-fixed":"#ffdcbf","on-primary-fixed":"#2d1605","surface":"#fcf9f4","surface-container-low":"#f6f3ee","secondary":"#73594b","surface-container":"#f0ede9","surface-container-high":"#ebe8e3","on-tertiary-fixed":"#2d1600","on-surface-variant":"#50453e","error-container":"#ffdad6","on-tertiary-container":"#ffd0a7","secondary-container":"#ffdbca","on-primary-container":"#fdcfb2","on-tertiary":"#ffffff","on-error-container":"#93000a","on-tertiary-fixed-variant":"#61401f","primary":"#5f402a","on-secondary":"#ffffff","on-secondary-container":"#795f51","outline-variant":"#d4c3ba","tertiary-fixed-dim":"#eebd93","background":"#fcf9f4"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-mobile":"1rem","space-sm":"0.5rem","gutter-compact":"0.5rem","space-md":"1rem","gutter":"1rem","space-lg":"1.5rem","space-xs":"0.25rem","margin":"1.5rem","space-xl":"2rem"},"fontFamily":{"financial-lg":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-sm":["Inter"],"label-md":["Inter"],"financial-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"financial-xl":["Inter"],"financial-sm":["Inter"],"body-md":["Inter"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-lg":["Plus Jakarta Sans"],"label-sm":["Inter"]},"fontSize":{"financial-lg":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}],"financial-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"500"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-xl":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"600"}],"financial-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-primary z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-md pt-space-lg pb-space-md"><div class="flex items-center gap-space-sm"><img alt="FurniERP Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UMfI2EWyHZej3Vl2CBTGXgMvWw3_8s_RBfsjsKMmLR2TXSjntXE3HZjisYZNTejx8nwxl7W23o3JjtOSD1MCp2qC0wFyw7CW_WnOUi3YwMGzmn9MpsMF_LZ0ZLK0jeBQIztyiG3uqPTh3PdwSHWnvzBavmNtaNegn-WrU6nhDKAUESQPo6KnnGqacMdf84l_soAnPU_xsSxb7fPhD_1U_WKNKCiL3dlqXeqXXoMNBn3Niy_uLYeY1QUV0"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FurniERP</span><div class="flex items-center gap-1.5 mt-0.5"><span class="font-label-sm text-label-sm text-primary-fixed-dim">Atelier Operations</span><span class="px-1.5 py-0.2 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm">Owner Mode</span></div></div></div></div><nav class="flex flex-col px-space-sm space-y-space-md mt-space-sm" data-active-classes="bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full pl-5"><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Utama</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="dashboard" href="#"><span>Dashboard</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Operasional</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="pos" href="#"><span>Penjualan / POS</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="orders" href="#"><span>Pesanan</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="customers" href="#"><span>Pelanggan</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="products" href="#"><span>Produk</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Persediaan &amp; Bengkel</span><a class="flex items-center px-space-sm py-2 rounded-lg transition-colors font-body-sm text-body-sm bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full pl-5" data-path="orders-production" href="#"><span>Pesanan &amp; SPK Produksi</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="inventory" href="#"><span>Stok Selesai</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="raw-materials" href="#"><span>Bahan Baku</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="shipping" href="#"><span>Pengiriman</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Keuangan</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="cash-flow" href="#"><span>Cash Flow</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="expenses" href="#"><span>Pengeluaran</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="receivables" href="#"><span>Piutang</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="financial-reports" href="#"><span>Laporan Keuangan</span></a></div><div class="flex flex-col gap-0.5 pb-space-lg"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Lainnya</span><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="ai-advisor" href="#"><span>Tanya AI</span></a><a class="flex items-center px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="settings" href="#"><span>Pengaturan</span></a></div></nav></div></aside><div class="pl-60 min-h-screen flex flex-col bg-background"><header class="fixed top-0 left-60 right-0 h-16 z-40 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-base">storefront</span><span>FurniERP</span><span class="text-outline-variant">/</span><span>Bengkel &amp; Produksi</span><span class="text-outline-variant">/</span><span class="text-on-surface font-semibold">Pesanan Kustom &amp; SPK Produksi Bengkel</span></div><div class="hidden xl:flex items-center bg-surface-container px-space-sm py-1.5 rounded-lg w-80 text-on-surface-variant focus-within:ring-1 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><span class="material-symbols-outlined text-base mr-2 text-outline">search</span><input class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari SPK, no. pesanan, perajin kayu..." type="text"/><kbd class="text-label-sm font-label-sm bg-surface-container-high px-1.5 py-0.5 rounded text-on-surface-variant">/</kbd></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-base text-primary">calendar_today</span><span>Rabu, 23 Okt 2024</span></div><div class="relative flex items-center"><button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors relative" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-semibold text-on-error">2</span></button></div><button class="flex items-center gap-1.5 bg-primary-container text-on-primary px-space-md py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-base">add</span><span>+ Buat SPK</span></button><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjD297V4VN7MHXlVKzV90nFbA3hKCfuzzCFZsl3NBYl1BhN8BEp94sbq65nMXFktn77ePVRM2RcGcmQ0x_HmDtuMVbA7xYRGN8CBLhrRl9bbhG9E-aFGkKD8IUCBTxrR9I8bAhFTiYgSdLJ4oeCQsyq17Qx_8hGK1U41HZiCSjZD84I6aqIrf9CrOmuialhvjh31HEq4__Kfx8RjnuqNd4p-Im2E8L5-8qAOPttoNzyW0oUZstpRy2"/><div class="hidden lg:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface font-medium leading-tight">Hendra Wijaya</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Owner</span></div></div></div></header><main class="w-full pt-16 bg-background flex-1 px-space-lg py-space-lg"><div class="flex flex-col w-full space-y-space-lg">
+<!-- PAGE HEADER & ACTION CONTROLS -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<span>FurniERP</span>
+<span class="text-outline-variant">/</span>
+<span>Operasional</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Pesanan Kustom &amp; SPK Produksi</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-1">Pesanan Kustom &amp; SPK Produksi</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl mt-0.5">
+        Kelola siklus pembuatan mebel pesanan khusus, instruksi kerja bengkel (SPK), Bill of Materials (BOM), kalkulasi estimasi vs riil HPP, serta pemantauan tahap tukang kayu.
+      </p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">download</span>
+<span>Export Rekap SPK (PDF/XLSX)</span>
+</button>
+<button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span>+ Buat SPK / Pesanan Baru</span>
+</button>
+</div>
+</div>
+<!-- EXECUTIVE KPI METRIC CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Total SPK Aktif</span>
+<span class="p-1.5 bg-surface-container rounded-lg text-secondary">
+<span class="material-symbols-outlined text-lg">precision_manufacturing</span>
+</span>
+</div>
+<div class="mt-space-md">
+<div class="font-financial-xl text-financial-xl text-on-surface tabular-nums">18 Pesanan</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-semibold text-primary">12</span> Sedang Dikerjakan • <span class="font-semibold">6</span> Menunggu Bahan/Antrean
+        </p>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Nilai Kontrak SPK</span>
+<span class="p-1.5 bg-surface-container rounded-lg text-secondary">
+<span class="material-symbols-outlined text-lg">payments</span>
+</span>
+</div>
+<div class="mt-space-md">
+<div class="font-financial-xl text-financial-xl text-on-surface tabular-nums">Rp 164.800.000</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          DP: <span class="font-medium text-on-surface">Rp 78,5jt</span> • Piutang: <span class="font-medium text-error">Rp 86,3jt</span>
+</p>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Estimasi HPP vs Riil</span>
+<span class="p-1.5 bg-surface-container rounded-lg text-secondary">
+<span class="material-symbols-outlined text-lg">calculate</span>
+</span>
+</div>
+<div class="mt-space-md">
+<div class="font-financial-xl text-financial-xl text-on-surface tabular-nums">Rp 98.450.000</div>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="px-1.5 py-0.5 rounded text-[11px] font-semibold bg-surface-container-high text-on-surface-variant">+2.1%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Efisiensi Bahan Kayu Solid</span>
+</div>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Status Tenggat Waktu (SLA)</span>
+<span class="p-1.5 bg-error-container rounded-lg text-on-error-container">
+<span class="material-symbols-outlined text-lg">schedule_send</span>
+</span>
+</div>
+<div class="mt-space-md">
+<div class="font-financial-xl text-financial-xl text-error tabular-nums">2 SPK Kritis</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Target Kirim &lt; 3 Hari ke Showroom/Klien
+        </p>
+</div>
+</div>
+</div>
+<!-- WORKFLOW TAHAPAN PRODUKSI PIPELINE & VIEW SWITCHER -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<!-- Stage Summary Chips -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm gap-2 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span>1. Menunggu DP</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">2</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">chevron_right</span>
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm gap-2 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>2. Menunggu Bahan Kayu</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">3</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">chevron_right</span>
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm gap-2 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>3. Siap Produksi</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">2</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">chevron_right</span>
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm gap-2 whitespace-nowrap shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"></span>
+<span class="font-semibold">4. Sedang Diproduksi / Bengkel</span>
+<span class="px-1.5 py-0.2 rounded-full bg-primary text-on-primary font-semibold">7</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">chevron_right</span>
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm gap-2 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span>5. Quality Control (QC)</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">2</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">chevron_right</span>
+<div class="flex items-center px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm gap-2 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+<span>6. Siap Kirim</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">2</span>
+</div>
+</div>
+<!-- View Switcher -->
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded-lg self-start lg:self-auto shrink-0">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm font-semibold shadow-sm" type="button">
+<span class="material-symbols-outlined text-sm">table_rows</span>
+<span>Tabel Terstruktur</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">view_kanban</span>
+<span>Papan Bengkel (Kanban)</span>
+</button>
+</div>
+</div>
+<!-- 2-COLUMN MAIN PRODUCTION WORKSPACE -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: ACTIVE JOB PRODUCTION ORDERS (SPK LIST) -->
+<div class="xl:col-span-5 flex flex-col space-y-space-md">
+<!-- Search & Filters -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Daftar Antrean &amp; SPK</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold">5 Tampil</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span>Filter Lanjutan</span>
+</button>
+</div>
+<div class="flex gap-space-xs">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-outline text-base">search</span>
+<input class="w-full pl-8 pr-3 py-2 bg-surface-container-low rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-colors" placeholder="No. SPK, Pelanggan, atau Jenis Kayu..." type="text" value="SPK-2410-098"/>
+</div>
+<select class="bg-surface-container-low rounded-lg px-2.5 py-2 text-label-sm font-label-sm text-on-surface focus:outline-none">
+<option>Semua Mandor</option>
+<option selected="">Pak Sukirno</option>
+<option>Pak Warno</option>
+<option>Pak Bambang</option>
+</select>
+</div>
+</div>
+<!-- SPK Cards List -->
+<div class="space-y-space-sm" id="spkCardContainer">
+<!-- Card 1: SELECTED SPK -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm relative transition-all cursor-pointer ring-2 ring-primary">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed">SPK-2410-098</span>
+<span class="flex items-center gap-1 px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Prioritas (Sisa 4 Hari)
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-2 font-semibold">Meja Konsol Jati Salur 140cm + Kaki Brass</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pelanggan: <strong class="text-on-surface">Arsitek Studio Batavia</strong> • Mandor: Pak Sukirno</p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-financial-md text-financial-md text-on-surface tabular-nums">Rp 18.200.000</span>
+<div class="mt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">DP 50% Lunas</span>
+</div>
+</div>
+</div>
+<!-- Production Stage & Progress Indicator -->
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-2.5 rounded-lg space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-primary">handyman</span>
+                Tahap: Perakitan Konstruksi Salur
+              </span>
+<span class="font-semibold text-primary">68%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 68%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Mulai: 18 Okt 2024</span>
+<span class="text-error font-medium">Tenggat: 27 Okt 2024</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold px-2 py-0.5 rounded bg-surface-container text-on-surface">SPK-2410-089</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface font-label-sm text-label-sm font-semibold">Tenggat Besok</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-2 font-semibold">Meja Makan Trembesi 8 Kursi Solid Wood</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pelanggan: <strong class="text-on-surface">Toko Mebel Subur Makmur</strong> • Mandor: Pak Warno</p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-financial-md text-financial-md text-on-surface tabular-nums">Rp 26.500.000</span>
+<div class="mt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">DP 50% Lunas</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-2.5 rounded-lg space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary">fact_check</span>
+                Tahap: Pemeriksaan Kualitas (QC Finish)
+              </span>
+<span class="font-semibold text-secondary">92%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 92%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Mulai: 12 Okt 2024</span>
+<span class="text-error font-medium">Tenggat: 25 Okt 2024 (Besok)</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold px-2 py-0.5 rounded bg-surface-container text-on-surface">SPK-2410-101</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Normal</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-2 font-semibold">Custom Wardrobe Jati 3 Pintu Geser</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pelanggan: <strong class="text-on-surface">Ibu Ratna Diningrum</strong> • Mandor: Pak Sukirno</p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-financial-md text-financial-md text-on-surface tabular-nums">Rp 18.200.000</span>
+<div class="mt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">DP 50% Lunas</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-2.5 rounded-lg space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-primary">format_paint</span>
+                Tahap: Finishing Melamic Natural Doft
+              </span>
+<span class="font-semibold text-primary">80%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 80%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Mulai: 19 Okt 2024</span>
+<span>Tenggat: 30 Okt 2024 (Sisa 7 Hari)</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold px-2 py-0.5 rounded bg-surface-container text-on-surface">SPK-2410-105</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Antrean</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-2 font-semibold">Credenza TV Slats Kayu Sungkai 180cm</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pelanggan: <strong class="text-on-surface">Bpk. Denny Hendrawan</strong> • Mandor: Pak Bambang</p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-financial-md text-financial-md text-on-surface tabular-nums">Rp 8.800.000</span>
+<div class="mt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">DP 40% Terverifikasi</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-2.5 rounded-lg space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary">inventory</span>
+                Tahap: Siap Masuk Meja Potong
+              </span>
+<span class="font-semibold text-secondary">15%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 15%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Bahan: Kayu Sungkai Kering Oven</span>
+<span>Tenggat: 05 Nov 2024</span>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold px-2 py-0.5 rounded bg-surface-container text-on-surface">SPK-2410-112</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface font-label-sm text-label-sm font-semibold">Tunggu Suplai</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-2 font-semibold">Sofa Bed Scandinavian Teak Frame 3-Seater</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pelanggan: <strong class="text-on-surface">Bpk. Rahmat Sentosa</strong> • Mandor: Pak Joko (Upholstery)</p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-financial-md text-financial-md text-on-surface tabular-nums">Rp 12.500.000</span>
+<div class="mt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">DP 50% Lunas</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-2.5 rounded-lg space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-tertiary">hourglass_top</span>
+                Tahap: Menunggu Kain Beludru Walnut
+              </span>
+<span class="font-semibold text-tertiary">20%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 20%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Rangka Teak: Selesai Rakit</span>
+<span>Tenggat: 10 Nov 2024</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: DETAILED JOB ORDER WORKBENCH & BOM INSPECTION -->
+<div class="xl:col-span-7 flex flex-col space-y-space-md">
+<!-- Detailed Header Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-sm pb-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 rounded bg-primary text-on-primary">#SPK-2410-098</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dibuat: 18 Okt 2024 (Sistem ERP Bengkel)</span>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold">Tukang: Pak Sukirno</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1.5">Meja Konsol Jati Salur 140cm</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Pesanan Kustom Living/Foyer • Klien: <span class="font-semibold text-on-surface">Arsitek Studio Batavia</span> (Villa Canggu Phase 2)
+            </p>
+</div>
+<div class="flex flex-col items-start lg:items-end bg-surface-container-low px-space-md py-2.5 rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Tenggat Selesai Fisik</span>
+<span class="font-financial-lg text-financial-lg text-error tabular-nums">27 Okt 2024</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tersisa 4 Hari Kerja Bengkel</span>
+</div>
+</div>
+<!-- Custom Image & Spec Preview Mockup -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md my-space-md bg-surface-container-low p-space-md rounded-xl">
+<div class="md:col-span-1 h-36 rounded-lg overflow-hidden relative shadow-sm">
+<img class="w-full h-full object-cover" data-alt="High-end bespoke teak wood console table with vertical fluted slat details and warm brushed brass accent legs in an architectural minimalist showroom studio, dramatic warm sunlight casting soft linear shadows, warm walnut wood texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcx2fELjUXLEFXmOjiHVai9ElHSGDK8qT9RUXRBzFWpn6Uw8pFYg0tOSf3qeD772pUWlApNm4QyomWjzIlk1fZrsN4GQkWgRLqe-S_OKPkyvQrw2lt2UNLeiClHSZna_EBbaqwoZuzdkwtucYAZNZnTNXi27ZZfTYScErYDL3F6AozRfHM768Wf4YWevLDLKLBGwhZdbwRjzQk00tNgnBK8ekVYDgl0GVWaNOdr-uS6fguo1fvUvxF"/>
+<div class="absolute bottom-2 left-2 bg-on-background/70 backdrop-blur-sm text-surface text-[10px] font-semibold px-2 py-0.5 rounded">
+              Ref 3D Render #04
+            </div>
+</div>
+<div class="md:col-span-2 flex flex-col justify-between">
+<div class="grid grid-cols-2 gap-2 text-body-sm font-body-sm">
+<div class="bg-surface-container-lowest p-2 rounded">
+<span class="text-on-surface-variant block text-label-sm">Dimensi P x L x T:</span>
+<span class="font-medium text-on-surface">140 x 40 x 85 cm</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded">
+<span class="text-on-surface-variant block text-label-sm">Material Utama:</span>
+<span class="font-medium text-on-surface">Jati Solid TPK Perhutani</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded">
+<span class="text-on-surface-variant block text-label-sm">Aksen Kaki &amp; Trim:</span>
+<span class="font-medium text-on-surface">Plat Kuningan / Brass Hairline</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded">
+<span class="text-on-surface-variant block text-label-sm">Finishing Akhir:</span>
+<span class="font-medium text-on-surface">Polyurethane (PU) Matte 10%</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-sm text-primary">info</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Catatan Gambar Kerja: Laci push-to-open tanpa handle luar tersembunyi di bawah lis salur.</span>
+</div>
+</div>
+</div>
+<!-- WORKBENCH TABS -->
+<div class="flex items-center gap-space-md pt-space-xs">
+<button class="pb-2.5 text-primary font-headline-sm text-headline-sm border-b-2 border-primary flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg">format_list_bulleted</span>
+<span>Bill of Materials (BOM) &amp; Biaya</span>
+</button>
+<button class="pb-2.5 text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg">timeline</span>
+<span>Tahapan &amp; Jadwal Bengkel</span>
+</button>
+<button class="pb-2.5 text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+<span>Finansial &amp; Margin</span>
+</button>
+</div>
+</div>
+<!-- BILL OF MATERIALS (BOM) & REALTIME COST BREAKDOWN -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Bill of Materials (BOM) Terinci</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Rincian alokasi kayu gelondong/papan, bahan pembantu, aksen besi, dan borongan tukang.</p>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Tambah Komponen</span>
+</button>
+</div>
+<!-- BOM Data Table -->
+<div class="overflow-x-auto rounded-lg bg-surface-container-lowest">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container text-secondary uppercase font-label-sm text-label-sm">
+<tr>
+<th class="py-2.5 px-3">Komponen / Material</th>
+<th class="py-2.5 px-3 text-right">Kebutuhan / Vol</th>
+<th class="py-2.5 px-3 text-right">Harga Satuan</th>
+<th class="py-2.5 px-3 text-right">Subtotal</th>
+<th class="py-2.5 px-3 text-center">Status Alokasi</th>
+</tr>
+</thead>
+<tbody class="text-on-surface">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-3">
+<div class="font-medium text-on-surface">Kayu Jati TPK Grade A Solid (Balok &amp; Papan)</div>
+<span class="text-on-surface-variant text-[11px]">Gudang Kayu Utama • Batch: JAT-2024-08</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums">0.45 m³</td>
+<td class="py-3 px-3 text-right tabular-nums">Rp 9.444.444</td>
+<td class="py-3 px-3 text-right font-semibold tabular-nums">Rp 4.250.000</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Terpotong</span>
+</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-3">
+<div class="font-medium text-on-surface">Aksen Plat Kuningan / Brass Inlay 3mm</div>
+<span class="text-on-surface-variant text-[11px]">Supplier Logam Mulia Jaya • Hairline Finish</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums">4.0 Meter</td>
+<td class="py-3 px-3 text-right tabular-nums">Rp 287.500</td>
+<td class="py-3 px-3 text-right font-semibold tabular-nums">Rp 1.150.000</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Siap Pasang</span>
+</td>
+</tr>
+<!-- Item 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-3">
+<div class="font-medium text-on-surface">Cat PU Propan &amp; Sanding Sealer Non-Yellowing</div>
+<span class="text-on-surface-variant text-[11px]">Bahan Kimia Finishing Bengkel</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums">2 Kaleng</td>
+<td class="py-3 px-3 text-right tabular-nums">Rp 175.000</td>
+<td class="py-3 px-3 text-right font-semibold tabular-nums">Rp 350.000</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Di Ruang Semprot</span>
+</td>
+</tr>
+<!-- Item 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-3">
+<div class="font-medium text-on-surface">Upah Borongan Mandor &amp; Tukang Kayu</div>
+<span class="text-on-surface-variant text-[11px]">Pak Sukirno &amp; 2 Kenek • Terbayar Rp 1.500.000</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums">1 Lot SPK</td>
+<td class="py-3 px-3 text-right tabular-nums">Rp 2.200.000</td>
+<td class="py-3 px-3 text-right font-semibold tabular-nums">Rp 2.200.000</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Berjalan (68%)</span>
+</td>
+</tr>
+<!-- Item 5 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-3">
+<div class="font-medium text-on-surface">Overhead Bengkel (Kiln Dry, Amplas, Lem Epoxy, Listrik)</div>
+<span class="text-on-surface-variant text-[11px]">Beban Operasional Workshop Teratribusi</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums">Fixed Alokasi</td>
+<td class="py-3 px-3 text-right tabular-nums">-</td>
+<td class="py-3 px-3 text-right font-semibold tabular-nums">Rp 650.000</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Teralokasi</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Realtime Cost vs Selling Price Calculation Bar -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm bg-surface-container-low p-space-md rounded-xl">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Total Estimasi HPP</span>
+<div class="font-financial-lg text-financial-lg text-on-surface tabular-nums mt-0.5">Rp 8.600.000</div>
+<span class="text-[11px] text-on-surface-variant font-medium">BOM Standar Awal</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Biaya Riil Berjalan</span>
+<div class="font-financial-lg text-financial-lg text-on-surface tabular-nums mt-0.5">Rp 8.450.000</div>
+<span class="text-[11px] text-on-surface font-medium">Hemat Rp 150rb di kayu</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Harga Kontrak Jual</span>
+<div class="font-financial-lg text-financial-lg text-primary tabular-nums mt-0.5">Rp 18.200.000</div>
+<span class="text-[11px] text-on-surface-variant">Include PPN 11%</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Estimasi Margin Kotor</span>
+<div class="font-financial-lg text-financial-lg text-on-surface tabular-nums mt-0.5">52.7% (Sehat)</div>
+<span class="text-[11px] text-on-surface-variant">Laba Bersih ~Rp 9.6M</span>
+</div>
+</div>
+</div>
+<!-- WORKSHOP PRODUCTION TIMELINE & STEP TRACKER -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Tahapan Pengerjaan Bengkel &amp; Log Mandor</h3>
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold">
+            Status Terkini: Rangka Meja &amp; Perakitan Salur
+          </span>
+</div>
+<!-- Step List -->
+<div class="space-y-space-sm">
+<!-- Step 1 (Done) -->
+<div class="flex items-start gap-space-md bg-surface-container-low/60 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">1. Pembelahan Balok &amp; Kiln Dry MC &lt; 12%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Selesai 20 Okt 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Kadar air kayu jati tercatat 10.8%. Bebas jamur dan retak hati.</p>
+</div>
+</div>
+<!-- Step 2 (Done) -->
+<div class="flex items-start gap-space-md bg-surface-container-low/60 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">2. Penyerutan 4 Sisi &amp; Pembentukan Profil Salur (Fluting)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Selesai 22 Okt 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pola salur 1.5cm konsisten. Dikerjakan di mesin router molding presisi.</p>
+</div>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex items-start gap-space-md bg-primary-fixed/30 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl mt-0.5 animate-spin">progress_activity</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">3. Perakitan Rangka Kaki Brass &amp; Lem Epoxy Struktural</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Sedang Dikerjakan (Pak Sukirno)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Penyatuan sambungan purus dan klem 24 jam. Pemasangan pelat kuningan di sudut bawah.</p>
+</div>
+</div>
+<!-- Step 4 (Pending) -->
+<div class="flex items-start gap-space-md bg-surface-container-lowest p-3 rounded-lg opacity-75">
+<span class="material-symbols-outlined text-outline text-xl mt-0.5">radio_button_unchecked</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">4. Pengamplasan Halus Grit 240/400 &amp; Spray PU Matte</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jadwal: 25 Okt 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Finishing 3 layer di ruang spray booth tertutup tanpa debu.</p>
+</div>
+</div>
+<!-- Step 5 (Pending) -->
+<div class="flex items-start gap-space-md bg-surface-container-lowest p-3 rounded-lg opacity-75">
+<span class="material-symbols-outlined text-outline text-xl mt-0.5">radio_button_unchecked</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">5. Quality Inspection (QC) &amp; Packing Peti Kayu + Foam</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jadwal: 26 Okt 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Pemeriksaan presisi permukaan mebel dan kelurusan kaki sebelum pelepasan invoice pelunasan.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- CLIENT PAYMENT & SETTLEMENT STATUS (Financial Separation) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Status Finansial &amp; Piutang Klien</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Status keuangan terpisah secara tegas dari status fisik workshop mebel.</span>
+</div>
+<span class="px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+            Status Pembayaran: DP 50% Diterima
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-low p-space-md rounded-xl">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total Nilai Kontrak</span>
+<div class="font-financial-lg text-financial-lg text-on-surface tabular-nums mt-0.5">Rp 18.200.000</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Order #SO-2410-098</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Uang Muka (DP Masuk)</span>
+<div class="font-financial-lg text-financial-lg text-on-surface tabular-nums mt-0.5">Rp 9.100.000</div>
+<span class="font-body-sm text-body-sm text-on-surface">Kuitansi #CR-202410-044 (BCA)</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sisa Pelunasan Pesanan</span>
+<div class="font-financial-lg text-financial-lg text-error tabular-nums mt-0.5">Rp 9.100.000</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Jatuh tempo saat lolos QC</span>
+</div>
+</div>
+<!-- ACTION BUTTONS OWNER / WORKSHOP MANAGER -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-md mt-space-md">
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">print</span>
+<span>Cetak Lembar SPK Tukang (Tanpa Margin)</span>
+</button>
+<button class="flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">edit_note</span>
+<span>Update Progress / Log Pemakaian Kayu</span>
+</button>
+</div>
+<button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">receipt_long</span>
+<span>+ Catat Biaya Tambahan</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive card selection demonstration for atelier workspace
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('#spkCardContainer > div');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => {
+          c.classList.remove('ring-2', 'ring-primary');
+        });
+        card.classList.add('ring-2', 'ring-primary');
+      });
+    });
+  });
+</script></main></div></body></html>
