@@ -1,18 +1,17 @@
 export type PageView =
-  | 'dashboard'
-  | 'pos'
-  | 'orders'
-  | 'customers'
-  | 'products'
-  | 'inventory'
-  | 'cash-flow'
-  | 'receivables'
-  | 'financial-reports'
-  | 'invoice-detail'
-  | 'ai-advisor'
-  | 'settings';
+  | "dashboard"
+  | "pos"
+  | "orders"
+  | "customers"
+  | "products"
+  | "inventory"
+  | "cash-flow"
+  | "receivables"
+  | "financial-reports"
+  | "invoice-detail"
+  | "settings";
 
-export type CustomerTier = 'Retail' | 'Reseller' | 'Grosir';
+export type CustomerTier = "Retail" | "Reseller" | "Grosir";
 
 export interface Customer {
   id: string;
@@ -31,7 +30,7 @@ export interface Customer {
   ordersCount: number;
   picName: string;
   email: string;
-  debtStatus: 'has-debt' | 'overdue' | 'settled';
+  debtStatus: "has-debt" | "overdue" | "settled";
   terms: string;
   image?: string;
 }
@@ -63,7 +62,7 @@ export interface Product {
   thickness: string;
   finishing: string;
   legConstruction: string;
-  type: 'Ready Stock' | 'PO 14-21 Hari';
+  type: "Ready Stock" | "PO 14-21 Hari";
   hpp: number;
   bomComponentsCount: number;
   prices: ProductTierPrice;
@@ -72,7 +71,7 @@ export interface Product {
   stockAvailable: number;
   bufferMin: number;
   ownerFloorPrice: number;
-  status: 'Aman' | 'Menipis' | 'Kritis';
+  status: "Aman" | "Menipis" | "Kritis";
   bomItems?: BOMItem[];
 }
 
@@ -88,7 +87,7 @@ export interface InventoryItem {
   available: number;
   hppPerUnit: number;
   totalHpp: number;
-  status: 'Aman' | 'Menipis' | 'Kritis!';
+  status: "Aman" | "Menipis" | "Kritis!";
   image?: string;
   spec?: string;
   isRawMaterial: boolean;
@@ -111,7 +110,12 @@ export interface ProductionOrder {
   currentStage: string;
   startDate: string;
   targetDate: string;
-  status: 'Prioritas (Sisa 4 Hari)' | 'Tenggat Besok' | 'Normal' | 'Antrean' | 'Tunggu Suplai';
+  status:
+    | "Prioritas (Sisa 4 Hari)"
+    | "Tenggat Besok"
+    | "Normal"
+    | "Antrean"
+    | "Tunggu Suplai";
   image: string;
   dimensions: string;
   woodMaterial: string;
@@ -137,8 +141,8 @@ export interface CashMutation {
   description: string;
   entity: string;
   category: string;
-  account: 'BCA' | 'Mandiri' | 'Kas Tunai';
-  type: 'IN' | 'OUT' | 'TRANSFER';
+  account: "BCA" | "Mandiri" | "Kas Tunai";
+  type: "IN" | "OUT" | "TRANSFER";
   amountIn: number;
   amountOut: number;
   runningBalance: number;
@@ -159,7 +163,7 @@ export interface ReceivableInvoice {
   paidAmount: number;
   remainingDebt: number;
   dueDate: string;
-  status: 'Lewat 4 Hari' | 'Besok' | '5 Hari' | '13 Hari' | '18 Hari';
+  status: "Lewat 4 Hari" | "Besok" | "5 Hari" | "13 Hari" | "18 Hari";
   isOverdue: boolean;
   picName: string;
   phone: string;
