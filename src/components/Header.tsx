@@ -20,16 +20,15 @@ interface QuickAction {
 
 const PAGE_TITLES: Partial<Record<PageView, string>> = {
   dashboard: "Dashboard",
-  pos: "Penjualan / POS",
-  orders: "Pesanan & SPK",
+  pos: "Penjualan",
+  orders: "Pesanan",
   customers: "Pelanggan",
   products: "Produk",
-  inventory: "Persediaan",
-  "cash-flow": "Cash Flow",
+  inventory: "Stok",
+  "cash-flow": "Kas",
   receivables: "Piutang",
-  "financial-reports": "Laporan Keuangan",
-  "invoice-detail": "Faktur / Nota",
-  "ai-advisor": "Tanya AI Atelier",
+  "financial-reports": "Laporan",
+  "invoice-detail": "Faktur",
   settings: "Pengaturan",
 };
 
@@ -356,26 +355,12 @@ export const Header: React.FC<HeaderProps> = ({
           className="lg:hidden"
         />
 
-        {/* Page title */}
-        <div className="hidden min-w-0 shrink-0 items-center gap-2 sm:flex">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eee5dc] text-[#795740]">
-            <MaterialIcon name="chair" className="text-[19px]" />
-          </div>
-
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 text-[11px] text-[#82746d]">
-              <span>FurniERP</span>
-              <span aria-hidden="true">/</span>
-            </div>
-
-            <h1
-              className="max-w-[190px] truncate text-[13px] font-semibold text-[#30251e]"
-              title={pageTitle}
-            >
-              {pageTitle}
-            </h1>
-          </div>
-        </div>
+        <h1
+          className="hidden min-w-0 max-w-[220px] truncate text-base font-semibold text-[#30251e] sm:block"
+          title={pageTitle}
+        >
+          {pageTitle}
+        </h1>
 
         {/* Global search */}
         <label className="flex h-9 min-w-0 max-w-[420px] flex-1 items-center gap-2 rounded-lg border border-transparent bg-[#f0ede9] px-3 transition-colors focus-within:border-[#b9a08c] focus-within:bg-white">

@@ -687,41 +687,16 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({
   };
 
   return (
-    <div className="invoice-detail flex w-full flex-col gap-5 pt-4 text-[#1c1c19]">
+    <div className="invoice-detail flex w-full flex-col gap-5 text-[#1c1c19]">
       {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
 
-      {/* Breadcrumb dan navigasi */}
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between print:hidden">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex flex-wrap items-center gap-2 text-xs text-[#82746d]"
-        >
-          <button
-            type="button"
-            onClick={() => onNavigate("dashboard")}
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-[#5f402a]"
-          >
-            <Icon name="storefront" className="text-[17px]" />
-            FurniERP
-          </button>
-          <Icon name="chevron_right" className="text-[15px]" />
-          <button
-            type="button"
-            onClick={() => onNavigate("pos")}
-            className="transition-colors hover:text-[#5f402a]"
-          >
-            Penjualan & POS
-          </button>
-          <Icon name="chevron_right" className="text-[15px]" />
-          <span className="font-semibold text-[#5f402a]">Detail faktur</span>
-        </nav>
-
+      <div className="flex justify-end print:hidden">
         <ActionButton
           variant="secondary"
           icon="arrow_back"
           onClick={() => onNavigate("pos")}
         >
-          Kembali ke POS
+          Kembali ke penjualan
         </ActionButton>
       </div>
 

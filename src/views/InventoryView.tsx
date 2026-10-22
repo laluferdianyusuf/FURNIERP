@@ -23,18 +23,6 @@ interface MovementLog {
   location: string;
 }
 
-const COLORS = {
-  background: "#f6f3ee",
-  surface: "#fcf9f4",
-  mutedSurface: "#f0ede9",
-  border: "#e5e2dd",
-  text: "#1c1c19",
-  secondary: "#50453e",
-  muted: "#82746d",
-  brown: "#5f402a",
-  brownHover: "#795740",
-};
-
 const money = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
 
 const compactMoney = (value: number) => {
@@ -68,10 +56,10 @@ const formatDate = (date: Date) =>
   });
 
 const inputClass =
-  "w-full rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition focus:border-[#795740] focus:ring-2 focus:ring-[#795740]/10";
+  "w-full rounded-md border border-[#ded8cf] bg-transparent px-3 py-2.5 text-sm text-[#29241f] outline-none transition focus:border-[#795740] focus:ring-1 focus:ring-[#795740]/20";
 
 const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
 const Icon: React.FC<{ name: string; className?: string }> = ({
   name,
@@ -86,65 +74,30 @@ const Icon: React.FC<{ name: string; className?: string }> = ({
 );
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const styles =
+  const color =
     status === "Aman"
-      ? "bg-emerald-50 text-emerald-800"
+      ? "text-[#365d43]"
       : status === "Menipis"
-        ? "bg-amber-50 text-amber-800"
-        : "bg-rose-50 text-rose-800";
+        ? "text-[#946200]"
+        : "text-[#b42318]";
 
   return (
-    <span
-      className={`inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold ${styles}`}
-    >
-      <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-current" />
+    <span className={`inline-flex items-center gap-1.5 text-xs ${color}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
     </span>
   );
 };
-
-const StatCard: React.FC<{
-  label: string;
-  value: string;
-  description: string;
-  icon: string;
-  accent?: "default" | "warning";
-}> = ({ label, value, description, icon, accent = "default" }) => (
-  <div className="rounded-xl border border-[#e5e2dd] bg-[#fcf9f4] p-4 sm:p-5">
-    <div className="flex items-start justify-between gap-3">
-      <p className="text-xs font-medium leading-5 text-[#82746d]">{label}</p>
-      <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-          accent === "warning"
-            ? "bg-amber-50 text-amber-800"
-            : "bg-[#f0ede9] text-[#5f402a]"
-        }`}
-      >
-        <Icon name={icon} className="text-[20px]" />
-      </span>
-    </div>
-    <p
-      className={`mt-3 break-words text-xl font-semibold tracking-tight sm:text-2xl ${
-        accent === "warning" ? "text-amber-800" : "text-[#1c1c19]"
-      }`}
-    >
-      {value}
-    </p>
-    <p className="mt-1.5 text-xs leading-5 text-[#82746d]">{description}</p>
-  </div>
-);
 
 const EmptyState: React.FC<{
   icon: string;
   title: string;
   description: string;
 }> = ({ icon, title, description }) => (
-  <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0ede9] text-[#5f402a]">
-      <Icon name={icon} className="text-2xl" />
-    </div>
-    <h3 className="mt-4 text-sm font-semibold text-[#1c1c19]">{title}</h3>
-    <p className="mt-1 max-w-sm text-xs leading-5 text-[#82746d]">
+  <div className="flex flex-col items-center justify-center px-5 py-12 text-center">
+    <Icon name={icon} className="text-3xl text-[#a3978a]" />
+    <h3 className="mt-3 text-sm font-medium text-[#29241f]">{title}</h3>
+    <p className="mt-1 max-w-sm text-xs leading-5 text-[#81766b]">
       {description}
     </p>
   </div>
@@ -158,6 +111,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   const [activeTab, setActiveTab] = useState<InventoryTab>("finished");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Semua Lokasi");
+
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(
     inventory[0] ?? null,
   );
@@ -218,7 +172,6 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     },
   ]);
 
-  // Sinkronisasi jika inventory diperbarui dari parent.
   useEffect(() => {
     setLocalInventory(inventory);
   }, [inventory]);
@@ -288,7 +241,6 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     });
   }, [currentList, searchQuery, selectedLocation]);
 
-  // Pastikan item detail sesuai dengan daftar aktif.
   useEffect(() => {
     if (activeTab === "history") return;
 
@@ -301,7 +253,6 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     });
   }, [activeTab, filteredItems]);
 
-  // Tutup modal dengan tombol Escape.
   useEffect(() => {
     if (!isStockModalOpen) return;
 
@@ -426,34 +377,20 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   };
 
   return (
-    <div className="mt-5 flex w-full flex-col gap-6 text-[#1c1c19] sm:mt-6">
-      {/* Header */}
-      <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
-        <div className="min-w-0">
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
-            <span>Persediaan</span>
-            <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#795740]">Stok & Bahan</span>
-          </div>
-
-          <h1 className="font-headline text-2xl font-semibold tracking-tight sm:text-3xl">
-            Persediaan
-          </h1>
-
-          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-[#82746d]">
-            Pantau stok mebel jadi, bahan baku, reservasi pesanan, dan
-            pergerakan barang di gudang.
-          </p>
-        </div>
+    <div className="flex w-full flex-col gap-5 text-[#29241f]">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[#81766b]">
+          Stok mebel jadi dan bahan baku.
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => onNavigate("products")}
-            className={`${buttonBase} border border-[#e5e2dd] bg-[#fcf9f4] text-[#50453e] hover:bg-[#f0ede9]`}
+            className={`${buttonBase} border border-[#ded8cf] text-[#50453e] hover:bg-[#f0ede9]`}
           >
-            <Icon name="chair" className="text-[18px]" />
-            Katalog Produk
+            <Icon name="chair" className="text-lg" />
+            Produk
           </button>
 
           <button
@@ -462,612 +399,506 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             disabled={!selectedItem}
             className={`${buttonBase} bg-[#5f402a] text-white hover:bg-[#795740]`}
           >
-            <Icon name="swap_vert" className="text-[18px]" />
-            Catat Mutasi
+            <Icon name="add" className="text-lg" />
+            Catat mutasi
           </button>
         </div>
       </header>
 
-      {/* Summary */}
-      <section
-        aria-label="Ringkasan persediaan"
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        <StatCard
-          label="Nilai Persediaan"
-          value={compactMoney(totalInventoryValue)}
-          description={`${compactMoney(totalFinishedValue)} mebel jadi · ${compactMoney(totalRawValue)} bahan baku`}
-          icon="inventory_2"
-        />
+      {/* Area utama */}
+      <section className="min-w-0">
+        {/* Tabs */}
+        <div className="flex gap-5 overflow-x-auto border-b border-[#ded8cf]">
+          {(
+            [
+              {
+                id: "finished",
+                label: "Mebel Jadi",
+                count: finishedGoods.length,
+              },
+              {
+                id: "raw",
+                label: "Bahan Baku",
+                count: rawMaterials.length,
+              },
+              {
+                id: "history",
+                label: "Riwayat Mutasi",
+                count: null,
+              },
+            ] as const
+          ).map((tab) => {
+            const active = activeTab === tab.id;
 
-        <StatCard
-          label="Stok Mebel Jadi"
-          value={`${formatQty(totalPhysical)} unit`}
-          description={`${formatQty(totalAvailable)} tersedia · ${formatQty(totalReserved)} direservasi`}
-          icon="chair"
-        />
-
-        <StatCard
-          label="Perlu Perhatian"
-          value={`${criticalItems.length} item`}
-          description="Item dengan stok menipis atau kritis"
-          icon="warning"
-          accent="warning"
-        />
-
-        <StatCard
-          label="Riwayat Mutasi"
-          value={`${movementLogs.length} transaksi`}
-          description="Jumlah catatan mutasi yang tersedia di halaman ini"
-          icon="sync_alt"
-        />
-      </section>
-
-      {/* Main workspace */}
-      <section className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="min-w-0 space-y-4">
-          {/* Tabs */}
-          <div className="flex gap-1 overflow-x-auto border-b border-[#e5e2dd]">
-            {(
-              [
-                {
-                  id: "finished",
-                  label: "Mebel Jadi",
-                  count: finishedGoods.length,
-                  icon: "chair",
-                },
-                {
-                  id: "raw",
-                  label: "Bahan Baku",
-                  count: rawMaterials.length,
-                  icon: "carpenter",
-                },
-                {
-                  id: "history",
-                  label: "Riwayat Mutasi",
-                  count: null,
-                  icon: "history",
-                },
-              ] as const
-            ).map((tab) => {
-              const active = activeTab === tab.id;
-
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => changeTab(tab.id)}
-                  className={`flex shrink-0 items-center gap-2 border-b-2 px-3 py-3 text-sm font-medium transition-colors ${
-                    active
-                      ? "border-[#5f402a] text-[#5f402a]"
-                      : "border-transparent text-[#82746d] hover:text-[#50453e]"
-                  }`}
-                >
-                  <Icon name={tab.icon} className="text-[18px]" />
-                  {tab.label}
-                  {tab.count !== null && (
-                    <span
-                      className={`rounded-md px-1.5 py-0.5 text-[10px] ${
-                        active
-                          ? "bg-[#f0ede9] text-[#5f402a]"
-                          : "bg-[#f0ede9] text-[#82746d]"
-                      }`}
-                    >
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {activeTab !== "history" ? (
-            <>
-              {/* Search and filters */}
-              <div className="flex flex-col gap-3 rounded-xl border border-[#e5e2dd] bg-[#fcf9f4] p-3 sm:flex-row">
-                <div className="relative min-w-0 flex-1">
-                  <Icon
-                    name="search"
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[19px] text-[#82746d]"
-                  />
-                  <input
-                    type="search"
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Cari nama, SKU, kategori..."
-                    aria-label="Cari persediaan"
-                    className={`${inputClass} pl-10`}
-                  />
-                </div>
-
-                <select
-                  value={selectedLocation}
-                  onChange={(event) => setSelectedLocation(event.target.value)}
-                  aria-label="Filter lokasi gudang"
-                  className={`${inputClass} sm:w-52`}
-                >
-                  <option value="Semua Lokasi">Semua Lokasi</option>
-                  <option value="Showroom">Showroom</option>
-                  <option value="Workshop">Workshop</option>
-                  <option value="Upholstery">Upholstery</option>
-                </select>
-              </div>
-
-              {/* Inventory table */}
-              <div className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]">
-                <div className="flex items-center justify-between gap-3 border-b border-[#e5e2dd] px-4 py-3.5">
-                  <div>
-                    <h2 className="text-sm font-semibold">
-                      {activeTab === "finished"
-                        ? "Daftar Mebel Jadi"
-                        : "Daftar Bahan Baku"}
-                    </h2>
-                    <p className="mt-0.5 text-xs text-[#82746d]">
-                      {filteredItems.length} item ditampilkan
-                    </p>
-                  </div>
-                  <span className="hidden text-xs text-[#82746d] sm:block">
-                    Pilih baris untuk melihat detail
-                  </span>
-                </div>
-
-                {filteredItems.length === 0 ? (
-                  <EmptyState
-                    icon="inventory_2"
-                    title="Persediaan tidak ditemukan"
-                    description="Coba ubah kata kunci atau pilih lokasi gudang yang berbeda."
-                  />
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[760px] border-collapse text-left text-xs">
-                      <thead>
-                        <tr className="border-b border-[#e5e2dd] bg-[#f0ede9] text-[10px] uppercase tracking-wider text-[#82746d]">
-                          <th className="px-4 py-3 font-semibold">Item</th>
-                          <th className="px-3 py-3 font-semibold">Lokasi</th>
-                          <th className="px-3 py-3 text-right font-semibold">
-                            Fisik
-                          </th>
-                          <th className="px-3 py-3 text-right font-semibold">
-                            Booking
-                          </th>
-                          <th className="px-3 py-3 text-right font-semibold">
-                            Tersedia
-                          </th>
-                          <th className="px-4 py-3 text-right font-semibold">
-                            Nilai HPP
-                          </th>
-                          <th className="px-4 py-3 text-right font-semibold">
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody className="divide-y divide-[#e5e2dd]">
-                        {filteredItems.map((item) => {
-                          const isSelected = selectedItem?.id === item.id;
-
-                          return (
-                            <tr
-                              key={item.id}
-                              onClick={() => setSelectedItem(item)}
-                              onKeyDown={(event) => {
-                                if (
-                                  event.key === "Enter" ||
-                                  event.key === " "
-                                ) {
-                                  event.preventDefault();
-                                  setSelectedItem(item);
-                                }
-                              }}
-                              tabIndex={0}
-                              aria-selected={isSelected}
-                              className={`cursor-pointer transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#795740] ${
-                                isSelected
-                                  ? "bg-[#f0ede9]"
-                                  : "hover:bg-[#f8f5f0]"
-                              }`}
-                            >
-                              <td className="px-4 py-3.5">
-                                <div className="flex min-w-0 items-center gap-3">
-                                  {item.image ? (
-                                    <img
-                                      src={item.image}
-                                      alt=""
-                                      loading="lazy"
-                                      className="h-10 w-10 shrink-0 rounded-lg border border-[#e5e2dd] object-cover"
-                                    />
-                                  ) : (
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
-                                      <Icon name="inventory_2" />
-                                    </div>
-                                  )}
-
-                                  <div className="min-w-0">
-                                    <p className="max-w-[230px] truncate font-semibold text-[#1c1c19]">
-                                      {item.name}
-                                    </p>
-                                    <p className="mt-1 truncate font-mono text-[10px] text-[#82746d]">
-                                      {item.sku}
-                                    </p>
-                                    {item.spec && (
-                                      <p className="mt-0.5 max-w-[230px] truncate text-[10px] text-[#82746d]">
-                                        {item.spec}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                              </td>
-
-                              <td className="max-w-[130px] px-3 py-3.5 text-[#50453e]">
-                                <span className="block truncate">
-                                  {item.location}
-                                </span>
-                              </td>
-
-                              <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono font-medium">
-                                {formatQty(item.physical)}
-                                <span className="ml-1 text-[10px] text-[#82746d]">
-                                  {item.unitType}
-                                </span>
-                              </td>
-
-                              <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono text-[#82746d]">
-                                {formatQty(item.reserved)}
-                              </td>
-
-                              <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono font-semibold text-[#365d43]">
-                                {formatQty(item.available)}
-                              </td>
-
-                              <td className="whitespace-nowrap px-4 py-3.5 text-right">
-                                <p className="font-mono font-semibold text-[#1c1c19]">
-                                  {compactMoney(item.totalHpp)}
-                                </p>
-                                <p className="mt-1 text-[10px] text-[#82746d]">
-                                  {money(item.hppPerUnit)}/unit
-                                </p>
-                              </td>
-
-                              <td className="whitespace-nowrap px-4 py-3.5 text-right">
-                                <StatusBadge status={item.status} />
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => changeTab(tab.id)}
+                className={`flex shrink-0 items-center gap-2 border-b-2 py-3 text-sm transition-colors ${
+                  active
+                    ? "border-[#5f402a] font-semibold text-[#5f402a]"
+                    : "border-transparent text-[#81766b] hover:text-[#29241f]"
+                }`}
+              >
+                {tab.label}
+                {tab.count !== null && (
+                  <span className="text-xs text-[#81766b]">{tab.count}</span>
                 )}
+              </button>
+            );
+          })}
+        </div>
 
-                <div className="flex flex-col gap-1 border-t border-[#e5e2dd] px-4 py-3 text-[11px] text-[#82746d] sm:flex-row sm:items-center sm:justify-between">
-                  <span>
-                    Total nilai HPP:{" "}
-                    <strong className="font-semibold text-[#50453e]">
-                      {money(
-                        filteredItems.reduce(
-                          (sum, item) => sum + item.totalHpp,
-                          0,
-                        ),
-                      )}
-                    </strong>
-                  </span>
-                  <span>
-                    Buffer minimum mengikuti pengaturan masing-masing item.
-                  </span>
-                </div>
-              </div>
-            </>
-          ) : (
-            /* Movement history */
-            <div className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]">
-              <div className="flex flex-col gap-1 border-b border-[#e5e2dd] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 className="text-sm font-semibold">Riwayat Mutasi</h2>
-                  <p className="mt-1 text-xs text-[#82746d]">
-                    Catatan barang masuk dan keluar
-                  </p>
-                </div>
-                <span className="text-xs text-[#82746d]">
-                  {movementLogs.length} transaksi
-                </span>
+        {activeTab !== "history" ? (
+          <>
+            {/* Pencarian langsung di atas tabel */}
+            <div className="flex flex-col gap-3 border-b border-[#ded8cf] py-4 sm:flex-row">
+              <div className="relative min-w-0 flex-1">
+                <Icon
+                  name="search"
+                  className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-lg text-[#81766b]"
+                />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Cari nama produk, SKU, kategori..."
+                  aria-label="Cari persediaan"
+                  className="w-full bg-transparent py-2 pl-7 pr-3 text-sm outline-none placeholder:text-[#a3978a]"
+                />
               </div>
 
-              {movementLogs.length === 0 ? (
+              <select
+                value={selectedLocation}
+                onChange={(event) => setSelectedLocation(event.target.value)}
+                aria-label="Filter lokasi gudang"
+                className="rounded-md border border-[#ded8cf] bg-transparent px-3 py-2 text-sm outline-none focus:border-[#795740]"
+              >
+                <option value="Semua Lokasi">Semua Lokasi</option>
+                <option value="Showroom">Showroom</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Upholstery">Upholstery</option>
+              </select>
+            </div>
+
+            {/* Tabel tanpa card */}
+            <div className="mt-4">
+              <p className="mb-3 text-xs text-[#81766b]">
+                {filteredItems.length} item
+              </p>
+
+              {filteredItems.length === 0 ? (
                 <EmptyState
-                  icon="history"
-                  title="Belum ada riwayat mutasi"
-                  description="Transaksi stok yang dicatat akan muncul di sini."
+                  icon="inventory_2"
+                  title="Persediaan tidak ditemukan"
+                  description="Coba ubah kata kunci atau lokasi gudang."
                 />
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[720px] text-left text-xs">
-                    <thead className="border-b border-[#e5e2dd] bg-[#f0ede9] text-[10px] uppercase tracking-wider text-[#82746d]">
-                      <tr>
-                        <th className="px-4 py-3 font-semibold">Waktu</th>
-                        <th className="px-3 py-3 font-semibold">Item</th>
-                        <th className="px-3 py-3 text-center font-semibold">
-                          Jenis
+                  <table className="w-full min-w-[740px] border-collapse text-left text-xs">
+                    <thead>
+                      <tr className="border-y border-[#ded8cf] text-[10px] uppercase tracking-wider text-[#81766b]">
+                        <th className="py-3 pr-4 font-medium">Nama Item</th>
+                        <th className="px-3 py-3 font-medium">Lokasi</th>
+                        <th className="px-3 py-3 text-right font-medium">
+                          Stok Fisik
                         </th>
-                        <th className="px-3 py-3 text-right font-semibold">
-                          Jumlah
+                        <th className="px-3 py-3 text-right font-medium">
+                          Booking
                         </th>
-                        <th className="px-3 py-3 font-semibold">Referensi</th>
-                        <th className="px-4 py-3 font-semibold">Operator</th>
+                        <th className="px-3 py-3 text-right font-medium">
+                          Tersedia
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium">
+                          Nilai HPP
+                        </th>
+                        <th className="py-3 pl-3 text-right font-medium">
+                          Status
+                        </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#e5e2dd]">
-                      {movementLogs.map((log) => (
-                        <tr key={log.id} className="hover:bg-[#f8f5f0]">
-                          <td className="whitespace-nowrap px-4 py-3.5 text-[#82746d]">
-                            {log.date}
-                          </td>
-                          <td className="px-3 py-3.5">
-                            <p className="max-w-[190px] truncate font-semibold text-[#1c1c19]">
-                              {log.name}
-                            </p>
-                            <p className="mt-1 font-mono text-[10px] text-[#82746d]">
-                              {log.sku}
-                            </p>
-                          </td>
-                          <td className="px-3 py-3.5 text-center">
-                            <span
-                              className={`inline-flex rounded-md px-2 py-1 text-[10px] font-semibold ${
-                                log.type === "IN"
-                                  ? "bg-emerald-50 text-emerald-800"
-                                  : "bg-rose-50 text-rose-800"
-                              }`}
-                            >
-                              {log.type === "IN" ? "Masuk" : "Keluar"}
-                            </span>
-                          </td>
-                          <td
-                            className={`whitespace-nowrap px-3 py-3.5 text-right font-mono font-semibold ${
-                              log.type === "IN"
-                                ? "text-emerald-800"
-                                : "text-rose-800"
+
+                    <tbody className="divide-y divide-[#e9e3da]">
+                      {filteredItems.map((item) => {
+                        const isSelected = selectedItem?.id === item.id;
+
+                        return (
+                          <tr
+                            key={item.id}
+                            onClick={() => setSelectedItem(item)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                setSelectedItem(item);
+                              }
+                            }}
+                            tabIndex={0}
+                            aria-selected={isSelected}
+                            className={`cursor-pointer transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#795740] ${
+                              isSelected ? "bg-[#f0ede9]" : "hover:bg-[#f8f5f0]"
                             }`}
                           >
-                            {log.type === "IN" ? "+" : "−"}
-                            {formatQty(log.qty)}
-                          </td>
-                          <td className="px-3 py-3.5">
-                            <p className="max-w-[220px] break-words font-medium text-[#50453e]">
-                              {log.ref}
-                            </p>
-                            <p className="mt-1 text-[10px] text-[#82746d]">
-                              {log.location}
-                            </p>
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-3.5 text-[#82746d]">
-                            {log.user}
-                          </td>
-                        </tr>
-                      ))}
+                            <td className="py-3.5 pr-4">
+                              <div className="flex min-w-0 items-center gap-3">
+                                {item.image ? (
+                                  <img
+                                    src={item.image}
+                                    alt=""
+                                    loading="lazy"
+                                    className="h-10 w-10 shrink-0 rounded-md object-cover"
+                                  />
+                                ) : (
+                                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#f0ede9] text-[#795740]">
+                                    <Icon
+                                      name={
+                                        item.isRawMaterial
+                                          ? "carpenter"
+                                          : "chair"
+                                      }
+                                      className="text-xl"
+                                    />
+                                  </div>
+                                )}
+
+                                <div className="min-w-0">
+                                  <p className="max-w-[230px] truncate font-medium text-[#29241f]">
+                                    {item.name}
+                                  </p>
+                                  <p className="mt-1 font-mono text-[10px] text-[#81766b]">
+                                    {item.sku}
+                                  </p>
+                                  {item.spec && (
+                                    <p className="mt-0.5 max-w-[230px] truncate text-[10px] text-[#81766b]">
+                                      {item.spec}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="max-w-[130px] px-3 py-3.5 text-[#65594e]">
+                              <span className="block truncate">
+                                {item.location}
+                              </span>
+                            </td>
+
+                            <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono">
+                              {formatQty(item.physical)}
+                              <span className="ml-1 text-[10px] text-[#81766b]">
+                                {item.unitType}
+                              </span>
+                            </td>
+
+                            <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono text-[#81766b]">
+                              {formatQty(item.reserved)}
+                            </td>
+
+                            <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono font-semibold text-[#365d43]">
+                              {formatQty(item.available)}
+                            </td>
+
+                            <td className="whitespace-nowrap px-3 py-3.5 text-right">
+                              <p className="font-mono font-medium text-[#29241f]">
+                                {compactMoney(item.totalHpp)}
+                              </p>
+                              <p className="mt-1 text-[10px] text-[#81766b]">
+                                {money(item.hppPerUnit)}/unit
+                              </p>
+                            </td>
+
+                            <td className="whitespace-nowrap py-3.5 pl-3 text-right">
+                              <StatusBadge status={item.status} />
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
               )}
-              <p className="border-t border-[#e5e2dd] px-4 py-3 text-[11px] leading-5 text-[#82746d]">
-                Riwayat awal masih menggunakan data contoh yang tersedia di
-                komponen. Hubungkan ke penyimpanan transaksi untuk riwayat
-                permanen.
-              </p>
-            </div>
-          )}
-        </div>
 
-        {/* Selected item detail */}
-        <aside className="min-w-0 overflow-hidden rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]">
-          <div className="flex items-center justify-between border-b border-[#e5e2dd] px-4 py-4">
-            <div>
-              <h2 className="text-sm font-semibold">Detail Persediaan</h2>
-              <p className="mt-1 text-xs text-[#82746d]">
-                Informasi dan tindakan stok
-              </p>
-            </div>
-            {selectedItem && <StatusBadge status={selectedItem.status} />}
-          </div>
-
-          {!selectedItem ? (
-            <EmptyState
-              icon="inventory_2"
-              title="Belum ada item dipilih"
-              description="Pilih item dari daftar persediaan untuk melihat detailnya."
-            />
-          ) : (
-            <div className="space-y-5 p-4">
-              {selectedItem.image ? (
-                <img
-                  src={selectedItem.image}
-                  alt={selectedItem.name}
-                  className="h-44 w-full rounded-lg border border-[#e5e2dd] bg-[#f0ede9] object-cover"
-                />
-              ) : (
-                <div className="flex h-32 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
-                  <Icon name="inventory_2" className="text-4xl" />
-                </div>
-              )}
-
-              <div>
-                <span className="inline-flex rounded-md bg-[#f0ede9] px-2 py-1 font-mono text-[10px] font-semibold text-[#5f402a]">
-                  {selectedItem.sku}
+              <div className="flex flex-col gap-1 border-t border-[#ded8cf] py-3 text-[11px] text-[#81766b] sm:flex-row sm:justify-between">
+                <span>
+                  Total nilai HPP:{" "}
+                  <strong className="font-semibold text-[#50453e]">
+                    {money(
+                      filteredItems.reduce(
+                        (sum, item) => sum + item.totalHpp,
+                        0,
+                      ),
+                    )}
+                  </strong>
                 </span>
-                <h3 className="mt-2 text-base font-semibold leading-6 text-[#1c1c19]">
-                  {selectedItem.name}
-                </h3>
-                {selectedItem.spec && (
-                  <p className="mt-1 text-xs leading-5 text-[#82746d]">
-                    {selectedItem.spec}
-                  </p>
-                )}
-                <p className="mt-3 flex items-center gap-1.5 text-xs text-[#82746d]">
-                  <Icon name="location_on" className="text-base" />
-                  {selectedItem.location}
-                </p>
+                <span>Buffer minimum mengikuti pengaturan tiap item.</span>
               </div>
+            </div>
 
-              {/* Stock breakdown */}
-              <div className="border-t border-[#e5e2dd] pt-4">
-                <h3 className="text-xs font-semibold text-[#50453e]">
-                  Ringkasan Stok
-                </h3>
+            {/* Detail di bawah tabel, bukan sidebar card */}
+            {selectedItem && (
+              <section className="mt-7 border-t border-[#ded8cf] pt-5">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="flex min-w-0 gap-4">
+                    {selectedItem.image ? (
+                      <img
+                        src={selectedItem.image}
+                        alt={selectedItem.name}
+                        className="h-20 w-20 shrink-0 rounded-md object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-md bg-[#f0ede9] text-[#795740]">
+                        <Icon name="inventory_2" className="text-3xl" />
+                      </div>
+                    )}
 
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  {[
-                    {
-                      label: "Fisik",
-                      value: selectedItem.physical,
-                      color: "text-[#1c1c19]",
-                    },
-                    {
-                      label: "Booking",
-                      value: selectedItem.reserved,
-                      color: "text-amber-800",
-                    },
-                    {
-                      label: "Tersedia",
-                      value: selectedItem.available,
-                      color: "text-emerald-800",
-                    },
-                  ].map((stock) => (
-                    <div
-                      key={stock.label}
-                      className="rounded-lg border border-[#e5e2dd] bg-[#f8f5f0] p-2.5"
-                    >
-                      <p className="text-[10px] text-[#82746d]">
-                        {stock.label}
-                      </p>
-                      <p
-                        className={`mt-1 break-words font-mono text-sm font-semibold ${stock.color}`}
-                      >
-                        {formatQty(stock.value)}
-                      </p>
-                      <p className="mt-0.5 truncate text-[10px] text-[#82746d]">
-                        {selectedItem.unitType}
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="font-mono text-xs text-[#81766b]">
+                          {selectedItem.sku}
+                        </span>
+                        <StatusBadge status={selectedItem.status} />
+                      </div>
+
+                      <h3 className="mt-2 text-base font-semibold">
+                        {selectedItem.name}
+                      </h3>
+
+                      {selectedItem.spec && (
+                        <p className="mt-1 text-xs text-[#81766b]">
+                          {selectedItem.spec}
+                        </p>
+                      )}
+
+                      <p className="mt-2 flex items-center gap-1 text-xs text-[#81766b]">
+                        <Icon name="location_on" className="text-base" />
+                        {selectedItem.location}
                       </p>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openStockModal("IN")}
+                      className={`${buttonBase} border border-[#ded8cf] text-[#365d43] hover:bg-[#f0ede9]`}
+                    >
+                      <Icon name="south_west" className="text-lg" />
+                      Barang Masuk
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => openStockModal("OUT")}
+                      disabled={selectedItem.available <= 0}
+                      className={`${buttonBase} border border-[#ded8cf] text-[#9b3b32] hover:bg-[#f0ede9]`}
+                    >
+                      <Icon name="north_east" className="text-lg" />
+                      Barang Keluar
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigate("orders")}
+                      className={`${buttonBase} bg-[#5f402a] text-white hover:bg-[#795740]`}
+                    >
+                      <Icon name="assignment" className="text-lg" />
+                      Buka SPK
+                    </button>
+                  </div>
                 </div>
 
-                <div className="mt-4">
-                  <div className="mb-2 flex items-center justify-between text-[11px]">
-                    <span className="text-[#82746d]">Alokasi stok fisik</span>
-                    <span className="font-medium text-[#50453e]">
-                      {selectedItem.physical > 0
-                        ? `${Math.round(
-                            (selectedItem.reserved / selectedItem.physical) *
+                <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-y border-[#ded8cf] py-4 sm:grid-cols-3 lg:grid-cols-5">
+                  <div>
+                    <p className="text-xs text-[#81766b]">Stok Fisik</p>
+                    <p className="mt-1 font-mono text-sm font-semibold">
+                      {formatQty(selectedItem.physical)} {selectedItem.unitType}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[#81766b]">Direservasi</p>
+                    <p className="mt-1 font-mono text-sm font-semibold text-amber-800">
+                      {formatQty(selectedItem.reserved)} {selectedItem.unitType}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[#81766b]">Stok Tersedia</p>
+                    <p className="mt-1 font-mono text-sm font-semibold text-[#365d43]">
+                      {formatQty(selectedItem.available)}{" "}
+                      {selectedItem.unitType}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[#81766b]">HPP per Unit</p>
+                    <p className="mt-1 font-mono text-sm font-semibold">
+                      {money(selectedItem.hppPerUnit)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[#81766b]">Nilai Total HPP</p>
+                    <p className="mt-1 font-mono text-sm font-semibold">
+                      {money(selectedItem.totalHpp)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-xs text-[#81766b]">
+                    Buffer minimum:{" "}
+                    <strong className="font-medium text-[#50453e]">
+                      {formatQty(selectedItem.minSafety)}{" "}
+                      {selectedItem.unitType}
+                    </strong>
+                  </p>
+
+                  <div className="flex items-center gap-2 text-xs text-[#81766b]">
+                    <span className="h-2 w-2 rounded-full bg-amber-600" />
+                    Booking
+                    <span className="ml-2 h-2 w-2 rounded-full bg-emerald-700" />
+                    Tersedia
+                  </div>
+                </div>
+
+                <div className="mt-2 flex h-1.5 overflow-hidden rounded-full bg-[#e5e2dd]">
+                  <div
+                    className="h-full bg-amber-600"
+                    style={{
+                      width: `${
+                        selectedItem.physical > 0
+                          ? Math.min(
                               100,
-                          )}% dipesan`
-                        : "0% dipesan"}
-                    </span>
-                  </div>
-
-                  <div className="flex h-2 overflow-hidden rounded-full bg-[#e5e2dd]">
-                    <div
-                      className="h-full bg-amber-600"
-                      style={{
-                        width: `${
-                          selectedItem.physical > 0
-                            ? Math.min(
+                              (selectedItem.reserved / selectedItem.physical) *
                                 100,
-                                (selectedItem.reserved /
-                                  selectedItem.physical) *
-                                  100,
-                              )
-                            : 0
-                        }%`,
-                      }}
-                    />
-                    <div
-                      className="h-full bg-emerald-700"
-                      style={{
-                        width: `${
-                          selectedItem.physical > 0
-                            ? Math.min(
+                            )
+                          : 0
+                      }%`,
+                    }}
+                  />
+                  <div
+                    className="h-full bg-emerald-700"
+                    style={{
+                      width: `${
+                        selectedItem.physical > 0
+                          ? Math.min(
+                              100,
+                              (selectedItem.available / selectedItem.physical) *
                                 100,
-                                (selectedItem.available /
-                                  selectedItem.physical) *
-                                  100,
-                              )
-                            : 0
-                        }%`,
-                      }}
-                    />
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-[#82746d]">
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-sm bg-amber-600" />
-                      Direservasi
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-sm bg-emerald-700" />
-                      Bebas digunakan
-                    </span>
-                  </div>
+                            )
+                          : 0
+                      }%`,
+                    }}
+                  />
                 </div>
-              </div>
-
-              {/* Valuation */}
-              <div className="space-y-3 border-t border-[#e5e2dd] pt-4">
-                <div className="flex items-center justify-between gap-3 text-xs">
-                  <span className="text-[#82746d]">HPP per unit</span>
-                  <span className="text-right font-mono font-medium">
-                    {money(selectedItem.hppPerUnit)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-3 text-xs">
-                  <span className="text-[#82746d]">Nilai total HPP</span>
-                  <span className="text-right font-mono font-semibold text-[#1c1c19]">
-                    {money(selectedItem.totalHpp)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-3 text-xs">
-                  <span className="text-[#82746d]">Buffer minimum</span>
-                  <span className="font-mono font-medium">
-                    {formatQty(selectedItem.minSafety)} {selectedItem.unitType}
-                  </span>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="space-y-2 border-t border-[#e5e2dd] pt-4">
-                <button
-                  type="button"
-                  onClick={() => openStockModal("IN")}
-                  className={`${buttonBase} w-full border border-[#e5e2dd] bg-[#f8f5f0] text-[#365d43] hover:bg-emerald-50`}
-                >
-                  <Icon name="south_west" className="text-[18px]" />
-                  Catat Barang Masuk
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => openStockModal("OUT")}
-                  disabled={selectedItem.available <= 0}
-                  className={`${buttonBase} w-full border border-[#e5e2dd] bg-[#f8f5f0] text-[#9b3b32] hover:bg-rose-50`}
-                >
-                  <Icon name="north_east" className="text-[18px]" />
-                  Catat Barang Keluar
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate("orders")}
-                  className={`${buttonBase} w-full bg-[#5f402a] text-white hover:bg-[#795740]`}
-                >
-                  <Icon name="assignment" className="text-[18px]" />
-                  Buka SPK Workshop
-                </button>
-              </div>
+              </section>
+            )}
+          </>
+        ) : (
+          /* Riwayat mutasi */
+          <section className="mt-5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h2 className="text-sm font-semibold">Riwayat Mutasi</h2>
+              <span className="text-xs text-[#81766b]">
+                {movementLogs.length} transaksi
+              </span>
             </div>
-          )}
-        </aside>
+
+            {movementLogs.length === 0 ? (
+              <EmptyState
+                icon="history"
+                title="Belum ada riwayat mutasi"
+                description="Transaksi stok yang dicatat akan muncul di sini."
+              />
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[720px] border-collapse text-left text-xs">
+                  <thead>
+                    <tr className="border-y border-[#ded8cf] text-[10px] uppercase tracking-wider text-[#81766b]">
+                      <th className="py-3 pr-4 font-medium">Waktu</th>
+                      <th className="px-3 py-3 font-medium">Item</th>
+                      <th className="px-3 py-3 text-center font-medium">
+                        Jenis
+                      </th>
+                      <th className="px-3 py-3 text-right font-medium">
+                        Jumlah
+                      </th>
+                      <th className="px-3 py-3 font-medium">Referensi</th>
+                      <th className="py-3 pl-4 font-medium">Operator</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-[#e9e3da]">
+                    {movementLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-[#f8f5f0]">
+                        <td className="whitespace-nowrap py-3.5 pr-4 text-[#81766b]">
+                          {log.date}
+                        </td>
+
+                        <td className="px-3 py-3.5">
+                          <p className="max-w-[190px] truncate font-medium">
+                            {log.name}
+                          </p>
+                          <p className="mt-1 font-mono text-[10px] text-[#81766b]">
+                            {log.sku}
+                          </p>
+                        </td>
+
+                        <td className="px-3 py-3.5 text-center">
+                          <span
+                            className={
+                              log.type === "IN"
+                                ? "font-medium text-[#365d43]"
+                                : "font-medium text-[#9b3b32]"
+                            }
+                          >
+                            {log.type === "IN" ? "Masuk" : "Keluar"}
+                          </span>
+                        </td>
+
+                        <td
+                          className={`whitespace-nowrap px-3 py-3.5 text-right font-mono font-semibold ${
+                            log.type === "IN"
+                              ? "text-[#365d43]"
+                              : "text-[#9b3b32]"
+                          }`}
+                        >
+                          {log.type === "IN" ? "+" : "−"}
+                          {formatQty(log.qty)}
+                        </td>
+
+                        <td className="px-3 py-3.5">
+                          <p className="max-w-[220px] break-words font-medium text-[#50453e]">
+                            {log.ref}
+                          </p>
+                          <p className="mt-1 text-[10px] text-[#81766b]">
+                            {log.location}
+                          </p>
+                        </td>
+
+                        <td className="whitespace-nowrap py-3.5 pl-4 text-[#81766b]">
+                          {log.user}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <p className="mt-3 border-t border-[#ded8cf] py-3 text-[11px] leading-5 text-[#81766b]">
+              Riwayat awal masih menggunakan data contoh. Hubungkan ke
+              penyimpanan transaksi untuk menyimpan riwayat secara permanen.
+            </p>
+          </section>
+        )}
       </section>
 
-      {/* Stock mutation modal */}
+      {/* Modal mutasi stok */}
       {isStockModalOpen && selectedItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-[2px]"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               setIsStockModalOpen(false);
@@ -1079,20 +910,18 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="stock-modal-title"
-            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#e5e2dd] bg-[#fcf9f4] shadow-2xl"
+            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-[#ded8cf] bg-[#fcf9f4] shadow-xl"
           >
-            <div className="flex items-center justify-between border-b border-[#e5e2dd] px-5 py-4">
+            <div className="flex items-center justify-between border-b border-[#ded8cf] px-5 py-4">
               <div>
-                <h2
-                  id="stock-modal-title"
-                  className="text-base font-semibold text-[#1c1c19]"
-                >
+                <h2 id="stock-modal-title" className="text-base font-semibold">
                   Catat Mutasi Stok
                 </h2>
-                <p className="mt-1 text-xs text-[#82746d]">
-                  Catat pergerakan fisik persediaan
+                <p className="mt-1 text-xs text-[#81766b]">
+                  {selectedItem.name}
                 </p>
               </div>
+
               <button
                 type="button"
                 onClick={() => {
@@ -1100,43 +929,30 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   setStockError("");
                 }}
                 aria-label="Tutup modal"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#f0ede9] hover:text-[#1c1c19]"
+                className="flex h-8 w-8 items-center justify-center rounded-md text-[#81766b] hover:bg-[#f0ede9]"
               >
                 <Icon name="close" className="text-xl" />
               </button>
             </div>
 
             <form onSubmit={handleStockMutation} className="space-y-5 p-5">
-              <div className="flex items-center gap-3 rounded-xl border border-[#e5e2dd] bg-[#f8f5f0] p-3">
-                {selectedItem.image ? (
-                  <img
-                    src={selectedItem.image}
-                    alt=""
-                    className="h-12 w-12 shrink-0 rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
-                    <Icon name="inventory_2" className="text-xl" />
-                  </div>
-                )}
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[#1c1c19]">
-                    {selectedItem.name}
-                  </p>
-                  <p className="mt-1 font-mono text-[11px] text-[#82746d]">
-                    {selectedItem.sku}
-                  </p>
-                  <p className="mt-1 text-[11px] text-[#82746d]">
-                    Tersedia: {formatQty(selectedItem.available)}{" "}
-                    {selectedItem.unitType}
-                  </p>
-                </div>
+              <div className="border-b border-[#ded8cf] pb-4">
+                <p className="font-mono text-xs text-[#81766b]">
+                  {selectedItem.sku}
+                </p>
+                <p className="mt-2 text-sm">
+                  Stok tersedia:{" "}
+                  <strong>
+                    {formatQty(selectedItem.available)} {selectedItem.unitType}
+                  </strong>
+                </p>
               </div>
 
               <fieldset>
-                <legend className="mb-2 text-xs font-semibold text-[#50453e]">
+                <legend className="mb-2 text-xs font-semibold">
                   Jenis Mutasi
                 </legend>
+
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -1145,10 +961,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                       setStockError("");
                     }}
                     aria-pressed={stockActionType === "IN"}
-                    className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-3 text-xs font-semibold transition ${
+                    className={`${buttonBase} border ${
                       stockActionType === "IN"
-                        ? "border-emerald-700 bg-emerald-50 text-emerald-800"
-                        : "border-[#e5e2dd] bg-[#fcf9f4] text-[#82746d] hover:bg-[#f0ede9]"
+                        ? "border-[#365d43] bg-[#edf4ed] text-[#365d43]"
+                        : "border-[#ded8cf] text-[#81766b]"
                     }`}
                   >
                     <Icon name="south_west" className="text-lg" />
@@ -1163,10 +979,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                     }}
                     aria-pressed={stockActionType === "OUT"}
                     disabled={selectedItem.available <= 0}
-                    className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-3 text-xs font-semibold transition disabled:opacity-40 ${
+                    className={`${buttonBase} border ${
                       stockActionType === "OUT"
-                        ? "border-rose-700 bg-rose-50 text-rose-800"
-                        : "border-[#e5e2dd] bg-[#fcf9f4] text-[#82746d] hover:bg-[#f0ede9]"
+                        ? "border-[#9b3b32] bg-[#fbefed] text-[#9b3b32]"
+                        : "border-[#ded8cf] text-[#81766b]"
                     }`}
                   >
                     <Icon name="north_east" className="text-lg" />
@@ -1178,10 +994,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
               <div>
                 <label
                   htmlFor="stock-quantity"
-                  className="mb-1.5 block text-xs font-semibold text-[#50453e]"
+                  className="mb-1.5 block text-xs font-semibold"
                 >
                   Jumlah ({selectedItem.unitType})
                 </label>
+
                 <input
                   id="stock-quantity"
                   type="number"
@@ -1201,9 +1018,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   className={inputClass}
                   placeholder="Masukkan jumlah"
                 />
+
                 {stockActionType === "OUT" && (
-                  <p className="mt-1.5 text-[11px] text-[#82746d]">
-                    Maksimal barang keluar: {formatQty(selectedItem.available)}{" "}
+                  <p className="mt-1.5 text-[11px] text-[#81766b]">
+                    Maksimal {formatQty(selectedItem.available)}{" "}
                     {selectedItem.unitType}
                   </p>
                 )}
@@ -1212,10 +1030,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
               <div>
                 <label
                   htmlFor="stock-reference"
-                  className="mb-1.5 block text-xs font-semibold text-[#50453e]"
+                  className="mb-1.5 block text-xs font-semibold"
                 >
                   Keterangan / Nomor Referensi
                 </label>
+
                 <textarea
                   id="stock-reference"
                   required
@@ -1237,21 +1056,20 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
               {stockError && (
                 <div
                   role="alert"
-                  className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs leading-5 text-rose-800"
+                  className="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs leading-5 text-rose-800"
                 >
-                  <Icon name="error" className="mt-0.5 text-base" />
-                  <span>{stockError}</span>
+                  {stockError}
                 </div>
               )}
 
-              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] pt-4 sm:flex-row sm:justify-end">
+              <div className="flex flex-col-reverse gap-2 border-t border-[#ded8cf] pt-4 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={() => {
                     setIsStockModalOpen(false);
                     setStockError("");
                   }}
-                  className={`${buttonBase} border border-[#e5e2dd] bg-[#f0ede9] text-[#50453e] hover:bg-[#e5e2dd]`}
+                  className={`${buttonBase} border border-[#ded8cf] text-[#50453e] hover:bg-[#f0ede9]`}
                 >
                   Batal
                 </button>
@@ -1260,11 +1078,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   type="submit"
                   className={`${buttonBase} ${
                     stockActionType === "IN"
-                      ? "bg-emerald-700 text-white hover:bg-emerald-800"
-                      : "bg-rose-700 text-white hover:bg-rose-800"
+                      ? "bg-[#365d43] text-white hover:bg-[#294a34]"
+                      : "bg-[#9b3b32] text-white hover:bg-[#812e27]"
                   }`}
                 >
-                  <Icon name="check" className="text-[18px]" />
+                  <Icon name="check" className="text-lg" />
                   Simpan Mutasi
                 </button>
               </div>

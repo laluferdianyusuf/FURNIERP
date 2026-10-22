@@ -442,7 +442,6 @@ function CashMutationTable({ mutations }: { mutations: CashMutation[] }) {
 
 export const CashFlowView: React.FC<CashFlowViewProps> = ({
   mutations,
-  onNavigate,
   onAddMutation,
 }) => {
   const [selectedAccountFilter, setSelectedAccountFilter] =
@@ -650,24 +649,11 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
     ACCOUNTS.find((item) => item.value === account)?.label ?? account;
 
   return (
-    <main className="mx-auto mt-5 flex w-full max-w-[1600px] flex-col gap-7 pb-8">
-      {/* Header */}
-      <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-        <div className="min-w-0">
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
-            <span>Keuangan</span>
-            <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#795740]">Pencatatan Kas</span>
-          </div>
-
-          <h1 className="font-headline text-2xl font-semibold tracking-tight text-[#1c1c19] sm:text-3xl">
-            Cash Flow
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#82746d]">
-            Pantau uang masuk, uang keluar, dan perpindahan dana untuk
-            operasional bisnis mebel.
-          </p>
-        </div>
+    <div className="flex w-full flex-col gap-6">
+      <header className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <p className="text-sm text-[#82746d]">
+          Catat uang masuk, uang keluar, dan pindah rekening.
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <button
@@ -694,25 +680,11 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
             <Icon name="add" className="text-lg" />
             Pemasukan
           </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("financial-reports")}
-            className={`${buttonBase} border border-[#e5e2dd] bg-transparent text-[#50453e] hover:bg-[#f0ede8]`}
-          >
-            <Icon name="bar_chart" className="text-lg" />
-            Laporan
-          </button>
         </div>
       </header>
 
-      {/* Summary */}
       <section>
-        <SectionHeading
-          title="Ringkasan arus kas"
-          description="Ringkasan nominal berdasarkan seluruh mutasi yang tersedia."
-        />
-
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
           <SummaryCard
             label="Saldo awal"
             amount={compactCurrency(initialBalance)}
@@ -756,19 +728,19 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         </div>
       </section>
 
-      {/* Accounts */}
       <section>
         <SectionHeading
-          title="Rekening kas dan bank"
-          description="Pilih rekening untuk memfilter transaksi terkait."
+          title="Rekening"
           action={
-            <button
-              type="button"
-              onClick={() => setSelectedAccountFilter("ALL")}
-              className="self-start text-xs font-semibold text-[#5f402a] hover:text-[#795740]"
-            >
-              Reset filter
-            </button>
+            selectedAccountFilter !== "ALL" ? (
+              <button
+                type="button"
+                onClick={() => setSelectedAccountFilter("ALL")}
+                className="self-start text-xs font-semibold text-[#5f402a] hover:text-[#795740]"
+              >
+                Tampilkan semua
+              </button>
+            ) : undefined
           }
         />
 
@@ -801,8 +773,8 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
       <section className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]">
         <div className="space-y-4 p-4 sm:p-5">
           <SectionHeading
-            title="Mutasi transaksi"
-            description={`${filteredMutations.length} transaksi ditampilkan dari ${mutations.length} data.`}
+            title="Transaksi"
+            description={`${filteredMutations.length} dari ${mutations.length} transaksi`}
           />
 
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
@@ -1099,6 +1071,6 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
           </form>
         </ModalShell>
       )}
-    </main>
+    </div>
   );
 };

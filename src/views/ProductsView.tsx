@@ -8,7 +8,6 @@ interface ProductsViewProps {
 }
 
 type ProductType = "Ready Stock" | "PO 14-21 Hari";
-type ViewMode = "table" | "grid";
 
 const CATEGORIES = [
   "Semua",
@@ -24,29 +23,31 @@ const PRODUCT_CATEGORIES = CATEGORIES.filter(
 );
 
 const INPUT_CLASS =
-  "w-full rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition placeholder:text-[#a49a91] focus:border-[#795740] focus:bg-white focus:ring-2 focus:ring-[#795740]/10";
+  "w-full rounded-md border border-[#ded8d0] bg-white px-3 py-2.5 text-sm text-[#29231f] outline-none transition placeholder:text-[#a49a91] focus:border-[#795740]";
 
 const LABEL_CLASS = "mb-1.5 block text-xs font-medium text-[#50453e]";
 
-const PANEL_CLASS = "rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]";
+const PANEL_CLASS = "rounded-lg border border-[#e5e2dd] bg-white";
 
 const formatRupiah = (value: number) =>
-  `Rp ${Math.round(value || 0).toLocaleString("id-ID")}`;
+  `Rp ${Math.round(Number(value) || 0).toLocaleString("id-ID")}`;
 
 const formatCompactRupiah = (value: number) => {
-  if (value >= 1_000_000) {
-    return `Rp ${(value / 1_000_000).toLocaleString("id-ID", {
+  const amount = Number(value) || 0;
+
+  if (amount >= 1_000_000) {
+    return `Rp ${(amount / 1_000_000).toLocaleString("id-ID", {
       maximumFractionDigits: 2,
     })} jt`;
   }
 
-  if (value >= 1_000) {
-    return `Rp ${(value / 1_000).toLocaleString("id-ID", {
+  if (amount >= 1_000) {
+    return `Rp ${(amount / 1_000).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
     })} rb`;
   }
 
-  return formatRupiah(value);
+  return formatRupiah(amount);
 };
 
 const getMargin = (price: number, hpp: number) => {
@@ -76,6 +77,15 @@ const getNextSku = (products: Product[]) => {
   return sku;
 };
 
+const Icon: React.FC<{
+  name: string;
+  className?: string;
+}> = ({ name, className = "" }) => (
+  <span aria-hidden="true" className={`material-symbols-outlined ${className}`}>
+    {name}
+  </span>
+);
+
 const Field: React.FC<{
   label: string;
   children: React.ReactNode;
@@ -101,26 +111,17 @@ const SectionHeading: React.FC<{
   </div>
 );
 
-const Icon: React.FC<{
-  name: string;
-  className?: string;
-}> = ({ name, className = "" }) => (
-  <span aria-hidden="true" className={`material-symbols-outlined ${className}`}>
-    {name}
-  </span>
-);
-
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const styles: Record<string, string> = {
-    Aman: "border-[#d8e5d9] bg-[#edf4ed] text-[#416346]",
-    Menipis: "border-[#eadcc3] bg-[#f8f0df] text-[#8a652b]",
-    Kritis: "border-[#ebd4ce] bg-[#f8eae6] text-[#9b493b]",
+    Aman: "bg-[#edf4ed] text-[#416346]",
+    Menipis: "bg-[#f8f0df] text-[#8a652b]",
+    Kritis: "bg-[#f8eae6] text-[#9b493b]",
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-md border px-2 py-1 text-[11px] font-medium ${
-        styles[status] || "border-[#e5e2dd] bg-[#f0ede9] text-[#50453e]"
+      className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-medium ${
+        styles[status] || "bg-[#f0ede9] text-[#50453e]"
       }`}
     >
       {status}
@@ -130,7 +131,7 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
 
 const TypeBadge: React.FC<{ type: string }> = ({ type }) => (
   <span
-    className={`inline-flex whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-medium ${
+    className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-medium ${
       type === "Ready Stock"
         ? "bg-[#edf4ed] text-[#416346]"
         : "bg-[#f1e9df] text-[#795740]"
@@ -138,59 +139,6 @@ const TypeBadge: React.FC<{ type: string }> = ({ type }) => (
   >
     {type === "Ready Stock" ? "Ready Stock" : "Custom / PO"}
   </span>
-);
-
-const MetricCard: React.FC<{
-  label: string;
-  value: string;
-  description: string;
-  icon: string;
-  warning?: boolean;
-}> = ({ label, value, description, icon, warning = false }) => (
-  <div className={`${PANEL_CLASS} p-4 sm:p-5`}>
-    <div className="flex items-start justify-between gap-3">
-      <p className="text-xs font-medium text-[#82746d]">{label}</p>
-      <div
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-          warning
-            ? "bg-[#f8eae6] text-[#9b493b]"
-            : "bg-[#f0e8df] text-[#795740]"
-        }`}
-      >
-        <Icon name={icon} className="text-[19px]" />
-      </div>
-    </div>
-
-    <p
-      className={`mt-4 text-xl font-semibold tracking-tight ${
-        warning ? "text-[#9b493b]" : "text-[#29231f]"
-      }`}
-    >
-      {value}
-    </p>
-
-    <p className="mt-1 text-xs leading-relaxed text-[#82746d]">{description}</p>
-  </div>
-);
-
-const PriceCell: React.FC<{
-  label: string;
-  price: number;
-  margin: number;
-}> = ({ label, price, margin }) => (
-  <div className="min-w-0 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] p-2">
-    <p className="text-[10px] font-medium text-[#82746d]">{label}</p>
-    <p className="mt-1 whitespace-nowrap font-mono text-xs font-semibold text-[#29231f]">
-      {formatCompactRupiah(price)}
-    </p>
-    <p
-      className={`mt-1 text-[10px] ${
-        margin < 0 ? "text-[#9b493b]" : "text-[#637a5e]"
-      }`}
-    >
-      Margin {margin.toFixed(1)}%
-    </p>
-  </div>
 );
 
 export const ProductsView: React.FC<ProductsViewProps> = ({
@@ -204,7 +152,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
   const [selectedProductForBOM, setSelectedProductForBOM] =
     useState<Product | null>(null);
   const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
 
   const [newSku, setNewSku] = useState("");
   const [newName, setNewName] = useState("");
@@ -240,13 +187,13 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     });
   }, [products, searchQuery, selectedCategory, selectedType]);
 
-  const totalHppInventory = products.reduce(
-    (total, product) => total + product.hpp * product.stockPhysical,
+  const totalPhysicalStock = products.reduce(
+    (total, product) => total + product.stockPhysical,
     0,
   );
 
-  const totalPhysicalStock = products.reduce(
-    (total, product) => total + product.stockPhysical,
+  const totalHppInventory = products.reduce(
+    (total, product) => total + product.hpp * product.stockPhysical,
     0,
   );
 
@@ -254,20 +201,11 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     (product) => product.status === "Kritis" || product.stockAvailable <= 0,
   ).length;
 
-  const readyStockCount = products.filter(
-    (product) => product.type === "Ready Stock",
-  ).length;
-
-  const poCount = products.length - readyStockCount;
-
-  const averageRetailMargin =
-    products.length > 0
-      ? products.reduce(
-          (total, product) =>
-            total + getMargin(product.prices.retail, product.hpp),
-          0,
-        ) / products.length
-      : 0;
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("Semua");
+    setSelectedType("Semua");
+  };
 
   const resetProductForm = () => {
     setNewSku("");
@@ -328,7 +266,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     }
 
     if (retail < hpp || reseller < hpp || grosir < hpp) {
-      setFormError("Harga jual sebaiknya tidak lebih rendah dari HPP.");
+      setFormError("Harga jual tidak boleh lebih rendah dari HPP.");
       return;
     }
 
@@ -342,13 +280,15 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
       return;
     }
 
+    const wood = newWood.trim() || "Belum ditentukan";
+
     const newProduct: Product = {
       id: `prod-${Date.now()}`,
       sku,
       name,
       category: newCategory,
       image: "",
-      woodType: newWood.trim() || "Belum ditentukan",
+      woodType: wood,
       dimensions: newDimensions.trim() || "Belum ditentukan",
       thickness: "Panel 2.5 cm",
       finishing: "Natural Satin Melamic",
@@ -371,7 +311,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
         {
           id: "b1",
           name: "Kayu Solid Pilihan",
-          spec: newWood.trim() || "Belum ditentukan",
+          spec: wood,
           volume: "0.4 m³",
           unitPrice: Math.round(hpp * 0.55),
           subtotal: Math.round(hpp * 0.55),
@@ -418,97 +358,74 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
   };
 
   return (
-    <div className="mt-5 flex w-full flex-col gap-6 text-[#29231f]">
-      {/* Header */}
-      <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
-        <div>
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
-            <span>Operasional</span>
-            <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#795740]">Produk</span>
-          </div>
-
-          <h1 className="font-headline text-2xl font-semibold tracking-tight sm:text-3xl">
-            Katalog produk
-          </h1>
-
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#82746d]">
-            Kelola spesifikasi, HPP, harga jual, dan ketersediaan stok produk
-            mebel dari satu tempat.
-          </p>
-        </div>
+    <div className="flex w-full flex-col gap-5 text-[#29231f]">
+      <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+        <p className="text-sm text-[#82746d]">
+          Katalog, harga, dan stok produk.
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => onNavigate("inventory")}
-            className="inline-flex items-center gap-2 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3.5 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f0ede9]"
+            className="inline-flex items-center gap-2 rounded-md border border-[#e5e2dd] bg-white px-3 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f6f3ee]"
           >
-            <Icon name="inventory_2" className="text-[18px]" />
-            Stok fisik
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onNavigate("pos")}
-            className="inline-flex items-center gap-2 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3.5 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f0ede9]"
-          >
-            <Icon name="point_of_sale" className="text-[18px]" />
-            Buka POS
+            <Icon name="inventory_2" className="text-base" />
+            Stok
           </button>
 
           <button
             type="button"
             onClick={openNewProductModal}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#5f402a] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#795740]"
+            className="inline-flex items-center gap-2 rounded-md bg-[#5f402a] px-3.5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#795740]"
           >
-            <Icon name="add" className="text-[18px]" />
+            <Icon name="add" className="text-base" />
             Tambah produk
           </button>
         </div>
       </header>
 
-      {/* Summary */}
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          label="Total produk"
-          value={`${products.length} SKU`}
-          description={`${readyStockCount} ready stock · ${poCount} produk PO`}
-          icon="inventory_2"
-        />
+      {/* Ringkasan sederhana, tanpa kartu */}
+      <section className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-[#e5e2dd] py-3 text-xs">
+        <p className="text-[#82746d]">
+          Total produk{" "}
+          <span className="ml-1 font-semibold text-[#29231f]">
+            {products.length}
+          </span>
+        </p>
 
-        <MetricCard
-          label="Nilai stok berdasarkan HPP"
-          value={formatCompactRupiah(totalHppInventory)}
-          description={`${totalPhysicalStock.toLocaleString("id-ID")} unit stok fisik`}
-          icon="account_balance_wallet"
-        />
+        <p className="text-[#82746d]">
+          Stok fisik{" "}
+          <span className="ml-1 font-semibold text-[#29231f]">
+            {totalPhysicalStock.toLocaleString("id-ID")} unit
+          </span>
+        </p>
 
-        <MetricCard
-          label="Rata-rata margin retail"
-          value={`${averageRetailMargin.toFixed(1)}%`}
-          description="Rata-rata margin kotor harga retail terhadap HPP"
-          icon="percent"
-        />
+        <p className="text-[#82746d]">
+          Nilai stok (HPP){" "}
+          <span className="ml-1 font-semibold text-[#29231f]">
+            {formatCompactRupiah(totalHppInventory)}
+          </span>
+        </p>
 
-        <MetricCard
-          label="Stok perlu diperiksa"
-          value={`${criticalStockCount} SKU`}
-          description="Produk kritis atau tidak memiliki stok tersedia"
-          icon="warning"
-          warning={criticalStockCount > 0}
-        />
+        <p
+          className={
+            criticalStockCount > 0 ? "text-[#9b493b]" : "text-[#82746d]"
+          }
+        >
+          Stok kritis{" "}
+          <span className="ml-1 font-semibold">{criticalStockCount} SKU</span>
+        </p>
       </section>
 
       {/* Search and filters */}
-      <section className={`${PANEL_CLASS} p-4`}>
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 md:flex-row">
           <div className="relative min-w-0 flex-1">
             <Icon
               name="search"
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-[#82746d]"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xl text-[#82746d]"
             />
-
             <input
               type="search"
               value={searchQuery}
@@ -519,400 +436,245 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <select
-              aria-label="Filter tipe produk"
-              value={selectedType}
-              onChange={(event) => setSelectedType(event.target.value)}
-              className={`${INPUT_CLASS} min-w-40 py-2.5 lg:w-auto`}
-            >
-              <option value="Semua">Semua tipe</option>
-              <option value="Ready Stock">Ready Stock</option>
-              <option value="PO 14-21 Hari">Custom / PO</option>
-            </select>
-
-            <div className="flex shrink-0 items-center gap-1 rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] p-1">
-              <button
-                type="button"
-                onClick={() => setViewMode("table")}
-                aria-label="Tampilan tabel"
-                aria-pressed={viewMode === "table"}
-                className={`flex h-9 w-9 items-center justify-center rounded-md transition ${
-                  viewMode === "table"
-                    ? "bg-[#5f402a] text-white"
-                    : "text-[#82746d] hover:bg-white hover:text-[#50453e]"
-                }`}
-              >
-                <Icon name="table_rows" className="text-[19px]" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setViewMode("grid")}
-                aria-label="Tampilan kartu"
-                aria-pressed={viewMode === "grid"}
-                className={`flex h-9 w-9 items-center justify-center rounded-md transition ${
-                  viewMode === "grid"
-                    ? "bg-[#5f402a] text-white"
-                    : "text-[#82746d] hover:bg-white hover:text-[#50453e]"
-                }`}
-              >
-                <Icon name="grid_view" className="text-[19px]" />
-              </button>
-            </div>
-          </div>
+          <select
+            aria-label="Filter tipe produk"
+            value={selectedType}
+            onChange={(event) => setSelectedType(event.target.value)}
+            className={`${INPUT_CLASS} md:w-48`}
+          >
+            <option value="Semua">Semua tipe</option>
+            <option value="Ready Stock">Ready Stock</option>
+            <option value="PO 14-21 Hari">Custom / PO</option>
+          </select>
         </div>
 
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+        <div className="flex flex-wrap items-center gap-2">
           {CATEGORIES.map((category) => {
+            const active = selectedCategory === category;
             const count =
               category === "Semua"
                 ? products.length
                 : products.filter((product) => product.category === category)
                     .length;
 
-            const active = selectedCategory === category;
-
             return (
               <button
                 key={category}
                 type="button"
                 onClick={() => setSelectedCategory(category)}
-                className={`inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition ${
+                className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-2 text-xs transition ${
                   active
-                    ? "border-[#5f402a] bg-[#5f402a] text-white"
-                    : "border-[#e5e2dd] bg-[#fcf9f4] text-[#50453e] hover:bg-[#f0ede9]"
+                    ? "border-[#795740] bg-[#f1e9df] font-semibold text-[#5f402a]"
+                    : "border-[#e5e2dd] bg-white text-[#50453e] hover:bg-[#f6f3ee]"
                 }`}
               >
                 {category}
-                <span
-                  className={`text-[10px] ${
-                    active ? "text-white/75" : "text-[#82746d]"
-                  }`}
-                >
-                  {count}
-                </span>
+                <span className="text-[10px] opacity-70">{count}</span>
               </button>
             );
           })}
         </div>
-
-        <div className="mt-3 flex items-center justify-between border-t border-[#e5e2dd] pt-3">
-          <p className="text-xs text-[#82746d]">
-            Menampilkan{" "}
-            <span className="font-semibold text-[#50453e]">
-              {filteredProducts.length}
-            </span>{" "}
-            dari {products.length} produk
-          </p>
-
-          {(searchQuery ||
-            selectedCategory !== "Semua" ||
-            selectedType !== "Semua") && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("Semua");
-                setSelectedType("Semua");
-              }}
-              className="text-xs font-medium text-[#795740] hover:underline"
-            >
-              Reset filter
-            </button>
-          )}
-        </div>
       </section>
 
-      {/* Table view */}
-      {viewMode === "table" ? (
-        <section className={`${PANEL_CLASS} overflow-hidden`}>
-          {filteredProducts.length === 0 ? (
-            <EmptyProducts
-              onReset={() => {
-                setSearchQuery("");
-                setSelectedCategory("Semua");
-                setSelectedType("Semua");
-              }}
-            />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[1120px] text-left text-xs">
-                <thead className="border-b border-[#e5e2dd] bg-[#f6f3ee]">
-                  <tr className="text-[10px] font-semibold uppercase tracking-wide text-[#82746d]">
-                    <th className="px-4 py-3">Produk</th>
-                    <th className="px-3 py-3">Tipe</th>
-                    <th className="px-3 py-3 text-right">HPP</th>
-                    <th className="px-3 py-3">Harga jual</th>
-                    <th className="px-3 py-3 text-center">Stok</th>
-                    <th className="px-3 py-3">Status</th>
-                    <th className="px-4 py-3 text-right">Aksi</th>
-                  </tr>
-                </thead>
+      {/* Product table */}
+      <section className={`${PANEL_CLASS} overflow-hidden`}>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e5e2dd] px-4 py-3">
+          <p className="text-sm font-semibold text-[#29231f]">Daftar produk</p>
 
-                <tbody className="divide-y divide-[#e5e2dd]">
-                  {filteredProducts.map((product) => (
-                    <tr
-                      key={product.id}
-                      className="transition hover:bg-[#f8f5f0]"
-                    >
-                      <td className="px-4 py-3.5">
-                        <div className="flex items-center gap-3">
-                          {product.image ? (
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              loading="lazy"
-                              className="h-12 w-12 shrink-0 rounded-lg border border-[#e5e2dd] bg-[#f0ede9] object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#e5e2dd] bg-[#f0ede9] text-[#82746d]">
-                              <Icon name="chair" className="text-[23px]" />
-                            </div>
-                          )}
+          <div className="flex items-center gap-3">
+            <p className="text-xs text-[#82746d]">
+              {filteredProducts.length} dari {products.length} produk
+            </p>
 
-                          <div className="min-w-0 max-w-[270px]">
-                            <p className="truncate text-sm font-semibold text-[#29231f]">
-                              {product.name}
-                            </p>
-                            <p className="mt-1 font-mono text-[11px] text-[#795740]">
-                              {product.sku}
-                            </p>
-                            <p className="mt-0.5 truncate text-[11px] text-[#82746d]">
-                              {product.woodType}
-                            </p>
-                            <p className="mt-0.5 text-[10px] text-[#a49a91]">
-                              {product.dimensions}
-                            </p>
+            {(searchQuery ||
+              selectedCategory !== "Semua" ||
+              selectedType !== "Semua") && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="text-xs font-medium text-[#795740] hover:underline"
+              >
+                Reset filter
+              </button>
+            )}
+          </div>
+        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="flex flex-col items-center px-5 py-12 text-center">
+            <Icon name="search_off" className="text-3xl text-[#a49a91]" />
+            <p className="mt-3 text-sm font-semibold">Produk tidak ditemukan</p>
+            <p className="mt-1 text-xs text-[#82746d]">
+              Ubah kata kunci atau filter yang digunakan.
+            </p>
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-3 text-xs font-medium text-[#795740] hover:underline"
+            >
+              Reset pencarian
+            </button>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[1050px] text-left text-xs">
+              <thead className="border-b border-[#e5e2dd] bg-[#f8f6f2]">
+                <tr className="text-[10px] font-semibold uppercase tracking-wide text-[#82746d]">
+                  <th className="px-4 py-3">Produk</th>
+                  <th className="px-3 py-3">Tipe</th>
+                  <th className="px-3 py-3 text-right">HPP</th>
+                  <th className="px-3 py-3">Harga jual</th>
+                  <th className="px-3 py-3 text-center">Stok</th>
+                  <th className="px-3 py-3">Status</th>
+                  <th className="px-4 py-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-[#eee9e3]">
+                {filteredProducts.map((product) => (
+                  <tr
+                    key={product.id}
+                    className="transition-colors hover:bg-[#fcfaf7]"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        {product.image ? (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            loading="lazy"
+                            className="h-11 w-11 shrink-0 rounded-md border border-[#e5e2dd] bg-[#f6f3ee] object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#f1ede7] text-[#82746d]">
+                            <Icon name="chair" className="text-xl" />
                           </div>
+                        )}
+
+                        <div className="min-w-0 max-w-[250px]">
+                          <p className="truncate text-sm font-medium text-[#29231f]">
+                            {product.name}
+                          </p>
+                          <p className="mt-1 font-mono text-[11px] text-[#795740]">
+                            {product.sku}
+                          </p>
+                          <p className="mt-0.5 truncate text-[11px] text-[#82746d]">
+                            {product.category}
+                          </p>
                         </div>
-                      </td>
+                      </div>
+                    </td>
 
-                      <td className="px-3 py-3.5">
-                        <TypeBadge type={product.type} />
-                      </td>
+                    <td className="px-3 py-3">
+                      <TypeBadge type={product.type} />
+                    </td>
 
-                      <td className="px-3 py-3.5 text-right">
-                        <p className="whitespace-nowrap font-mono text-xs font-semibold">
-                          {formatRupiah(product.hpp)}
-                        </p>
+                    <td className="whitespace-nowrap px-3 py-3 text-right">
+                      <p className="font-mono font-medium">
+                        {formatRupiah(product.hpp)}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProductForBOM(product)}
+                        className="mt-1 text-[11px] text-[#795740] hover:underline"
+                      >
+                        Lihat BOM
+                      </button>
+                    </td>
+
+                    <td className="px-3 py-3">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-[11px] text-[#82746d]">
+                            Retail
+                          </span>
+                          <span className="whitespace-nowrap font-mono font-medium">
+                            {formatCompactRupiah(product.prices.retail)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-[11px] text-[#82746d]">
+                            Reseller
+                          </span>
+                          <span className="whitespace-nowrap font-mono">
+                            {formatCompactRupiah(product.prices.reseller)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-[11px] text-[#82746d]">
+                            Grosir
+                          </span>
+                          <span className="whitespace-nowrap font-mono">
+                            {formatCompactRupiah(product.prices.grosir)}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-3 py-3">
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="text-center">
+                          <p className="text-[10px] text-[#82746d]">Fisik</p>
+                          <p className="mt-1 font-semibold">
+                            {product.stockPhysical}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-[10px] text-[#82746d]">SPK</p>
+                          <p className="mt-1 font-semibold text-[#795740]">
+                            {product.stockReserved}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-[10px] text-[#82746d]">Bebas</p>
+                          <p className="mt-1 font-semibold text-[#416346]">
+                            {product.stockAvailable}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-center text-[10px] text-[#82746d]">
+                        Buffer: {product.bufferMin}
+                      </p>
+                    </td>
+
+                    <td className="px-3 py-3">
+                      <StatusBadge status={product.status} />
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end gap-1.5">
                         <button
                           type="button"
+                          title="Lihat detail BOM"
+                          aria-label={`Lihat BOM ${product.name}`}
                           onClick={() => setSelectedProductForBOM(product)}
-                          className="mt-1 text-[11px] font-medium text-[#795740] hover:underline"
+                          className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e5e2dd] text-[#795740] transition hover:bg-[#f6f3ee]"
                         >
-                          Lihat BOM ({product.bomComponentsCount})
+                          <Icon name="description" className="text-lg" />
                         </button>
-                      </td>
 
-                      <td className="px-3 py-3.5">
-                        <div className="grid min-w-[290px] grid-cols-3 gap-1.5">
-                          <PriceCell
-                            label="Retail"
-                            price={product.prices.retail}
-                            margin={getMargin(
-                              product.prices.retail,
-                              product.hpp,
-                            )}
-                          />
-                          <PriceCell
-                            label="Reseller"
-                            price={product.prices.reseller}
-                            margin={getMargin(
-                              product.prices.reseller,
-                              product.hpp,
-                            )}
-                          />
-                          <PriceCell
-                            label="Grosir"
-                            price={product.prices.grosir}
-                            margin={getMargin(
-                              product.prices.grosir,
-                              product.hpp,
-                            )}
-                          />
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onNavigate("pos")}
+                          className="inline-flex items-center gap-1 rounded-md bg-[#5f402a] px-3 py-2 text-xs font-medium text-white transition hover:bg-[#795740]"
+                        >
+                          <Icon name="point_of_sale" className="text-base" />
+                          Jual
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
 
-                        <p className="mt-1.5 text-[10px] text-[#82746d]">
-                          Harga minimum internal:{" "}
-                          {formatRupiah(product.ownerFloorPrice)}
-                        </p>
-                      </td>
-
-                      <td className="px-3 py-3.5">
-                        <div className="flex items-center justify-center gap-3">
-                          <div className="text-center">
-                            <p className="text-[10px] text-[#82746d]">Fisik</p>
-                            <p className="mt-1 font-semibold">
-                              {product.stockPhysical}
-                            </p>
-                          </div>
-                          <div className="h-7 border-l border-[#e5e2dd]" />
-                          <div className="text-center">
-                            <p className="text-[10px] text-[#82746d]">SPK</p>
-                            <p className="mt-1 font-semibold text-[#795740]">
-                              {product.stockReserved}
-                            </p>
-                          </div>
-                          <div className="h-7 border-l border-[#e5e2dd]" />
-                          <div className="text-center">
-                            <p className="text-[10px] text-[#82746d]">Bebas</p>
-                            <p className="mt-1 font-semibold text-[#416346]">
-                              {product.stockAvailable}
-                            </p>
-                          </div>
-                        </div>
-
-                        <p className="mt-2 text-center text-[10px] text-[#82746d]">
-                          Buffer minimum: {product.bufferMin}
-                        </p>
-                      </td>
-
-                      <td className="px-3 py-3.5">
-                        <StatusBadge status={product.status} />
-                      </td>
-
-                      <td className="px-4 py-3.5">
-                        <div className="flex justify-end gap-1.5">
-                          <button
-                            type="button"
-                            title="Lihat detail produk dan BOM"
-                            aria-label={`Lihat BOM ${product.name}`}
-                            onClick={() => setSelectedProductForBOM(product)}
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#e5e2dd] text-[#795740] transition hover:bg-[#f0ede9]"
-                          >
-                            <Icon name="description" className="text-[18px]" />
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => onNavigate("pos")}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-[#5f402a] px-3 py-2 text-xs font-medium text-white transition hover:bg-[#795740]"
-                          >
-                            <Icon
-                              name="point_of_sale"
-                              className="text-[16px]"
-                            />
-                            Jual
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
-      ) : (
-        /* Grid view */
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredProducts.length === 0 ? (
-            <div className="col-span-full">
-              <EmptyProducts
-                onReset={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("Semua");
-                  setSelectedType("Semua");
-                }}
-              />
-            </div>
-          ) : (
-            filteredProducts.map((product) => (
-              <article
-                key={product.id}
-                className={`${PANEL_CLASS} flex min-w-0 flex-col overflow-hidden transition-colors hover:border-[#cfc1b4]`}
-              >
-                <div className="relative flex h-44 items-center justify-center overflow-hidden bg-[#f0ede9]">
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <Icon name="chair" className="text-5xl text-[#b3a59a]" />
-                  )}
-
-                  <div className="absolute left-3 top-3">
-                    <TypeBadge type={product.type} />
-                  </div>
-
-                  <div className="absolute right-3 top-3">
-                    <StatusBadge status={product.status} />
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-4">
-                  <p className="text-[10px] font-medium tracking-wide text-[#795740]">
-                    {product.sku}
-                  </p>
-
-                  <h3 className="mt-1 text-sm font-semibold leading-snug text-[#29231f]">
-                    {product.name}
-                  </h3>
-
-                  <p className="mt-1 text-xs text-[#82746d]">
-                    {product.woodType}
-                  </p>
-
-                  <p className="mt-1 text-[11px] text-[#a49a91]">
-                    {product.dimensions}
-                  </p>
-
-                  <div className="mt-4 border-t border-[#e5e2dd] pt-3">
-                    <p className="text-[10px] font-medium uppercase tracking-wide text-[#82746d]">
-                      Harga retail
-                    </p>
-                    <p className="mt-1 font-mono text-lg font-semibold text-[#29231f]">
-                      {formatRupiah(product.prices.retail)}
-                    </p>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-2 gap-3 rounded-lg bg-[#f6f3ee] p-3">
-                    <div>
-                      <p className="text-[10px] text-[#82746d]">HPP</p>
-                      <p className="mt-1 text-xs font-semibold">
-                        {formatCompactRupiah(product.hpp)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-[#82746d]">Stok bebas</p>
-                      <p className="mt-1 text-xs font-semibold">
-                        {product.stockAvailable} unit
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedProductForBOM(product)}
-                      className="flex-1 rounded-lg border border-[#e5e2dd] px-3 py-2 text-xs font-medium text-[#50453e] transition hover:bg-[#f0ede9]"
-                    >
-                      Detail BOM
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onNavigate("pos")}
-                      className="flex-1 rounded-lg bg-[#5f402a] px-3 py-2 text-xs font-medium text-white transition hover:bg-[#795740]"
-                    >
-                      Buka POS
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))
-          )}
-        </section>
-      )}
-
-      {/* BOM detail modal */}
+      {/* BOM detail */}
       {selectedProductForBOM && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#211b17]/45 p-3 backdrop-blur-sm sm:p-5"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-3 sm:p-5"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               setSelectedProductForBOM(null);
@@ -923,55 +685,41 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="bom-modal-title"
-            className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[#e5e2dd] bg-[#fcf9f4] shadow-2xl"
+            className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#e5e2dd] bg-white shadow-xl"
           >
-            <div className="flex items-center justify-between gap-4 border-b border-[#e5e2dd] px-4 py-4 sm:px-6">
-              <div className="flex min-w-0 items-center gap-3">
-                {selectedProductForBOM.image ? (
-                  <img
-                    src={selectedProductForBOM.image}
-                    alt={selectedProductForBOM.name}
-                    className="h-12 w-12 shrink-0 rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#795740]">
-                    <Icon name="chair" className="text-2xl" />
-                  </div>
-                )}
-
-                <div className="min-w-0">
-                  <h2
-                    id="bom-modal-title"
-                    className="truncate text-base font-semibold"
-                  >
-                    {selectedProductForBOM.name}
-                  </h2>
-                  <p className="mt-1 text-xs text-[#82746d]">
-                    {selectedProductForBOM.sku} · HPP{" "}
-                    {formatRupiah(selectedProductForBOM.hpp)}
-                  </p>
-                </div>
+            <div className="flex items-center justify-between gap-4 border-b border-[#e5e2dd] px-5 py-4">
+              <div className="min-w-0">
+                <h2
+                  id="bom-modal-title"
+                  className="truncate text-base font-semibold"
+                >
+                  {selectedProductForBOM.name}
+                </h2>
+                <p className="mt-1 text-xs text-[#82746d]">
+                  {selectedProductForBOM.sku} · HPP{" "}
+                  {formatRupiah(selectedProductForBOM.hpp)}
+                </p>
               </div>
 
               <button
                 type="button"
                 aria-label="Tutup detail BOM"
                 onClick={() => setSelectedProductForBOM(null)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#f0ede9] hover:text-[#29231f]"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#82746d] hover:bg-[#f6f3ee]"
               >
                 <Icon name="close" className="text-xl" />
               </button>
             </div>
 
-            <div className="flex-1 space-y-6 overflow-y-auto p-4 sm:p-6">
+            <div className="flex-1 space-y-5 overflow-y-auto p-5">
               <div>
-                <SectionHeading
-                  title="Spesifikasi produk"
-                  description="Informasi material dan konstruksi produk."
-                />
-
-                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <SectionHeading title="Spesifikasi produk" />
+                <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
                   {[
+                    {
+                      label: "Kategori",
+                      value: selectedProductForBOM.category,
+                    },
                     {
                       label: "Jenis kayu / material",
                       value: selectedProductForBOM.woodType,
@@ -979,6 +727,10 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     {
                       label: "Dimensi",
                       value: selectedProductForBOM.dimensions,
+                    },
+                    {
+                      label: "Ketebalan",
+                      value: selectedProductForBOM.thickness,
                     },
                     {
                       label: "Finishing",
@@ -991,38 +743,39 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                   ].map((spec) => (
                     <div
                       key={spec.label}
-                      className="rounded-lg border border-[#e5e2dd] bg-white/60 p-3"
+                      className="border-b border-[#eee9e3] pb-2"
                     >
                       <p className="text-[11px] text-[#82746d]">{spec.label}</p>
-                      <p className="mt-1 text-sm font-medium">{spec.value}</p>
+                      <p className="mt-1 text-sm font-medium">
+                        {spec.value || "—"}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <SectionHeading
-                    title="Rincian komponen BOM"
-                    description="Bill of Materials atau rincian komponen biaya produk."
+                    title="Komponen BOM"
+                    description="Rincian komponen dan biaya produksi."
                   />
-                  <p className="text-sm font-semibold text-[#795740]">
+                  <p className="text-sm font-semibold">
                     Total HPP: {formatRupiah(selectedProductForBOM.hpp)}
                   </p>
                 </div>
 
-                <div className="mt-3 overflow-x-auto rounded-xl border border-[#e5e2dd]">
-                  <table className="w-full min-w-[520px] text-left text-xs">
-                    <thead className="bg-[#f0ede9] text-[10px] uppercase tracking-wide text-[#82746d]">
+                <div className="mt-3 overflow-x-auto border-y border-[#e5e2dd]">
+                  <table className="w-full min-w-[480px] text-left text-xs">
+                    <thead className="bg-[#f8f6f2] text-[10px] uppercase tracking-wide text-[#82746d]">
                       <tr>
-                        <th className="px-3 py-3">Komponen</th>
-                        <th className="px-3 py-3">Spesifikasi</th>
-                        <th className="px-3 py-3">Volume</th>
-                        <th className="px-3 py-3 text-right">Subtotal</th>
+                        <th className="px-3 py-2.5">Komponen</th>
+                        <th className="px-3 py-2.5">Spesifikasi</th>
+                        <th className="px-3 py-2.5">Volume</th>
+                        <th className="px-3 py-2.5 text-right">Subtotal</th>
                       </tr>
                     </thead>
-
-                    <tbody className="divide-y divide-[#e5e2dd]">
+                    <tbody className="divide-y divide-[#eee9e3]">
                       {selectedProductForBOM.bomItems?.length ? (
                         selectedProductForBOM.bomItems.map((item) => (
                           <tr key={item.id}>
@@ -1033,7 +786,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                               {item.spec}
                             </td>
                             <td className="px-3 py-3">{item.volume}</td>
-                            <td className="whitespace-nowrap px-3 py-3 text-right font-mono font-medium">
+                            <td className="whitespace-nowrap px-3 py-3 text-right font-mono">
                               {formatRupiah(item.subtotal)}
                             </td>
                           </tr>
@@ -1044,7 +797,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                             colSpan={4}
                             className="px-3 py-8 text-center text-[#82746d]"
                           >
-                            Belum ada rincian komponen BOM untuk produk ini.
+                            Belum ada rincian komponen BOM.
                           </td>
                         </tr>
                       )}
@@ -1055,95 +808,131 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
               <div>
                 <SectionHeading
-                  title="Perbandingan harga dan margin"
-                  description="Margin kotor dihitung dari harga jual dikurangi HPP, dibagi harga jual."
+                  title="Harga dan margin"
+                  description="Margin kotor dihitung dari harga jual dikurangi HPP."
                 />
 
-                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {[
-                    {
-                      label: "Retail",
-                      price: selectedProductForBOM.prices.retail,
-                    },
-                    {
-                      label: "Reseller",
-                      price: selectedProductForBOM.prices.reseller,
-                    },
-                    {
-                      label: "Grosir",
-                      price: selectedProductForBOM.prices.grosir,
-                    },
-                  ].map((tier) => {
-                    const marginValue = tier.price - selectedProductForBOM.hpp;
-                    const marginPercent = getMargin(
-                      tier.price,
-                      selectedProductForBOM.hpp,
-                    );
+                <div className="mt-3 overflow-x-auto">
+                  <table className="w-full min-w-[420px] text-left text-xs">
+                    <thead className="border-b border-[#e5e2dd] text-[#82746d]">
+                      <tr>
+                        <th className="py-2 font-medium">Tipe harga</th>
+                        <th className="py-2 text-right font-medium">
+                          Harga jual
+                        </th>
+                        <th className="py-2 text-right font-medium">Margin</th>
+                        <th className="py-2 text-right font-medium">
+                          Persentase
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#eee9e3]">
+                      {[
+                        {
+                          label: "Retail",
+                          price: selectedProductForBOM.prices.retail,
+                        },
+                        {
+                          label: "Reseller",
+                          price: selectedProductForBOM.prices.reseller,
+                        },
+                        {
+                          label: "Grosir",
+                          price: selectedProductForBOM.prices.grosir,
+                        },
+                      ].map((tier) => {
+                        const margin = tier.price - selectedProductForBOM.hpp;
+                        const percent = getMargin(
+                          tier.price,
+                          selectedProductForBOM.hpp,
+                        );
 
-                    return (
-                      <div
-                        key={tier.label}
-                        className="rounded-xl border border-[#e5e2dd] bg-white/60 p-4"
-                      >
-                        <p className="text-xs font-medium text-[#82746d]">
-                          {tier.label}
-                        </p>
-                        <p className="mt-2 font-mono text-sm font-semibold">
-                          {formatRupiah(tier.price)}
-                        </p>
-                        <div className="mt-3 border-t border-[#e5e2dd] pt-3">
-                          <p className="text-[11px] text-[#82746d]">
-                            Margin kotor
-                          </p>
-                          <p
-                            className={`mt-1 text-sm font-semibold ${
-                              marginValue < 0
-                                ? "text-[#9b493b]"
-                                : "text-[#416346]"
-                            }`}
-                          >
-                            {formatRupiah(marginValue)}
-                          </p>
-                          <p className="mt-1 text-xs text-[#82746d]">
-                            {marginPercent.toFixed(1)}%
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                        return (
+                          <tr key={tier.label}>
+                            <td className="py-3 font-medium">{tier.label}</td>
+                            <td className="whitespace-nowrap py-3 text-right font-mono">
+                              {formatRupiah(tier.price)}
+                            </td>
+                            <td
+                              className={`whitespace-nowrap py-3 text-right font-mono ${
+                                margin < 0 ? "text-[#9b493b]" : "text-[#416346]"
+                              }`}
+                            >
+                              {formatRupiah(margin)}
+                            </td>
+                            <td
+                              className={`whitespace-nowrap py-3 text-right ${
+                                percent < 0
+                                  ? "text-[#9b493b]"
+                                  : "text-[#416346]"
+                              }`}
+                            >
+                              {percent.toFixed(1)}%
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 border-t border-[#e5e2dd] pt-4 sm:grid-cols-4">
+                <div>
+                  <p className="text-[11px] text-[#82746d]">Stok fisik</p>
+                  <p className="mt-1 text-sm font-semibold">
+                    {selectedProductForBOM.stockPhysical}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[11px] text-[#82746d]">Stok SPK</p>
+                  <p className="mt-1 text-sm font-semibold">
+                    {selectedProductForBOM.stockReserved}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[11px] text-[#82746d]">Stok bebas</p>
+                  <p className="mt-1 text-sm font-semibold">
+                    {selectedProductForBOM.stockAvailable}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[11px] text-[#82746d]">Harga minimum</p>
+                  <p className="mt-1 text-sm font-semibold">
+                    {formatRupiah(selectedProductForBOM.ownerFloorPrice)}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f6f3ee] p-4 sm:flex-row sm:justify-between sm:px-6">
+            <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f8f6f2] p-4 sm:flex-row sm:justify-between">
               <button
                 type="button"
                 onClick={() => {
                   setSelectedProductForBOM(null);
                   onNavigate("orders");
                 }}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-4 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f0ede9]"
+                className="rounded-md border border-[#e5e2dd] bg-white px-4 py-2.5 text-xs font-medium text-[#50453e] hover:bg-[#f6f3ee]"
               >
-                <Icon name="assignment" className="text-[17px]" />
                 Buka SPK produksi
               </button>
 
               <button
                 type="button"
                 onClick={() => setSelectedProductForBOM(null)}
-                className="rounded-lg bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#795740]"
+                className="rounded-md bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#795740]"
               >
-                Tutup detail
+                Tutup
               </button>
             </div>
           </section>
         </div>
       )}
 
-      {/* New product modal */}
+      {/* Add product */}
       {isNewProductModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#211b17]/45 p-3 backdrop-blur-sm sm:p-5"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-3 sm:p-5"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               setIsNewProductModalOpen(false);
@@ -1154,15 +943,15 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="new-product-title"
-            className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#e5e2dd] bg-[#fcf9f4] shadow-2xl"
+            className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-[#e5e2dd] bg-white shadow-xl"
           >
-            <div className="flex items-center justify-between border-b border-[#e5e2dd] px-5 py-4 sm:px-6">
+            <div className="flex items-center justify-between border-b border-[#e5e2dd] px-5 py-4">
               <div>
                 <h2 id="new-product-title" className="text-base font-semibold">
                   Tambah produk
                 </h2>
                 <p className="mt-1 text-xs text-[#82746d]">
-                  Masukkan identitas, biaya produksi, harga, dan stok awal.
+                  Isi informasi produk, harga, dan stok awal.
                 </p>
               </div>
 
@@ -1170,7 +959,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 type="button"
                 aria-label="Tutup form produk"
                 onClick={() => setIsNewProductModalOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#f0ede9] hover:text-[#29231f]"
+                className="flex h-8 w-8 items-center justify-center rounded-md text-[#82746d] hover:bg-[#f6f3ee]"
               >
                 <Icon name="close" className="text-xl" />
               </button>
@@ -1180,21 +969,16 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
               onSubmit={handleCreateProduct}
               className="flex min-h-0 flex-1 flex-col"
             >
-              <div className="flex-1 space-y-6 overflow-y-auto p-5 sm:p-6">
+              <div className="flex-1 space-y-5 overflow-y-auto p-5">
                 <div>
-                  <SectionHeading
-                    title="Identitas produk"
-                    description="Gunakan SKU yang unik agar produk mudah dicari dan dibedakan."
-                  />
-
+                  <SectionHeading title="Identitas produk" />
                   <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="SKU produk *">
                       <input
-                        type="text"
                         required
                         value={newSku}
                         onChange={(event) => setNewSku(event.target.value)}
-                        placeholder="Contoh: MBL-0001"
+                        placeholder="MBL-0001"
                         className={INPUT_CLASS}
                       />
                     </Field>
@@ -1216,7 +1000,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                     <Field label="Nama produk *" className="sm:col-span-2">
                       <input
-                        type="text"
                         required
                         value={newName}
                         onChange={(event) => setNewName(event.target.value)}
@@ -1227,17 +1010,14 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                     <Field label="Jenis kayu / material">
                       <input
-                        type="text"
                         value={newWood}
                         onChange={(event) => setNewWood(event.target.value)}
-                        placeholder="Jenis kayu utama"
                         className={INPUT_CLASS}
                       />
                     </Field>
 
                     <Field label="Dimensi produk">
                       <input
-                        type="text"
                         value={newDimensions}
                         onChange={(event) =>
                           setNewDimensions(event.target.value)
@@ -1279,10 +1059,10 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 <div className="border-t border-[#e5e2dd] pt-5">
                   <SectionHeading
                     title="Harga jual"
-                    description="Tentukan harga berdasarkan kelompok pelanggan."
+                    description="Harga berdasarkan kelompok pelanggan."
                   />
 
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <Field label="Retail (Rp) *">
                       <input
                         type="number"
@@ -1324,25 +1104,15 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     Number(newRetail) > 0 &&
                     Number(newReseller) > 0 &&
                     Number(newGrosir) > 0 && (
-                      <div className="mt-3 rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] p-3">
-                        <p className="text-[11px] font-medium text-[#82746d]">
+                      <div className="mt-4 border-t border-[#e5e2dd] pt-3">
+                        <p className="text-xs font-medium text-[#82746d]">
                           Estimasi margin kotor
                         </p>
-
-                        <div className="mt-2 grid grid-cols-3 gap-2">
+                        <div className="mt-2 grid grid-cols-3 gap-3">
                           {[
-                            {
-                              label: "Retail",
-                              price: Number(newRetail),
-                            },
-                            {
-                              label: "Reseller",
-                              price: Number(newReseller),
-                            },
-                            {
-                              label: "Grosir",
-                              price: Number(newGrosir),
-                            },
+                            { label: "Retail", price: Number(newRetail) },
+                            { label: "Reseller", price: Number(newReseller) },
+                            { label: "Grosir", price: Number(newGrosir) },
                           ].map((tier) => {
                             const margin = getMargin(
                               tier.price,
@@ -1351,7 +1121,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                             return (
                               <div key={tier.label}>
-                                <p className="text-[10px] text-[#82746d]">
+                                <p className="text-[11px] text-[#82746d]">
                                   {tier.label}
                                 </p>
                                 <p
@@ -1373,8 +1143,8 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                 <div className="border-t border-[#e5e2dd] pt-5">
                   <SectionHeading
-                    title="Persediaan awal"
-                    description="Isi jumlah produk yang sudah tersedia secara fisik."
+                    title="Stok awal"
+                    description="Jumlah stok yang tersedia secara fisik."
                   />
 
                   <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -1407,18 +1177,18 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 {formError && (
                   <div
                     role="alert"
-                    className="rounded-lg border border-[#ebd4ce] bg-[#f8eae6] px-3 py-2.5 text-xs text-[#9b493b]"
+                    className="rounded-md border border-[#ebd4ce] bg-[#f8eae6] px-3 py-2.5 text-xs text-[#9b493b]"
                   >
                     {formError}
                   </div>
                 )}
               </div>
 
-              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f6f3ee] p-4 sm:flex-row sm:justify-end sm:px-6">
+              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f8f6f2] p-4 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={() => setIsNewProductModalOpen(false)}
-                  className="rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-4 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f0ede9]"
+                  className="rounded-md border border-[#e5e2dd] bg-white px-4 py-2.5 text-xs font-medium text-[#50453e] hover:bg-[#f6f3ee]"
                 >
                   Batal
                 </button>
@@ -1426,9 +1196,9 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 <button
                   type="submit"
                   disabled={!onAddProduct}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#795740] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#795740] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon name="check" className="text-[17px]" />
+                  <Icon name="check" className="text-base" />
                   Simpan produk
                 </button>
               </div>
@@ -1439,27 +1209,3 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     </div>
   );
 };
-
-const EmptyProducts: React.FC<{ onReset: () => void }> = ({ onReset }) => (
-  <div className="flex flex-col items-center justify-center px-5 py-14 text-center">
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0ede9] text-[#795740]">
-      <Icon name="search_off" className="text-2xl" />
-    </div>
-
-    <h3 className="mt-4 text-sm font-semibold text-[#29231f]">
-      Produk tidak ditemukan
-    </h3>
-
-    <p className="mt-1 max-w-sm text-xs leading-relaxed text-[#82746d]">
-      Coba gunakan kata kunci lain atau ubah filter kategori dan tipe produk.
-    </p>
-
-    <button
-      type="button"
-      onClick={onReset}
-      className="mt-4 rounded-lg border border-[#e5e2dd] px-4 py-2 text-xs font-medium text-[#795740] transition hover:bg-[#f0ede9]"
-    >
-      Reset pencarian
-    </button>
-  </div>
-);

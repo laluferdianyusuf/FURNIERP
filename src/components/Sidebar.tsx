@@ -21,48 +21,18 @@ interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    group: "Utama",
+    group: "Menu",
     items: [
-      {
-        path: "dashboard" as PageView,
-        label: "Dashboard",
-        icon: "dashboard",
-      },
-    ],
-  },
-  {
-    group: "Operasional",
-    items: [
-      {
-        path: "pos" as PageView,
-        label: "Penjualan / POS",
-        icon: "point_of_sale",
-      },
+      { path: "dashboard" as PageView, label: "Dashboard", icon: "dashboard" },
+      { path: "pos" as PageView, label: "Penjualan", icon: "point_of_sale" },
       {
         path: "orders" as PageView,
-        label: "Pesanan & SPK",
+        label: "Pesanan",
         icon: "precision_manufacturing",
       },
-      {
-        path: "customers" as PageView,
-        label: "Pelanggan",
-        icon: "group",
-      },
-      {
-        path: "products" as PageView,
-        label: "Produk",
-        icon: "chair",
-      },
-    ],
-  },
-  {
-    group: "Persediaan",
-    items: [
-      {
-        path: "inventory" as PageView,
-        label: "Stok & Bahan",
-        icon: "inventory_2",
-      },
+      { path: "customers" as PageView, label: "Pelanggan", icon: "group" },
+      { path: "products" as PageView, label: "Produk", icon: "chair" },
+      { path: "inventory" as PageView, label: "Stok", icon: "inventory_2" },
     ],
   },
   {
@@ -70,39 +40,25 @@ const navSections: NavSection[] = [
     items: [
       {
         path: "cash-flow" as PageView,
-        label: "Cash Flow",
+        label: "Kas",
         icon: "account_balance_wallet",
       },
       {
         path: "receivables" as PageView,
-        label: "Piutang & Aging",
+        label: "Piutang",
         icon: "request_quote",
       },
       {
         path: "financial-reports" as PageView,
-        label: "Laporan Keuangan",
+        label: "Laporan",
         icon: "bar_chart",
       },
-    ],
-  },
-  {
-    group: "Lainnya",
-    items: [
       {
         path: "invoice-detail" as PageView,
-        label: "Faktur / Nota",
+        label: "Faktur",
         icon: "description",
       },
-      // {
-      //   path: "ai-advisor" as PageView,
-      //   label: "Tanya AI Atelier",
-      //   icon: "psychology",
-      // },
-      {
-        path: "settings" as PageView,
-        label: "Pengaturan",
-        icon: "settings",
-      },
+      { path: "settings" as PageView, label: "Pengaturan", icon: "settings" },
     ],
   },
 ];
@@ -137,7 +93,7 @@ interface SidebarBrandProps {
 }
 
 const SidebarBrand: React.FC<SidebarBrandProps> = () => (
-  <div className="shrink-0 border-b border-white/10 px-5 py-5">
+  <div className="shrink-0 border-b border-white/10 px-5 py-4">
     <div className="flex items-center gap-3">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#795740] text-[#ffdcc6]">
         <MaterialIcon name="chair" className="text-[23px]" />
@@ -147,16 +103,8 @@ const SidebarBrand: React.FC<SidebarBrandProps> = () => (
         <p className="truncate text-[17px] font-semibold tracking-tight text-white">
           FurniERP
         </p>
-        <p className="mt-0.5 text-xs text-[#eabea1]">Sistem Operasional</p>
+        <p className="mt-0.5 text-xs text-[#eabea1]">Panel usaha mebel</p>
       </div>
-    </div>
-
-    <div className="mt-4 flex items-center gap-2 rounded-md border border-white/10 bg-black/[0.10] px-3 py-2">
-      <MaterialIcon
-        name="verified_user"
-        className="text-[17px] text-[#ffdcc6]"
-      />
-      <span className="text-xs font-medium text-[#f6f3ee]">Akses Pemilik</span>
     </div>
   </div>
 );
@@ -235,17 +183,8 @@ const NavigationSection: React.FC<NavigationSectionProps> = ({
 );
 
 const SidebarFooter: React.FC = () => (
-  <div className="shrink-0 border-t border-white/10 px-5 py-4">
-    <div className="flex items-center justify-between gap-3">
-      <div className="min-w-0">
-        <p className="text-xs font-medium text-[#f6f3ee]">FurniERP</p>
-        <p className="mt-1 text-[10px] text-[#eabea1]/70">
-          Panel pemilik · v2.4
-        </p>
-      </div>
-
-      <MaterialIcon name="chair" className="text-[19px] text-[#eabea1]/70" />
-    </div>
+  <div className="shrink-0 border-t border-white/10 px-5 py-3">
+    <p className="text-[11px] text-[#eabea1]/80">Akses pemilik</p>
   </div>
 );
 

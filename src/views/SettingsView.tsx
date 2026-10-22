@@ -342,42 +342,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-6 pt-4 text-[#1c1c19]">
+    <div className="flex w-full flex-col gap-6 text-[#1c1c19]">
       {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
 
-      {/* Header */}
       <header>
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-2 text-xs text-[#82746d]"
-        >
-          <button
-            type="button"
-            onClick={() => onNavigate("dashboard")}
-            className="transition-colors hover:text-[#5f402a]"
-          >
-            FurniERP
-          </button>
-          <Icon name="chevron_right" className="text-[15px]" />
-          <span className="font-semibold text-[#5f402a]">Pengaturan</span>
-        </nav>
-
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 className="font-serif text-2xl font-semibold tracking-tight text-[#1c1c19] sm:text-3xl">
-              Pengaturan Atelier
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#82746d]">
-              Kelola profil usaha, informasi pada faktur, dan standar margin
-              harga untuk pelanggan retail, reseller, serta grosir.
-            </p>
-          </div>
-
-          <span className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3 py-2 text-[10px] text-[#82746d]">
-            <Icon name="tune" className="text-[17px] text-[#5f402a]" />
-            Preferensi sistem
-          </span>
-        </div>
+        <p className="max-w-2xl text-sm leading-6 text-[#82746d]">
+          Profil usaha, isi faktur, dan margin harga.
+        </p>
       </header>
 
       <form

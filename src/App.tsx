@@ -288,7 +288,7 @@ export default function App() {
       />
 
       {/* Main Container */}
-      <div className="lg:pl-60 flex-1 flex flex-col min-h-screen w-full overflow-x-hidden">
+      <div className="flex min-h-screen w-full flex-1 flex-col overflow-x-hidden lg:pl-[252px]">
         {/* Persistent Top Navigation Header */}
         <Header
           currentPage={currentPage}
@@ -303,7 +303,7 @@ export default function App() {
         />
 
         {/* Dynamic Main Workspace Content */}
-        <main className="w-full pt-16 flex-1 px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-10 pt-20 sm:px-6 lg:px-8">
           {currentPage === "dashboard" && (
             <DashboardView
               onNavigate={setCurrentPage}

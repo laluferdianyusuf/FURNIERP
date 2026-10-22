@@ -719,13 +719,6 @@ export const FinancialReportsView: React.FC<FinancialReportsViewProps> = ({
 
   const isEmptyPeriod = data.revenue === 0;
 
-  const periodLabel = useMemo(
-    () =>
-      PERIOD_OPTIONS.find((period) => period.value === selectedPeriod)?.label ??
-      "",
-    [selectedPeriod],
-  );
-
   const showToast = (message: string) => {
     setToastMessage(message);
     window.setTimeout(() => {
@@ -761,7 +754,7 @@ export const FinancialReportsView: React.FC<FinancialReportsViewProps> = ({
   };
 
   return (
-    <div className="flex w-full flex-col gap-6 pb-8 pt-4">
+    <div className="flex w-full flex-col gap-6">
       {toastMessage && (
         <div
           role="status"
@@ -780,24 +773,10 @@ export const FinancialReportsView: React.FC<FinancialReportsViewProps> = ({
         </div>
       )}
 
-      {/* Header */}
-      <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
-            <span>Keuangan</span>
-            <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#795740]">Laporan</span>
-          </div>
-
-          <h1 className="text-2xl font-bold tracking-tight text-[#29251f] sm:text-3xl">
-            Laporan Keuangan
-          </h1>
-
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#82746d]">
-            Ringkasan pendapatan, HPP, beban operasional, laba, dan perbandingan
-            hasil akrual dengan arus kas usaha mebel.
-          </p>
-        </div>
+      <header className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <p className="text-sm text-[#82746d]">
+          Pendapatan, biaya, dan laba per periode.
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <SecondaryButton onClick={() => handleExport("PDF")}>
@@ -831,32 +810,6 @@ export const FinancialReportsView: React.FC<FinancialReportsViewProps> = ({
 
         <PeriodSelector value={selectedPeriod} onChange={handlePeriodChange} />
       </Card>
-
-      {/* Data status */}
-      <div className="flex flex-col gap-3 rounded-xl border border-[#e5e0d8] bg-[#f0ede7] p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-start gap-3">
-          <Icon name="info" className="mt-0.5 text-xl text-[#654832]" />
-          <div>
-            <p className="text-sm font-semibold text-[#50453e]">
-              {isEmptyPeriod
-                ? "Data periode belum tersedia"
-                : "Ringkasan laporan periode"}
-            </p>
-            <p className="mt-1 text-xs leading-5 text-[#82746d]">
-              {isEmptyPeriod
-                ? `Belum ada data laporan untuk ${periodLabel}. Hubungkan laporan ke transaksi yang tersimpan untuk menampilkan nilai aktual.`
-                : `${data.startDate} – ${data.endDate}. Nilai saat ini menggunakan data contoh yang ada di file ini.`}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone={isBookClosed ? "amber" : "green"}>
-            {isBookClosed ? "Status UI: ditandai tutup" : "Status UI: terbuka"}
-          </Badge>
-          <Badge tone="brown">IDR · Rupiah</Badge>
-        </div>
-      </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">

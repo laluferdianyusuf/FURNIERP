@@ -928,7 +928,7 @@ export const ReceivablesView: React.FC<ReceivablesViewProps> = ({
   };
 
   return (
-    <div className="flex w-full flex-col gap-6 pb-8 pt-4">
+    <div className="flex w-full flex-col gap-6">
       {toastMessage && (
         <div
           role="status"
@@ -947,45 +947,15 @@ export const ReceivablesView: React.FC<ReceivablesViewProps> = ({
         </div>
       )}
 
-      {/* Page header */}
-      <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
-            <span>Keuangan</span>
-            <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#795740]">Piutang</span>
-          </div>
-
-          <h1 className="text-2xl font-bold tracking-tight text-[#29251f] sm:text-3xl">
-            Piutang Pelanggan
-          </h1>
-
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#82746d]">
-            Pantau sisa tagihan, tanggal jatuh tempo, penggunaan plafon kredit,
-            dan pencatatan pembayaran pelanggan.
-          </p>
-        </div>
+      <header className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <p className="text-sm text-[#82746d]">
+          Tagihan pelanggan yang belum lunas.
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <SecondaryButton onClick={() => onNavigate("customers")}>
             <Icon name="groups" className="text-lg" />
-            Master Pelanggan
-          </SecondaryButton>
-
-          <SecondaryButton
-            onClick={() => {
-              if (overdueInvoices.length === 0) {
-                showToast("Tidak ada piutang lewat jatuh tempo.");
-                return;
-              }
-
-              showToast(
-                `${overdueInvoices.length} faktur lewat jatuh tempo perlu ditindaklanjuti.`,
-              );
-            }}
-          >
-            <Icon name="notifications_active" className="text-lg" />
-            Pengingat
+            Pelanggan
           </SecondaryButton>
         </div>
       </header>
@@ -1029,10 +999,7 @@ export const ReceivablesView: React.FC<ReceivablesViewProps> = ({
 
       {/* Filters */}
       <div className="space-y-3">
-        <PanelHeading
-          title="Semua transaksi piutang"
-          description="Cari invoice atau persempit daftar berdasarkan kategori pelanggan dan status."
-        />
+        <PanelHeading title="Daftar piutang" />
 
         <ReceivablesFilters
           searchQuery={searchQuery}
