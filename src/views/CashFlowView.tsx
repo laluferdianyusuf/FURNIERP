@@ -654,13 +654,10 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
       {/* Header */}
       <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0">
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="rounded-md bg-[#eae1d7] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#5f402a]">
-              Keuangan
-            </span>
-            <span className="text-xs text-[#82746d]">
-              Pencatatan kas dan bank
-            </span>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
+            <span>Keuangan</span>
+            <Icon name="chevron_right" className="text-sm" />
+            <span className="text-[#795740]">Pencatatan Kas</span>
           </div>
 
           <h1 className="font-headline text-2xl font-semibold tracking-tight text-[#1c1c19] sm:text-3xl">

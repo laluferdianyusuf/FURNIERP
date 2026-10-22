@@ -783,9 +783,10 @@ export const FinancialReportsView: React.FC<FinancialReportsViewProps> = ({
       {/* Header */}
       <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <Badge tone="brown">Keuangan</Badge>
-            <Badge>Laporan manajemen</Badge>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
+            <span>Keuangan</span>
+            <Icon name="chevron_right" className="text-sm" />
+            <span className="text-[#795740]">Laporan</span>
           </div>
 
           <h1 className="text-2xl font-bold tracking-tight text-[#29251f] sm:text-3xl">

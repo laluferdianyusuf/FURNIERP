@@ -12,9 +12,12 @@ type WorkspaceTab = "bom" | "timeline" | "financial";
 type ViewMode = "table" | "kanban";
 
 const panel = "rounded-xl border border-[#e5e2dd] bg-white";
+const muted = "text-[#82746d]";
+const text = "text-[#1c1c19]";
+const brown = "text-[#5f402a]";
 
 const button =
-  "inline-flex items-center justify-center gap-2 rounded-lg border border-[#e5e2dd] bg-white px-3 py-2 text-xs font-medium text-[#50453e] transition-colors hover:bg-[#f6f3ee] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#795740] disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-lg border border-[#e5e2dd] bg-white px-3 py-2 text-xs font-medium text-[#50453e] transition-colors hover:bg-[#f6f3ee] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#795740]";
 
 const primaryButton =
   "inline-flex items-center justify-center gap-2 rounded-lg bg-[#5f402a] px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#795740] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#795740] focus-visible:ring-offset-2";
@@ -48,70 +51,50 @@ const normalized = (value?: string) =>
     .toLowerCase()
     .trim();
 
-const isCancelled = (order: ProductionOrder) => {
-  const status = normalized(`${order.status} ${order.currentStage}`);
-  return status.includes("batal") || status.includes("cancel");
-};
+const isCancelled = (order: ProductionOrder) =>
+  /batal|cancel/.test(normalized(`${order.status} ${order.currentStage}`));
 
 const isCompletedOrder = (order: ProductionOrder) => {
   if (isCancelled(order)) return true;
 
-  const status = normalized(`${order.status} ${order.currentStage}`);
-
-  return status.includes("selesai") || status.includes("terkirim");
-};
-
-const isUrgentOrder = (order: ProductionOrder) => {
-  const status = normalized(order.status);
-
-  return (
-    status.includes("prioritas") ||
-    status.includes("terlambat") ||
-    status.includes("besok") ||
-    status.includes("kritis") ||
-    status.includes("mendesak")
+  return /selesai|terkirim/.test(
+    normalized(`${order.status} ${order.currentStage}`),
   );
 };
 
-const getProductionColumn = (
-  order: ProductionOrder,
-):
+const isUrgentOrder = (order: ProductionOrder) =>
+  /prioritas|terlambat|besok|kritis|mendesak/.test(normalized(order.status));
+
+type ProductionStage =
   | "Menunggu DP"
   | "Menunggu Bahan"
   | "Sedang Diproduksi"
   | "QC & Siap Kirim"
-  | "Dibatalkan" => {
+  | "Dibatalkan";
+
+const columns: Exclude<ProductionStage, "Dibatalkan">[] = [
+  "Menunggu DP",
+  "Menunggu Bahan",
+  "Sedang Diproduksi",
+  "QC & Siap Kirim",
+];
+
+const getProductionColumn = (order: ProductionOrder): ProductionStage => {
   const value = normalized(`${order.status} ${order.currentStage}`);
 
   if (isCancelled(order)) return "Dibatalkan";
 
   if (
-    value.includes("selesai") ||
-    value.includes("terkirim") ||
-    value.includes("siap kirim") ||
-    value.includes("pengiriman") ||
-    value.includes("qc") ||
-    value.includes("finishing") ||
-    value.includes("quality")
+    /selesai|terkirim|siap kirim|pengiriman|qc|finishing|quality/.test(value)
   ) {
     return "QC & Siap Kirim";
   }
 
-  if (
-    value.includes("produksi") ||
-    value.includes("perakitan") ||
-    value.includes("pengamplasan") ||
-    value.includes("pemotongan") ||
-    value.includes("pengerjaan")
-  ) {
+  if (/produksi|perakitan|pengamplasan|pemotongan|pengerjaan/.test(value)) {
     return "Sedang Diproduksi";
   }
 
-  if (
-    value.includes("bahan") ||
-    value.includes("material") ||
-    value.includes("kayu")
-  ) {
+  if (/bahan|material|kayu/.test(value)) {
     return "Menunggu Bahan";
   }
 
@@ -146,23 +129,21 @@ const StatCard: React.FC<{
 }> = ({ label, value, note, icon, tone = "default" }) => (
   <section className={`${panel} min-w-0 p-4`}>
     <div className="flex items-center justify-between gap-3">
-      <p className="text-xs text-[#82746d]">{label}</p>
+      <p className={`text-xs ${muted}`}>{label}</p>
       <Icon name={icon} className="text-lg text-[#795740]" />
     </div>
-
     <p
       className={`mt-3 break-words text-xl font-semibold tracking-tight font-mono-numbers ${
         tone === "danger"
           ? "text-[#a3443f]"
           : tone === "success"
             ? "text-emerald-800"
-            : "text-[#1c1c19]"
+            : text
       }`}
     >
       {value}
     </p>
-
-    <p className="mt-1.5 text-[11px] leading-relaxed text-[#82746d]">{note}</p>
+    <p className={`mt-1 text-[11px] leading-relaxed ${muted}`}>{note}</p>
   </section>
 );
 
@@ -172,9 +153,9 @@ const EmptyState: React.FC<{
   icon?: string;
 }> = ({ title, description, icon = "inbox" }) => (
   <div className="flex flex-col items-center rounded-xl border border-dashed border-[#e5e2dd] bg-[#fcf9f4] px-5 py-9 text-center">
-    <Icon name={icon} className="text-3xl text-[#82746d]" />
-    <p className="mt-3 text-sm font-semibold text-[#1c1c19]">{title}</p>
-    <p className="mt-1 max-w-sm text-xs leading-relaxed text-[#82746d]">
+    <Icon name={icon} className={`text-3xl ${muted}`} />
+    <p className={`mt-3 text-sm font-semibold ${text}`}>{title}</p>
+    <p className={`mt-1 max-w-sm text-xs leading-relaxed ${muted}`}>
       {description}
     </p>
   </div>
@@ -185,13 +166,11 @@ const SectionHeading: React.FC<{
   description?: string;
   action?: React.ReactNode;
 }> = ({ title, description, action }) => (
-  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h3 className="text-sm font-semibold text-[#1c1c19]">{title}</h3>
+      <h3 className={`text-sm font-semibold ${text}`}>{title}</h3>
       {description && (
-        <p className="mt-1 text-xs leading-relaxed text-[#82746d]">
-          {description}
-        </p>
+        <p className={`mt-1 text-xs leading-relaxed ${muted}`}>{description}</p>
       )}
     </div>
     {action}
@@ -249,6 +228,20 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
   const metrics = useMemo(() => {
     const active = orders.filter((order) => !isCompletedOrder(order));
 
+    const stageCounts: Record<
+      Exclude<ProductionStage, "Dibatalkan">,
+      number
+    > = {
+      "Menunggu DP": 0,
+      "Menunggu Bahan": 0,
+      "Sedang Diproduksi": 0,
+      "QC & Siap Kirim": 0,
+    };
+
+    active.forEach((order) => {
+      stageCounts[getProductionColumn(order) as keyof typeof stageCounts] += 1;
+    });
+
     return {
       activeCount: active.length,
       totalContract: orders.reduce(
@@ -272,26 +265,13 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
         0,
       ),
       urgentOrders: active.filter(isUrgentOrder).length,
-      stageCounts: {
-        "Menunggu DP": active.filter(
-          (order) => getProductionColumn(order) === "Menunggu DP",
-        ).length,
-        "Menunggu Bahan": active.filter(
-          (order) => getProductionColumn(order) === "Menunggu Bahan",
-        ).length,
-        "Sedang Diproduksi": active.filter(
-          (order) => getProductionColumn(order) === "Sedang Diproduksi",
-        ).length,
-        "QC & Siap Kirim": active.filter(
-          (order) => getProductionColumn(order) === "QC & Siap Kirim",
-        ).length,
-      },
+      stageCounts,
     };
   }, [orders]);
 
   const renderStatus = (order: ProductionOrder) => {
-    const urgent = isUrgentOrder(order);
     const cancelled = isCancelled(order);
+    const urgent = isUrgentOrder(order);
 
     return (
       <span
@@ -317,18 +297,16 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
     );
   };
 
-  const renderProgress = (order: ProductionOrder, compact = false) => {
+  const renderProgress = (order: ProductionOrder) => {
     const value = progressOf(order.progressPercent);
 
     return (
-      <div className={compact ? "mt-3" : "mt-2"}>
+      <div className="mt-3">
         <div className="flex items-center justify-between gap-2 text-[11px]">
-          <span className="truncate text-[#82746d]">
+          <span className={`truncate ${muted}`}>
             {order.currentStage || "Tahap belum dicatat"}
           </span>
-          <span className="shrink-0 font-semibold text-[#5f402a]">
-            {value}%
-          </span>
+          <span className={`shrink-0 font-semibold ${brown}`}>{value}%</span>
         </div>
         <div
           className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#f0ede9]"
@@ -347,27 +325,31 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
     );
   };
 
-  const columns = [
-    "Menunggu DP",
-    "Menunggu Bahan",
-    "Sedang Diproduksi",
-    "QC & Siap Kirim",
-  ] as const;
+  const tabs: { id: WorkspaceTab; label: string; icon: string }[] = [
+    { id: "bom", label: "Material & HPP", icon: "inventory_2" },
+    { id: "timeline", label: "Progres", icon: "timeline" },
+    { id: "financial", label: "Keuangan", icon: "payments" },
+  ];
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setMandorFilter("all");
+  };
 
   return (
     <div className="mt-6 flex w-full flex-col gap-5">
-      {/* Header */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <p className="text-[11px] font-medium text-[#82746d]">
-            FurniERP <span className="mx-1">/</span> Operasional
-          </p>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
+            <span>Operasional</span>
+            <Icon name="chevron_right" className="text-sm" />
+            <span className="text-[#795740]">Orders</span>
+          </div>
           <h1 className="mt-2 font-headline text-2xl font-semibold tracking-tight text-[#1c1c19] sm:text-3xl">
             Pesanan Produksi
           </h1>
-          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-[#82746d]">
-            Pantau SPK, progres pengerjaan, kebutuhan material, biaya, dan
-            piutang pelanggan.
+          <p className={`mt-1.5 max-w-xl text-sm leading-relaxed ${muted}`}>
+            Kelola SPK, progres pengerjaan, material, dan biaya pesanan.
           </p>
         </div>
 
@@ -393,7 +375,6 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
         </div>
       </header>
 
-      {/* Summary */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="SPK aktif"
@@ -422,18 +403,12 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
         />
       </div>
 
-      {/* Production stages */}
       <section className={`${panel} p-4`}>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-semibold text-[#1c1c19]">
-              Tahapan produksi
-            </h2>
-            <p className="mt-1 text-xs text-[#82746d]">
-              Pesanan aktif berdasarkan tahap pengerjaan.
-            </p>
-          </div>
-          <Icon name="conversion_path" className="text-xl text-[#82746d]" />
+        <div>
+          <h2 className={`text-sm font-semibold ${text}`}>Tahapan produksi</h2>
+          <p className={`mt-1 text-xs ${muted}`}>
+            Jumlah pesanan aktif pada setiap tahap.
+          </p>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -445,7 +420,9 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
               <span className="text-xs leading-relaxed text-[#50453e]">
                 {stage}
               </span>
-              <span className="text-lg font-semibold text-[#5f402a] font-mono-numbers">
+              <span
+                className={`text-lg font-semibold font-mono-numbers ${brown}`}
+              >
                 {metrics.stageCounts[stage]}
               </span>
             </div>
@@ -453,31 +430,27 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
         </div>
       </section>
 
-      {/* List toolbar */}
       <section className={`${panel} p-4`}>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-[#1c1c19]">
-              Daftar pesanan
-            </h2>
-            <p className="mt-1 text-xs text-[#82746d]">
-              {filteredOrders.length} dari {orders.length} pesanan
+            <h2 className={`text-sm font-semibold ${text}`}>Daftar pesanan</h2>
+            <p className={`mt-1 text-xs ${muted}`}>
+              Menampilkan {filteredOrders.length} dari {orders.length} pesanan
             </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <div className="relative min-w-0 sm:w-72">
-              <Icon
-                name="search"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-[#82746d]"
-              />
+            <div
+              className={`${input} flex gap-3 items-center min-w-0 sm:w-72 flex-row`}
+            >
+              <Icon name="search" className="text-lg text-[#82746d]" />
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Cari SPK, pelanggan, material..."
                 aria-label="Cari pesanan"
-                className={`${input} pl-10`}
+                className={`py-1 w-full`}
               />
             </div>
 
@@ -501,9 +474,9 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                 aria-label="Tampilan daftar"
                 aria-pressed={viewMode === "table"}
                 onClick={() => setViewMode("table")}
-                className={`rounded-md px-3 py-2 text-xs ${
+                className={`rounded-md px-3 py-2 ${
                   viewMode === "table"
-                    ? "bg-white font-semibold text-[#5f402a] shadow-sm"
+                    ? "bg-white text-[#5f402a] shadow-sm"
                     : "text-[#82746d]"
                 }`}
               >
@@ -514,9 +487,9 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                 aria-label="Tampilan Kanban"
                 aria-pressed={viewMode === "kanban"}
                 onClick={() => setViewMode("kanban")}
-                className={`rounded-md px-3 py-2 text-xs ${
+                className={`rounded-md px-3 py-2 ${
                   viewMode === "kanban"
-                    ? "bg-white font-semibold text-[#5f402a] shadow-sm"
+                    ? "bg-white text-[#5f402a] shadow-sm"
                     : "text-[#82746d]"
                 }`}
               >
@@ -528,15 +501,10 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
 
         {(searchQuery || mandorFilter !== "all") && (
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#f0ede9] pt-3">
-            <p className="text-[11px] text-[#82746d]">
-              Filter sedang diterapkan.
-            </p>
+            <p className={`text-[11px] ${muted}`}>Filter sedang diterapkan.</p>
             <button
               type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setMandorFilter("all");
-              }}
+              onClick={resetFilters}
               className="text-xs font-medium text-[#795740] hover:underline"
             >
               Reset filter
@@ -545,7 +513,6 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
         )}
       </section>
 
-      {/* Kanban */}
       {viewMode === "kanban" ? (
         <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 2xl:grid-cols-4">
           {columns.map((column) => {
@@ -569,7 +536,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
 
                 <div className="flex flex-col gap-2 p-3">
                   {columnOrders.length === 0 ? (
-                    <p className="py-5 text-center text-xs text-[#82746d]">
+                    <p className={`py-5 text-center text-xs ${muted}`}>
                       Tidak ada pesanan.
                     </p>
                   ) : (
@@ -587,17 +554,17 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                           <span className="font-mono text-[10px] font-semibold text-[#795740]">
                             {order.spkNumber}
                           </span>
-                          <span className="text-[11px] font-semibold text-[#1c1c19]">
+                          <span className={`text-[11px] font-semibold ${text}`}>
                             {compactMoney(order.contractPrice)}
                           </span>
                         </div>
-                        <p className="mt-2 text-xs font-semibold text-[#1c1c19]">
+                        <p className={`mt-2 text-xs font-semibold ${text}`}>
                           {order.title}
                         </p>
-                        <p className="mt-1 text-[11px] text-[#82746d]">
+                        <p className={`mt-1 text-[11px] ${muted}`}>
                           {order.customerName}
                         </p>
-                        {renderProgress(order, true)}
+                        {renderProgress(order)}
                       </button>
                     ))
                   )}
@@ -607,7 +574,6 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
           })}
         </div>
       ) : (
-        /* List and detail */
         <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
           <aside className="flex min-w-0 flex-col gap-2 xl:col-span-5">
             {filteredOrders.length === 0 ? (
@@ -640,22 +606,28 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                           </span>
                           {renderStatus(order)}
                         </div>
-                        <h3 className="mt-2 text-sm font-semibold text-[#1c1c19]">
+                        <h3 className={`mt-2 text-sm font-semibold ${text}`}>
                           {order.title}
                         </h3>
                         <p className="mt-1 text-xs text-[#50453e]">
                           {order.customerName}
                         </p>
-                        <p className="mt-1 text-[11px] text-[#82746d]">
+                        <p className={`mt-1 text-[11px] ${muted}`}>
                           Mandor: {order.mandor || "Belum ditentukan"}
                         </p>
                       </div>
-                      <span className="shrink-0 text-xs font-semibold text-[#1c1c19] font-mono-numbers">
+                      <span
+                        className={`shrink-0 text-xs font-semibold font-mono-numbers ${text}`}
+                      >
                         {compactMoney(order.contractPrice)}
                       </span>
                     </div>
+
                     {renderProgress(order)}
-                    <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-[#e5e2dd] pt-2 text-[10px] text-[#82746d]">
+
+                    <div
+                      className={`mt-3 flex flex-wrap justify-between gap-2 border-t border-[#e5e2dd] pt-2 text-[10px] ${muted}`}
+                    >
                       <span>Mulai: {order.startDate || "Belum dicatat"}</span>
                       <span>
                         Target: {order.targetDate || "Belum ditentukan"}
@@ -676,7 +648,6 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
               />
             ) : (
               <>
-                {/* Order summary */}
                 <section className={`${panel} overflow-hidden`}>
                   <div className="p-4 sm:p-5">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -687,20 +658,20 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                           </span>
                           {renderStatus(selectedOrder)}
                         </div>
-                        <h2 className="mt-2 font-headline text-xl font-semibold text-[#1c1c19]">
+                        <h2
+                          className={`mt-2 font-headline text-xl font-semibold ${text}`}
+                        >
                           {selectedOrder.title}
                         </h2>
-                        <p className="mt-1 text-xs text-[#82746d]">
+                        <p className={`mt-1 text-xs ${muted}`}>
                           {selectedOrder.customerName} · Mandor{" "}
                           {selectedOrder.mandor || "belum ditentukan"}
                         </p>
                       </div>
 
-                      <div className="shrink-0 rounded-lg bg-[#f6f3ee] px-3 py-2">
-                        <p className="text-[10px] text-[#82746d]">
-                          Target selesai
-                        </p>
-                        <p className="mt-1 text-xs font-semibold text-[#1c1c19]">
+                      <div className="rounded-lg bg-[#f6f3ee] px-3 py-2 sm:shrink-0">
+                        <p className={`text-[10px] ${muted}`}>Target selesai</p>
+                        <p className={`mt-1 text-xs font-semibold ${text}`}>
                           {selectedOrder.targetDate || "Belum ditentukan"}
                         </p>
                       </div>
@@ -738,10 +709,10 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                             key={label}
                             className="min-w-0 rounded-lg border border-[#e5e2dd] p-3"
                           >
-                            <p className="text-[10px] text-[#82746d]">
-                              {label}
-                            </p>
-                            <p className="mt-1 break-words text-xs font-medium text-[#1c1c19]">
+                            <p className={`text-[10px] ${muted}`}>{label}</p>
+                            <p
+                              className={`mt-1 break-words text-xs font-medium ${text}`}
+                            >
                               {value || "Belum dicatat"}
                             </p>
                           </div>
@@ -765,21 +736,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                     role="tablist"
                     aria-label="Rincian pesanan"
                   >
-                    {(
-                      [
-                        {
-                          id: "bom",
-                          label: "Material & HPP",
-                          icon: "inventory_2",
-                        },
-                        { id: "timeline", label: "Progres", icon: "timeline" },
-                        {
-                          id: "financial",
-                          label: "Keuangan",
-                          icon: "payments",
-                        },
-                      ] as const
-                    ).map((tab) => (
+                    {tabs.map((tab) => (
                       <button
                         key={tab.id}
                         type="button"
@@ -799,12 +756,11 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                   </div>
                 </section>
 
-                {/* BOM */}
                 {activeTab === "bom" && (
                   <section className={`${panel} space-y-4 p-4 sm:p-5`}>
                     <SectionHeading
                       title="Material dan HPP"
-                      description="Kebutuhan material serta perbandingan biaya produksi."
+                      description="Daftar kebutuhan material dan perbandingan biaya."
                       action={
                         <button
                           type="button"
@@ -843,10 +799,10 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                             selectedOrder.bom.map((item) => (
                               <tr key={item.id}>
                                 <td className="px-3 py-3">
-                                  <p className="font-medium text-[#1c1c19]">
+                                  <p className={`font-medium ${text}`}>
                                     {item.name}
                                   </p>
-                                  <p className="mt-1 text-[10px] text-[#82746d]">
+                                  <p className={`mt-1 text-[10px] ${muted}`}>
                                     {item.spec || "Tanpa spesifikasi"}
                                   </p>
                                 </td>
@@ -859,7 +815,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                                 <td className="px-3 py-3 text-right font-semibold">
                                   {money(item.subtotal)}
                                 </td>
-                                <td className="px-3 py-3 text-[#82746d]">
+                                <td className={`px-3 py-3 ${muted}`}>
                                   {item.status || "Belum ditentukan"}
                                 </td>
                               </tr>
@@ -868,7 +824,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                             <tr>
                               <td
                                 colSpan={5}
-                                className="px-3 py-8 text-center text-xs text-[#82746d]"
+                                className={`px-3 py-8 text-center ${muted}`}
                               >
                                 Belum ada material yang dicatat.
                               </td>
@@ -880,14 +836,18 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
 
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div className="rounded-lg bg-[#fcf9f4] p-4">
-                        <p className="text-xs text-[#82746d]">Estimasi HPP</p>
-                        <p className="mt-2 text-lg font-semibold text-[#1c1c19] font-mono-numbers">
+                        <p className={`text-xs ${muted}`}>Estimasi HPP</p>
+                        <p
+                          className={`mt-2 text-lg font-semibold font-mono-numbers ${text}`}
+                        >
                           {money(selectedOrder.estimatedHpp)}
                         </p>
                       </div>
                       <div className="rounded-lg bg-[#fcf9f4] p-4">
-                        <p className="text-xs text-[#82746d]">Biaya riil</p>
-                        <p className="mt-2 text-lg font-semibold text-[#1c1c19] font-mono-numbers">
+                        <p className={`text-xs ${muted}`}>Biaya riil</p>
+                        <p
+                          className={`mt-2 text-lg font-semibold font-mono-numbers ${text}`}
+                        >
                           {money(selectedOrder.actualCost)}
                         </p>
                       </div>
@@ -901,10 +861,10 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                       return (
                         <div className="flex items-center justify-between gap-3 border-t border-[#e5e2dd] pt-3">
                           <div>
-                            <p className="text-xs font-medium text-[#1c1c19]">
+                            <p className={`text-xs font-medium ${text}`}>
                               Selisih biaya
                             </p>
-                            <p className="mt-1 text-[10px] text-[#82746d]">
+                            <p className={`mt-1 text-[10px] ${muted}`}>
                               Biaya riil dibandingkan estimasi.
                             </p>
                           </div>
@@ -914,7 +874,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                                 ? "text-[#a3443f]"
                                 : difference < 0
                                   ? "text-emerald-800"
-                                  : "text-[#1c1c19]"
+                                  : text
                             }`}
                           >
                             {difference > 0 ? "+" : ""}
@@ -926,20 +886,19 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                   </section>
                 )}
 
-                {/* Timeline */}
                 {activeTab === "timeline" && (
                   <section className={`${panel} space-y-4 p-4 sm:p-5`}>
                     <SectionHeading
                       title="Progres produksi"
-                      description="Tahapan dan riwayat pengerjaan pesanan."
+                      description="Tahapan dan catatan pengerjaan pesanan."
                     />
 
                     <div className="rounded-lg bg-[#fcf9f4] p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="text-xs text-[#82746d]">
+                        <span className={`text-xs ${muted}`}>
                           Progres keseluruhan
                         </span>
-                        <span className="text-sm font-semibold text-[#5f402a]">
+                        <span className={`text-sm font-semibold ${brown}`}>
                           {progressOf(selectedOrder.progressPercent)}%
                         </span>
                       </div>
@@ -953,7 +912,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                       </div>
                       <p className="mt-3 text-xs text-[#50453e]">
                         Tahap saat ini:{" "}
-                        <span className="font-medium text-[#1c1c19]">
+                        <span className={`font-medium ${text}`}>
                           {selectedOrder.currentStage || "Belum ditentukan"}
                         </span>
                       </p>
@@ -984,15 +943,17 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                             />
                             <div className="min-w-0 flex-1">
                               <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
-                                <p className="text-xs font-medium text-[#1c1c19]">
+                                <p className={`text-xs font-medium ${text}`}>
                                   {step.title}
                                 </p>
-                                <p className="text-[10px] text-[#82746d]">
+                                <p className={`text-[10px] ${muted}`}>
                                   {step.date || "Belum ada jadwal"}
                                 </p>
                               </div>
                               {step.description && (
-                                <p className="mt-1 text-xs leading-relaxed text-[#82746d]">
+                                <p
+                                  className={`mt-1 text-xs leading-relaxed ${muted}`}
+                                >
                                   {step.description}
                                 </p>
                               )}
@@ -1009,7 +970,7 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                       <EmptyState
                         icon="timeline"
                         title="Belum ada riwayat produksi"
-                        description="Catatan tahapan pengerjaan belum tersedia untuk pesanan ini."
+                        description="Catatan tahapan pengerjaan belum tersedia."
                       />
                     )}
 
@@ -1028,7 +989,6 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                   </section>
                 )}
 
-                {/* Finance */}
                 {activeTab === "financial" && (
                   <section className={`${panel} space-y-4 p-4 sm:p-5`}>
                     <SectionHeading
@@ -1038,51 +998,59 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
 
                     <div className="divide-y divide-[#e5e2dd]">
                       {[
-                        [
-                          "Nilai kontrak",
-                          selectedOrder.contractPrice,
-                          "default",
-                        ],
-                        ["DP diterima", selectedOrder.dpPaid, "success"],
-                        ["Sisa piutang", selectedOrder.remainingDebt, "danger"],
-                        [
-                          "Biaya produksi riil",
-                          selectedOrder.actualCost,
-                          "default",
-                        ],
-                      ].map(([label, value, tone]) => (
+                        {
+                          label: "Nilai kontrak",
+                          value: selectedOrder.contractPrice,
+                          tone: "default",
+                        },
+                        {
+                          label: "DP diterima",
+                          value: selectedOrder.dpPaid,
+                          tone: "success",
+                        },
+                        {
+                          label: "Sisa piutang",
+                          value: selectedOrder.remainingDebt,
+                          tone: "danger",
+                        },
+                        {
+                          label: "Biaya produksi riil",
+                          value: selectedOrder.actualCost,
+                          tone: "default",
+                        },
+                      ].map((item) => (
                         <div
-                          key={String(label)}
+                          key={item.label}
                           className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
                         >
                           <span className="text-xs text-[#50453e]">
-                            {label}
+                            {item.label}
                           </span>
                           <span
                             className={`text-sm font-semibold font-mono-numbers ${
-                              tone === "success"
+                              item.tone === "success"
                                 ? "text-emerald-800"
-                                : tone === "danger"
+                                : item.tone === "danger"
                                   ? "text-[#a3443f]"
-                                  : "text-[#1c1c19]"
+                                  : text
                             }`}
                           >
-                            {money(Number(value || 0))}
+                            {money(Number(item.value || 0))}
                           </span>
                         </div>
                       ))}
                     </div>
 
                     <div className="rounded-lg bg-[#fcf9f4] p-4">
-                      <h4 className="text-xs font-semibold text-[#1c1c19]">
+                      <h4 className={`text-xs font-semibold ${text}`}>
                         Perkiraan laba kotor
                       </h4>
                       <div className="mt-3 space-y-3">
                         <div className="flex items-center justify-between gap-3">
-                          <span className="text-xs text-[#82746d]">
+                          <span className={`text-xs ${muted}`}>
                             Berdasarkan estimasi HPP
                           </span>
-                          <span className="text-xs font-semibold text-[#1c1c19]">
+                          <span className={`text-xs font-semibold ${text}`}>
                             {money(
                               Number(selectedOrder.contractPrice || 0) -
                                 Number(selectedOrder.estimatedHpp || 0),
@@ -1090,29 +1058,32 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                           </span>
                         </div>
                         <div className="flex items-center justify-between gap-3">
-                          <span className="text-xs text-[#82746d]">
+                          <span className={`text-xs ${muted}`}>
                             Berdasarkan biaya riil
                           </span>
-                          <span
-                            className={`text-xs font-semibold ${
+                          {(() => {
+                            const profit =
                               Number(selectedOrder.contractPrice || 0) -
-                                Number(selectedOrder.actualCost || 0) <
-                              0
-                                ? "text-[#a3443f]"
-                                : "text-emerald-800"
-                            }`}
-                          >
-                            {money(
-                              Number(selectedOrder.contractPrice || 0) -
-                                Number(selectedOrder.actualCost || 0),
-                            )}
-                          </span>
+                              Number(selectedOrder.actualCost || 0);
+
+                            return (
+                              <span
+                                className={`text-xs font-semibold ${
+                                  profit < 0
+                                    ? "text-[#a3443f]"
+                                    : "text-emerald-800"
+                                }`}
+                              >
+                                {money(profit)}
+                              </span>
+                            );
+                          })()}
                         </div>
                         <div className="flex items-center justify-between gap-3 border-t border-[#e5e2dd] pt-3">
                           <span className="text-xs text-[#50453e]">
                             Margin aktual
                           </span>
-                          <span className="text-sm font-semibold text-[#5f402a]">
+                          <span className={`text-sm font-semibold ${brown}`}>
                             {formatMargin(
                               Number(selectedOrder.contractPrice || 0),
                               Number(selectedOrder.actualCost || 0),
@@ -1120,9 +1091,11 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                           </span>
                         </div>
                       </div>
-                      <p className="mt-3 text-[10px] leading-relaxed text-[#82746d]">
-                        Perhitungan ini belum memasukkan pajak, biaya
-                        administrasi, dan biaya lain yang belum dicatat.
+                      <p
+                        className={`mt-3 text-[10px] leading-relaxed ${muted}`}
+                      >
+                        Perhitungan belum memasukkan pajak, biaya administrasi,
+                        dan pengeluaran lain yang belum dicatat.
                       </p>
                     </div>
 
@@ -1137,16 +1110,15 @@ export const OrdersProductionView: React.FC<OrdersProductionViewProps> = ({
                   </section>
                 )}
 
-                {/* Actions */}
                 <section
                   className={`${panel} flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between`}
                 >
                   <div>
-                    <h3 className="text-xs font-semibold text-[#1c1c19]">
+                    <h3 className={`text-xs font-semibold ${text}`}>
                       Tindakan pesanan
                     </h3>
-                    <p className="mt-1 text-[11px] text-[#82746d]">
-                      Cetak atau catat pengeluaran terkait produksi.
+                    <p className={`mt-1 text-[11px] ${muted}`}>
+                      Cetak detail atau catat biaya produksi.
                     </p>
                   </div>
 

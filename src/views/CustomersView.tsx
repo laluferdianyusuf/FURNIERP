@@ -12,7 +12,7 @@ interface CustomersViewProps {
 type DebtFilter = "all" | "has-debt" | "overdue" | "settled";
 type TierFilter = "all" | CustomerTier;
 
-const COLORS = {
+const C = {
   text: "#1c1c19",
   secondary: "#50453e",
   muted: "#82746d",
@@ -20,62 +20,62 @@ const COLORS = {
   surface: "#ffffff",
   border: "#e5e2dd",
   brown: "#5f402a",
-  brownHover: "#795740",
-  softBrown: "#ffdcc6",
+  hover: "#795740",
   danger: "#ba1a1a",
+  green: "#356344",
 };
 
-const INPUT_CLASS =
-  "w-full rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition placeholder:text-[#82746d] focus:border-[#795740] focus:bg-white focus:ring-2 focus:ring-[#795740]/10";
+const INPUT =
+  "w-full min-w-0 rounded-lg border border-[#e5e2dd] bg-white px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition placeholder:text-[#a0968e] focus:border-[#795740] focus:ring-2 focus:ring-[#795740]/10";
 
-const BUTTON_PRIMARY =
-  "inline-flex items-center justify-center gap-2 rounded-lg bg-[#5f402a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#795740] focus:outline-none focus:ring-2 focus:ring-[#795740]/30 disabled:cursor-not-allowed disabled:opacity-50";
+const PRIMARY =
+  "inline-flex items-center justify-center gap-2 rounded-lg bg-[#5f402a] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#795740] focus:outline-none focus:ring-2 focus:ring-[#795740]/30 disabled:cursor-not-allowed disabled:opacity-50";
 
-const BUTTON_SECONDARY =
+const SECONDARY =
   "inline-flex items-center justify-center gap-2 rounded-lg border border-[#e5e2dd] bg-white px-3.5 py-2.5 text-sm font-medium text-[#50453e] transition hover:bg-[#f6f3ee] focus:outline-none focus:ring-2 focus:ring-[#795740]/20";
 
-const formatRupiah = (value: number) =>
+const money = (value: number | undefined) =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0,
-  }).format(Number.isFinite(value) ? value : 0);
+  }).format(Number.isFinite(value) ? Number(value) : 0);
 
-const formatNumber = (value: number) =>
+const number = (value: number | undefined) =>
   new Intl.NumberFormat("id-ID", {
     maximumFractionDigits: 0,
-  }).format(Number.isFinite(value) ? value : 0);
+  }).format(Number.isFinite(value) ? Number(value) : 0);
 
-const getInitials = (name: string) =>
+const initials = (name: string) =>
   name
     .trim()
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
-    .map((word) => word.charAt(0).toUpperCase())
+    .map((word) => word[0].toUpperCase())
     .join("") || "?";
 
-const getNextCustomerId = (customers: Customer[]) => {
-  const highestId = customers.reduce((highest, customer) => {
+const nextCustomerId = (customers: Customer[]) => {
+  const highest = customers.reduce((result, customer) => {
     const match = customer.id.match(/^CUST-(\d+)$/i);
-    return match ? Math.max(highest, Number(match[1])) : highest;
+    return match ? Math.max(result, Number(match[1])) : result;
   }, 0);
 
-  return `CUST-${String(highestId + 1).padStart(3, "0")}`;
+  return `CUST-${String(highest + 1).padStart(3, "0")}`;
 };
 
-const getTierClass = (tier: CustomerTier) => {
+const tierStyle = (tier: CustomerTier) => {
   switch (tier) {
     case "Grosir":
-      return "border-[#5f402a] bg-[#5f402a] text-white";
+      return "bg-[#5f402a] text-white";
     case "Reseller":
-      return "border-[#e8c9b4] bg-[#fff2e8] text-[#795740]";
+      return "bg-[#f7e9dc] text-[#795740]";
     default:
-      return "border-[#e5e2dd] bg-[#f6f3ee] text-[#50453e]";
+      return "bg-[#f0ede9] text-[#50453e]";
   }
 };
 
-const getDebtStatusLabel = (status: Customer["debtStatus"]) => {
+const debtLabel = (status: Customer["debtStatus"]) => {
   switch (status) {
     case "overdue":
       return "Jatuh tempo";
@@ -88,18 +88,41 @@ const getDebtStatusLabel = (status: Customer["debtStatus"]) => {
   }
 };
 
-const getDebtStatusClass = (status: Customer["debtStatus"]) => {
+const debtStyle = (status: Customer["debtStatus"]) => {
   switch (status) {
     case "overdue":
-      return "bg-[#ffdad6] text-[#ba1a1a]";
+      return "bg-[#f9e9e7] text-[#a3443f]";
     case "has-debt":
-      return "bg-[#fff0df] text-[#795740]";
+      return "bg-[#fff2e5] text-[#795740]";
     case "settled":
-      return "bg-[#eaf3e9] text-[#356344]";
+      return "bg-[#edf5ee] text-[#356344]";
     default:
-      return "bg-[#f0ede9] text-[#50453e]";
+      return "bg-[#f0ede9] text-[#62554b]";
   }
 };
+
+const Icon: React.FC<{
+  name: string;
+  className?: string;
+}> = ({ name, className = "" }) => (
+  <span aria-hidden="true" className={`material-symbols-outlined ${className}`}>
+    {name}
+  </span>
+);
+
+const Metric: React.FC<{
+  label: string;
+  value: string;
+  detail: string;
+}> = ({ label, value, detail }) => (
+  <div className="min-w-0 rounded-xl border border-[#e5e2dd] bg-white p-4">
+    <p className="text-xs text-[#82746d]">{label}</p>
+    <p className="mt-2 break-words text-xl font-semibold tracking-tight text-[#1c1c19]">
+      {value}
+    </p>
+    <p className="mt-1 text-xs text-[#82746d]">{detail}</p>
+  </div>
+);
 
 const Field: React.FC<{
   label: string;
@@ -113,49 +136,38 @@ const Field: React.FC<{
       {required && <span className="ml-1 text-[#ba1a1a]">*</span>}
     </label>
     {children}
-    {hint && (
-      <p className="mt-1.5 text-[11px] leading-relaxed text-[#82746d]">
-        {hint}
-      </p>
-    )}
+    {hint && <p className="mt-1.5 text-xs text-[#82746d]">{hint}</p>}
   </div>
 );
 
-const SectionHeading: React.FC<{
-  title: string;
-  description?: string;
-  action?: React.ReactNode;
-}> = ({ title, description, action }) => (
-  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <h2 className="text-sm font-semibold text-[#1c1c19]">{title}</h2>
-      {description && (
-        <p className="mt-1 text-xs text-[#82746d]">{description}</p>
-      )}
-    </div>
-    {action}
-  </div>
-);
+const TIER_OPTIONS: { value: TierFilter; label: string }[] = [
+  { value: "all", label: "Semua" },
+  { value: "Retail", label: "Retail" },
+  { value: "Reseller", label: "Reseller" },
+  { value: "Grosir", label: "Grosir" },
+];
 
-const MetricCard: React.FC<{
+const CUSTOMER_TIERS: {
+  value: CustomerTier;
   label: string;
-  value: string;
   description: string;
-  icon: string;
-}> = ({ label, value, description, icon }) => (
-  <div className="min-w-0 rounded-xl border border-[#e5e2dd] bg-white p-4">
-    <div className="flex items-start justify-between gap-3">
-      <span className="text-xs font-medium text-[#50453e]">{label}</span>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f6f3ee] text-[#5f402a]">
-        <span className="material-symbols-outlined text-xl">{icon}</span>
-      </span>
-    </div>
-    <p className="mt-4 break-words text-xl font-semibold tracking-tight text-[#1c1c19]">
-      {value}
-    </p>
-    <p className="mt-1 text-xs text-[#82746d]">{description}</p>
-  </div>
-);
+}[] = [
+  {
+    value: "Retail",
+    label: "Retail",
+    description: "Harga eceran",
+  },
+  {
+    value: "Reseller",
+    label: "Reseller",
+    description: "Harga mitra",
+  },
+  {
+    value: "Grosir",
+    label: "Grosir",
+    description: "Harga volume",
+  },
+];
 
 export const CustomersView: React.FC<CustomersViewProps> = ({
   customers,
@@ -165,9 +177,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
   onToast,
 }) => {
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
-  const [statusPiutangFilter, setStatusPiutangFilter] =
-    useState<DebtFilter>("all");
-  const [tierTab, setTierTab] = useState<TierFilter>("all");
+  const [debtFilter, setDebtFilter] = useState<DebtFilter>("all");
+  const [tierFilter, setTierFilter] = useState<TierFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -180,30 +191,26 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
   const [newCustTerms, setNewCustTerms] = useState("Net 30 Hari");
   const [newCustAddress, setNewCustAddress] = useState("");
 
-  // Pilih pelanggan pertama jika pilihan saat ini sudah tidak tersedia.
   useEffect(() => {
-    if (!customers.length) {
+    if (customers.length === 0) {
       setSelectedCustomerId("");
       return;
     }
 
-    const selectionStillExists = customers.some(
+    const exists = customers.some(
       (customer) => customer.id === selectedCustomerId,
     );
 
-    if (!selectionStillExists) {
+    if (!exists) {
       setSelectedCustomerId(customers[0].id);
     }
   }, [customers, selectedCustomerId]);
 
-  // Escape menutup modal pendaftaran.
   useEffect(() => {
     if (!showAddModal) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setShowAddModal(false);
-      }
+      if (event.key === "Escape") setShowAddModal(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -215,7 +222,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     [customers, selectedCustomerId],
   );
 
-  const customerStats = useMemo(() => {
+  const stats = useMemo(() => {
     const tierCounts: Record<TierFilter, number> = {
       all: customers.length,
       Retail: 0,
@@ -223,35 +230,31 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       Grosir: 0,
     };
 
-    let totalReceivables = 0;
+    let receivables = 0;
     let totalSpend = 0;
     let customersWithDebt = 0;
-    let overdueCustomers = 0;
-    let creditLimitTotal = 0;
+    let overdue = 0;
 
     customers.forEach((customer) => {
       tierCounts[customer.tier] += 1;
-
-      totalReceivables += Math.max(0, customer.activeDebt || 0);
+      receivables += Math.max(0, customer.activeDebt || 0);
       totalSpend += Math.max(0, customer.totalSpend || 0);
-      creditLimitTotal += Math.max(0, customer.creditLimit || 0);
 
       if ((customer.activeDebt || 0) > 0) {
         customersWithDebt += 1;
       }
 
       if (customer.debtStatus === "overdue") {
-        overdueCustomers += 1;
+        overdue += 1;
       }
     });
 
     return {
       tierCounts,
-      totalReceivables,
+      receivables,
       totalSpend,
       customersWithDebt,
-      overdueCustomers,
-      creditLimitTotal,
+      overdue,
     };
   }, [customers]);
 
@@ -259,19 +262,17 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     const query = searchQuery.trim().toLowerCase();
 
     return customers.filter((customer) => {
-      const matchesTier = tierTab === "all" || customer.tier === tierTab;
+      const matchesTier = tierFilter === "all" || customer.tier === tierFilter;
 
-      const matchesStatus =
-        statusPiutangFilter === "all" ||
-        (statusPiutangFilter === "has-debt" &&
+      const matchesDebt =
+        debtFilter === "all" ||
+        (debtFilter === "has-debt" &&
           (customer.debtStatus === "has-debt" ||
             customer.debtStatus === "overdue")) ||
-        (statusPiutangFilter === "overdue" &&
-          customer.debtStatus === "overdue") ||
-        (statusPiutangFilter === "settled" &&
-          customer.debtStatus === "settled");
+        (debtFilter === "overdue" && customer.debtStatus === "overdue") ||
+        (debtFilter === "settled" && customer.debtStatus === "settled");
 
-      const searchableFields = [
+      const fields = [
         customer.name,
         customer.company,
         customer.phone,
@@ -283,17 +284,17 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
 
       const matchesSearch =
         !query ||
-        searchableFields.some((field) =>
+        fields.some((field) =>
           String(field ?? "")
             .toLowerCase()
             .includes(query),
         );
 
-      return matchesTier && matchesStatus && matchesSearch;
+      return matchesTier && matchesDebt && matchesSearch;
     });
-  }, [customers, searchQuery, statusPiutangFilter, tierTab]);
+  }, [customers, searchQuery, debtFilter, tierFilter]);
 
-  const resetCustomerForm = () => {
+  const resetForm = () => {
     setNewCustName("");
     setNewCustPic("");
     setNewCustPhone("");
@@ -302,6 +303,11 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     setNewCustLimit("");
     setNewCustTerms("Net 30 Hari");
     setNewCustAddress("");
+  };
+
+  const openAddModal = () => {
+    resetForm();
+    setShowAddModal(true);
   };
 
   const handleSaveCustomer = (event: React.FormEvent<HTMLFormElement>) => {
@@ -326,13 +332,12 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       return;
     }
 
-    const newId = getNextCustomerId(customers);
-    const company = name;
+    const newId = nextCustomerId(customers);
 
     const newEntry: Customer = {
       id: newId,
       name,
-      company,
+      company: name,
       phone,
       city: newCustCity.trim(),
       address: newCustAddress.trim(),
@@ -354,17 +359,14 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     setSelectedCustomerId(newId);
     setShowAddModal(false);
     setSearchQuery("");
-    setTierTab("all");
-    setStatusPiutangFilter("all");
-    resetCustomerForm();
+    setTierFilter("all");
+    setDebtFilter("all");
+    resetForm();
     onToast(`Pelanggan ${name} berhasil didaftarkan.`);
   };
 
-  const triggerPosWithCustomer = (customer: Customer) => {
-    if (onSelectCustomerForPOS) {
-      onSelectCustomerForPOS(customer.id);
-    }
-
+  const openPOS = (customer: Customer) => {
+    onSelectCustomerForPOS?.(customer.id);
     onNavigate("pos");
   };
 
@@ -373,208 +375,184 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     onNavigate("receivables");
   };
 
-  const openAddModal = () => {
-    resetCustomerForm();
-    setShowAddModal(true);
+  const clearFilters = () => {
+    setSearchQuery("");
+    setTierFilter("all");
+    setDebtFilter("all");
   };
 
+  const activeDebt = Math.max(0, selectedCustomer?.activeDebt || 0);
+
+  const creditLimit = Math.max(0, selectedCustomer?.creditLimit || 0);
+
+  const creditUsed = Math.max(0, selectedCustomer?.creditUsed || 0);
+
+  const creditPercent =
+    creditLimit > 0 ? Math.min(100, (creditUsed / creditLimit) * 100) : 0;
+
   return (
-    <div className="mt-5 flex w-full flex-col gap-6 pb-8">
+    <div className="mt-5 flex w-full flex-col gap-5 pb-8">
       {/* Header */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <p className="text-xs font-medium text-[#82746d]">
-            Master Data / Pelanggan
-          </p>
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
+            <span>Operasional</span>
+            <Icon name="chevron_right" className="text-sm" />
+            <span className="text-[#795740]">Produk</span>
+          </div>
 
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[#1c1c19] font-headline">
+          <h1 className="text-2xl font-semibold tracking-tight text-[#1c1c19]">
             Pelanggan
           </h1>
 
-          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-[#50453e]">
-            Kelola data pelanggan, tier harga, limit kredit, dan piutang dalam
-            satu tempat.
+          <p className="mt-1.5 text-sm text-[#62554b]">
+            Kelola data pelanggan, kategori harga, dan piutang.
           </p>
         </div>
 
-        <button type="button" onClick={openAddModal} className={BUTTON_PRIMARY}>
-          <span className="material-symbols-outlined text-lg">person_add</span>
+        <button type="button" onClick={openAddModal} className={PRIMARY}>
+          <Icon name="person_add" className="text-lg" />
           Tambah pelanggan
         </button>
       </header>
 
       {/* Summary */}
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
+        <Metric
           label="Total pelanggan"
-          value={formatNumber(customers.length)}
-          description={`${customerStats.tierCounts.Retail} Retail · ${customerStats.tierCounts.Reseller} Reseller · ${customerStats.tierCounts.Grosir} Grosir`}
-          icon="groups"
+          value={number(customers.length)}
+          detail={`${stats.tierCounts.Retail} Retail · ${stats.tierCounts.Reseller} Reseller · ${stats.tierCounts.Grosir} Grosir`}
         />
 
-        <MetricCard
+        <Metric
           label="Total piutang"
-          value={formatRupiah(customerStats.totalReceivables)}
-          description={`${customerStats.customersWithDebt} pelanggan memiliki piutang`}
-          icon="account_balance_wallet"
+          value={money(stats.receivables)}
+          detail={`${stats.customersWithDebt} pelanggan memiliki piutang`}
         />
 
-        <MetricCard
+        <Metric
           label="Akumulasi belanja"
-          value={formatRupiah(customerStats.totalSpend)}
-          description="Total belanja seluruh pelanggan"
-          icon="payments"
+          value={money(stats.totalSpend)}
+          detail="Total belanja seluruh pelanggan"
         />
 
-        <MetricCard
-          label="Perlu ditindaklanjuti"
-          value={formatNumber(customerStats.overdueCustomers)}
-          description="Pelanggan dengan piutang jatuh tempo"
-          icon="schedule"
+        <Metric
+          label="Piutang jatuh tempo"
+          value={number(stats.overdue)}
+          detail="Pelanggan perlu ditindaklanjuti"
         />
       </section>
 
-      {/* Customer directory */}
+      {/* Directory */}
       <section className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-white">
-        <div className="border-b border-[#e5e2dd] p-4 sm:p-5">
-          <SectionHeading
-            title="Direktori pelanggan"
-            description="Cari pelanggan atau persempit daftar berdasarkan tier dan status piutang."
-            action={
-              <span className="text-xs text-[#82746d]">
-                {filteredCustomers.length} hasil
-              </span>
-            }
-          />
+        <div className="space-y-4 border-b border-[#e5e2dd] p-4 sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="text-sm font-semibold text-[#1c1c19]">
+                Direktori pelanggan
+              </h2>
+              <p className="mt-1 text-xs text-[#82746d]">
+                Pilih pelanggan untuk melihat ringkasan detail.
+              </p>
+            </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-            <div className="relative min-w-0">
-              <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xl text-[#82746d]">
-                search
-              </span>
+            <span className="text-xs text-[#82746d]">
+              {filteredCustomers.length} dari {customers.length}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_200px]">
+            <div className="relative">
+              <Icon
+                name="search"
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xl text-[#82746d]"
+              />
 
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Cari nama, perusahaan, telepon, kota, atau ID..."
-                aria-label="Cari pelanggan"
-                className={`${INPUT_CLASS} pl-10 pr-10`}
                 onKeyDown={(event) => {
-                  if (event.key === "Escape") {
-                    setSearchQuery("");
-                  }
+                  if (event.key === "Escape") setSearchQuery("");
                 }}
+                placeholder="Cari nama, toko, telepon, kota, atau ID..."
+                aria-label="Cari pelanggan"
+                className={`${INPUT} pl-10`}
               />
-
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  aria-label="Hapus pencarian"
-                  className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-[#82746d] hover:bg-[#e5e2dd] hover:text-[#1c1c19]"
-                >
-                  <span className="material-symbols-outlined text-lg">
-                    close
-                  </span>
-                </button>
-              )}
             </div>
 
-            <div className="flex min-w-0 items-center gap-2">
-              <label
-                htmlFor="customer-debt-filter"
-                className="shrink-0 text-xs text-[#50453e]"
-              >
-                Piutang
-              </label>
-
-              <select
-                id="customer-debt-filter"
-                value={statusPiutangFilter}
-                onChange={(event) =>
-                  setStatusPiutangFilter(event.target.value as DebtFilter)
-                }
-                className={`${INPUT_CLASS} min-w-0 py-2.5 lg:w-48`}
-              >
-                <option value="all">Semua status</option>
-                <option value="has-debt">Ada piutang</option>
-                <option value="overdue">Jatuh tempo</option>
-                <option value="settled">Lunas</option>
-              </select>
-            </div>
+            <select
+              value={debtFilter}
+              onChange={(event) =>
+                setDebtFilter(event.target.value as DebtFilter)
+              }
+              aria-label="Filter status piutang"
+              className={INPUT}
+            >
+              <option value="all">Semua status piutang</option>
+              <option value="has-debt">Ada piutang</option>
+              <option value="overdue">Jatuh tempo</option>
+              <option value="settled">Lunas</option>
+            </select>
           </div>
 
-          {/* Tier filters */}
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {(
-              [
-                ["all", "Semua"],
-                ["Retail", "Retail"],
-                ["Reseller", "Reseller"],
-                ["Grosir", "Grosir"],
-              ] as [TierFilter, string][]
-            ).map(([tier, label]) => {
-              const isActive = tierTab === tier;
+          <div className="flex flex-wrap items-center gap-2">
+            {TIER_OPTIONS.map((option) => {
+              const active = tierFilter === option.value;
 
               return (
                 <button
-                  key={tier}
+                  key={option.value}
                   type="button"
-                  onClick={() => setTierTab(tier)}
-                  aria-pressed={isActive}
+                  onClick={() => setTierFilter(option.value)}
+                  aria-pressed={active}
                   className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition ${
-                    isActive
+                    active
                       ? "border-[#5f402a] bg-[#5f402a] text-white"
                       : "border-[#e5e2dd] bg-white text-[#50453e] hover:bg-[#f6f3ee]"
                   }`}
                 >
-                  {label}
+                  {option.label}
                   <span
-                    className={`rounded px-1.5 py-0.5 text-[10px] ${
-                      isActive
-                        ? "bg-white/15 text-white"
-                        : "bg-[#f0ede9] text-[#50453e]"
+                    className={`tabular-nums ${
+                      active ? "text-white/75" : "text-[#82746d]"
                     }`}
                   >
-                    {customerStats.tierCounts[tier]}
+                    {stats.tierCounts[option.value]}
                   </span>
                 </button>
               );
             })}
+
+            {(searchQuery || tierFilter !== "all" || debtFilter !== "all") && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="ml-auto text-xs font-medium text-[#795740] hover:underline"
+              >
+                Reset filter
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Table */}
         {filteredCustomers.length > 0 ? (
           <div className="w-full overflow-x-auto">
-            <table className="w-full min-w-[980px] text-left text-sm">
+            <table className="w-full min-w-[900px] text-left text-sm">
               <thead>
-                <tr className="border-b border-[#e5e2dd] bg-[#faf8f5] text-[11px] font-medium text-[#82746d]">
-                  <th scope="col" className="px-4 py-3 font-medium">
-                    Pelanggan
-                  </th>
-                  <th scope="col" className="px-3 py-3 font-medium">
-                    Kontak
-                  </th>
-                  <th scope="col" className="px-3 py-3 font-medium">
-                    Tier
-                  </th>
-                  <th scope="col" className="px-3 py-3 text-right font-medium">
+                <tr className="border-b border-[#e5e2dd] bg-[#faf8f5] text-[11px] text-[#82746d]">
+                  <th className="px-4 py-3 font-medium">Pelanggan</th>
+                  <th className="px-3 py-3 font-medium">Kontak</th>
+                  <th className="px-3 py-3 font-medium">Tier</th>
+                  <th className="px-3 py-3 text-right font-medium">
                     Limit kredit
                   </th>
-                  <th scope="col" className="px-3 py-3 text-right font-medium">
+                  <th className="px-3 py-3 text-right font-medium">
                     Total belanja
                   </th>
-                  <th scope="col" className="px-3 py-3 text-right font-medium">
-                    Piutang
-                  </th>
-                  <th scope="col" className="px-3 py-3 font-medium">
-                    Status
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-right font-medium">
-                    Aksi
-                  </th>
+                  <th className="px-3 py-3 text-right font-medium">Piutang</th>
+                  <th className="px-3 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 text-right font-medium">Aksi</th>
                 </tr>
               </thead>
 
@@ -582,14 +560,12 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                 {filteredCustomers.map((customer) => {
                   const isSelected = customer.id === selectedCustomer?.id;
 
-                  const creditLimit = Math.max(0, customer.creditLimit || 0);
+                  const limit = Math.max(0, customer.creditLimit || 0);
 
-                  const creditUsed = Math.max(0, customer.creditUsed || 0);
+                  const used = Math.max(0, customer.creditUsed || 0);
 
-                  const percentUsed =
-                    creditLimit > 0
-                      ? Math.min(100, (creditUsed / creditLimit) * 100)
-                      : 0;
+                  const usedPercent =
+                    limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
 
                   return (
                     <tr
@@ -603,7 +579,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                       <td className="px-4 py-3.5">
                         <div className="flex min-w-0 items-center gap-3">
                           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f0e2d6] text-xs font-semibold text-[#5f402a]">
-                            {getInitials(customer.name)}
+                            {initials(customer.name)}
                           </div>
 
                           <div className="min-w-0">
@@ -611,14 +587,15 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                               {customer.name}
                             </p>
                             <p className="mt-0.5 truncate text-[11px] text-[#82746d]">
-                              {customer.id} · {customer.company || "—"}
+                              {customer.id}
+                              {customer.company ? ` · ${customer.company}` : ""}
                             </p>
                           </div>
                         </div>
                       </td>
 
                       <td className="px-3 py-3.5">
-                        <p className="text-xs text-[#1c1c19]">
+                        <p className="text-xs text-[#30251e]">
                           {customer.phone || "—"}
                         </p>
                         <p className="mt-1 text-[11px] text-[#82746d]">
@@ -628,7 +605,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
 
                       <td className="px-3 py-3.5">
                         <span
-                          className={`inline-flex rounded-md border px-2 py-1 text-[11px] font-medium ${getTierClass(customer.tier)}`}
+                          className={`inline-flex rounded-md px-2 py-1 text-[11px] font-medium ${tierStyle(customer.tier)}`}
                         >
                           {customer.tier}
                         </span>
@@ -636,47 +613,43 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
 
                       <td className="px-3 py-3.5 text-right">
                         <p className="whitespace-nowrap text-xs font-medium tabular-nums text-[#1c1c19]">
-                          {formatRupiah(creditLimit)}
+                          {money(limit)}
                         </p>
-                        {creditLimit > 0 ? (
-                          <div className="mt-1.5 ml-auto h-1 w-20 overflow-hidden rounded-full bg-[#e5e2dd]">
+                        {limit > 0 && (
+                          <div className="ml-auto mt-2 h-1 w-20 overflow-hidden rounded-full bg-[#e5e2dd]">
                             <div
                               className={`h-full rounded-full ${
-                                percentUsed >= 80
+                                usedPercent >= 80
                                   ? "bg-[#ba1a1a]"
                                   : "bg-[#795740]"
                               }`}
-                              style={{ width: `${percentUsed}%` }}
+                              style={{ width: `${usedPercent}%` }}
                             />
                           </div>
-                        ) : (
-                          <p className="mt-1 text-[10px] text-[#82746d]">
-                            Tanpa kredit
-                          </p>
                         )}
                       </td>
 
-                      <td className="whitespace-nowrap px-3 py-3.5 text-right text-xs font-medium tabular-nums text-[#1c1c19]">
-                        {formatRupiah(customer.totalSpend || 0)}
+                      <td className="whitespace-nowrap px-3 py-3.5 text-right text-xs tabular-nums text-[#30251e]">
+                        {money(customer.totalSpend)}
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-3.5 text-right">
                         <span
                           className={`text-xs font-medium tabular-nums ${
                             (customer.activeDebt || 0) > 0
-                              ? "text-[#ba1a1a]"
+                              ? "text-[#a3443f]"
                               : "text-[#82746d]"
                           }`}
                         >
-                          {formatRupiah(customer.activeDebt || 0)}
+                          {money(customer.activeDebt)}
                         </span>
                       </td>
 
                       <td className="px-3 py-3.5">
                         <span
-                          className={`inline-flex whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium ${getDebtStatusClass(customer.debtStatus)}`}
+                          className={`inline-flex whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium ${debtStyle(customer.debtStatus)}`}
                         >
-                          {getDebtStatusLabel(customer.debtStatus)}
+                          {debtLabel(customer.debtStatus)}
                         </span>
                       </td>
 
@@ -684,47 +657,44 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                         <div className="flex items-center justify-end gap-1">
                           <button
                             type="button"
-                            aria-label={`Buat order untuk ${customer.name}`}
                             title="Buat order"
+                            aria-label={`Buat order untuk ${customer.name}`}
                             onClick={(event) => {
                               event.stopPropagation();
-                              triggerPosWithCustomer(customer);
+                              openPOS(customer);
                             }}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5f402a] transition hover:bg-[#f0ede9]"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5f402a] hover:bg-[#f0ede9]"
                           >
-                            <span className="material-symbols-outlined text-lg">
-                              add_shopping_cart
-                            </span>
+                            <Icon
+                              name="add_shopping_cart"
+                              className="text-lg"
+                            />
                           </button>
 
                           <button
                             type="button"
+                            title="Lihat piutang"
                             aria-label={`Buka piutang ${customer.name}`}
-                            title="Buka piutang"
                             onClick={(event) => {
                               event.stopPropagation();
                               openReceivables(customer);
                             }}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5f402a] transition hover:bg-[#f0ede9]"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5f402a] hover:bg-[#f0ede9]"
                           >
-                            <span className="material-symbols-outlined text-lg">
-                              receipt_long
-                            </span>
+                            <Icon name="receipt_long" className="text-lg" />
                           </button>
 
                           <button
                             type="button"
-                            aria-label={`Lihat detail ${customer.name}`}
                             title="Lihat detail"
+                            aria-label={`Lihat detail ${customer.name}`}
                             onClick={(event) => {
                               event.stopPropagation();
                               setSelectedCustomerId(customer.id);
                             }}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#f0ede9] hover:text-[#1c1c19]"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#82746d] hover:bg-[#f0ede9]"
                           >
-                            <span className="material-symbols-outlined text-lg">
-                              chevron_right
-                            </span>
+                            <Icon name="chevron_right" className="text-lg" />
                           </button>
                         </div>
                       </td>
@@ -735,62 +705,58 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             </table>
           </div>
         ) : (
-          <div className="flex flex-col items-center px-6 py-14 text-center">
-            <span className="material-symbols-outlined text-4xl text-[#b8aca2]">
-              person_search
-            </span>
-            <h3 className="mt-3 text-sm font-semibold text-[#1c1c19]">
+          <div className="px-5 py-12 text-center">
+            <Icon name="person_search" className="text-3xl text-[#b8aca2]" />
+            <h3 className="mt-2 text-sm font-semibold text-[#1c1c19]">
               Pelanggan tidak ditemukan
             </h3>
-            <p className="mt-1 max-w-sm text-xs leading-relaxed text-[#82746d]">
-              Coba ubah kata kunci pencarian atau filter yang digunakan.
+            <p className="mt-1 text-xs text-[#82746d]">
+              Coba ubah kata kunci atau filter pencarian.
             </p>
             <button
               type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setTierTab("all");
-                setStatusPiutangFilter("all");
-              }}
-              className={`${BUTTON_SECONDARY} mt-4`}
+              onClick={clearFilters}
+              className={`${SECONDARY} mt-4`}
             >
               Reset filter
             </button>
           </div>
         )}
 
-        <div className="flex flex-col gap-2 border-t border-[#e5e2dd] bg-[#faf8f5] px-4 py-3 text-xs text-[#82746d] sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1 border-t border-[#e5e2dd] bg-[#faf8f5] px-4 py-3 text-xs text-[#82746d] sm:flex-row sm:justify-between">
           <span>
             Menampilkan {filteredCustomers.length} dari {customers.length}{" "}
             pelanggan
           </span>
-          <span>Data mengikuti daftar pelanggan yang tersedia.</span>
+          <span>Data sesuai daftar pelanggan yang tersedia.</span>
         </div>
       </section>
 
       {/* Customer detail */}
-      {selectedCustomer ? (
+      {selectedCustomer && (
         <section className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-white">
           <div className="flex flex-col gap-4 border-b border-[#e5e2dd] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#5f402a] text-sm font-semibold text-white">
-                {getInitials(selectedCustomer.name)}
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#5f402a] text-sm font-semibold text-white">
+                {initials(selectedCustomer.name)}
               </div>
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="break-words text-base font-semibold text-[#1c1c19]">
+                  <h2 className="text-base font-semibold text-[#1c1c19]">
                     {selectedCustomer.name}
                   </h2>
                   <span
-                    className={`inline-flex rounded-md border px-2 py-1 text-[10px] font-medium ${getTierClass(selectedCustomer.tier)}`}
+                    className={`rounded-md px-2 py-1 text-[10px] font-medium ${tierStyle(selectedCustomer.tier)}`}
                   >
                     {selectedCustomer.tier}
                   </span>
                 </div>
-
-                <p className="mt-1 break-words text-xs text-[#82746d]">
-                  {selectedCustomer.id} · {selectedCustomer.company || "—"}
+                <p className="mt-1 text-xs text-[#82746d]">
+                  {selectedCustomer.id}
+                  {selectedCustomer.company
+                    ? ` · ${selectedCustomer.company}`
+                    : ""}
                 </p>
               </div>
             </div>
@@ -798,136 +764,106 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => triggerPosWithCustomer(selectedCustomer)}
-                className={BUTTON_PRIMARY}
+                onClick={() => openPOS(selectedCustomer)}
+                className={PRIMARY}
               >
-                <span className="material-symbols-outlined text-lg">
-                  add_shopping_cart
-                </span>
+                <Icon name="add_shopping_cart" className="text-lg" />
                 Order baru
               </button>
 
               <button
                 type="button"
                 onClick={() => openReceivables(selectedCustomer)}
-                className={BUTTON_SECONDARY}
+                className={SECONDARY}
               >
-                <span className="material-symbols-outlined text-lg">
-                  receipt_long
-                </span>
+                <Icon name="receipt_long" className="text-lg" />
                 Lihat piutang
               </button>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-6 p-4 sm:p-5 lg:grid-cols-3">
-            {/* Credit information */}
-            <div className="space-y-4">
+            {/* Credit */}
+            <div className="space-y-3">
               <h3 className="text-xs font-semibold text-[#50453e]">
-                Ringkasan kredit
+                Kredit dan piutang
               </h3>
 
-              <div className="rounded-xl border border-[#e5e2dd] bg-[#faf8f5] p-4">
+              <div className="rounded-lg border border-[#e5e2dd] p-4">
                 <p className="text-xs text-[#82746d]">Limit kredit</p>
                 <p className="mt-1 text-lg font-semibold tabular-nums text-[#1c1c19]">
-                  {formatRupiah(selectedCustomer.creditLimit || 0)}
+                  {money(creditLimit)}
                 </p>
 
                 <div className="mt-4 flex items-center justify-between gap-2 text-xs">
-                  <span className="text-[#50453e]">Kredit terpakai</span>
+                  <span className="text-[#62554b]">Kredit terpakai</span>
                   <span className="font-medium tabular-nums text-[#1c1c19]">
-                    {formatRupiah(selectedCustomer.creditUsed || 0)}
+                    {money(creditUsed)}
                   </span>
                 </div>
 
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e5e2dd]">
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e5e2dd]">
                   <div
                     className={`h-full rounded-full ${
-                      selectedCustomer.creditLimit > 0 &&
-                      (selectedCustomer.creditUsed /
-                        selectedCustomer.creditLimit) *
-                        100 >=
-                        80
-                        ? "bg-[#ba1a1a]"
-                        : "bg-[#795740]"
+                      creditPercent >= 80 ? "bg-[#ba1a1a]" : "bg-[#795740]"
                     }`}
-                    style={{
-                      width: `${
-                        selectedCustomer.creditLimit > 0
-                          ? Math.min(
-                              100,
-                              Math.max(
-                                0,
-                                (selectedCustomer.creditUsed /
-                                  selectedCustomer.creditLimit) *
-                                  100,
-                              ),
-                            )
-                          : 0
-                      }%`,
-                    }}
+                    style={{ width: `${creditPercent}%` }}
                   />
                 </div>
 
-                <div className="mt-3 flex items-start justify-between gap-3 text-xs">
+                <div className="mt-3 flex justify-between gap-3 text-xs">
                   <span className="text-[#82746d]">Sisa limit</span>
                   <span className="text-right font-medium tabular-nums text-[#1c1c19]">
-                    {formatRupiah(
-                      Math.max(
-                        0,
-                        (selectedCustomer.creditLimit || 0) -
-                          (selectedCustomer.creditUsed || 0),
-                      ),
-                    )}
+                    {money(Math.max(0, creditLimit - creditUsed))}
                   </span>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-[#e5e2dd] p-4">
+              <div className="rounded-lg border border-[#e5e2dd] p-4">
                 <p className="text-xs text-[#82746d]">Piutang aktif</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums text-[#ba1a1a]">
-                  {formatRupiah(selectedCustomer.activeDebt || 0)}
+                <p className="mt-1 text-xl font-semibold tabular-nums text-[#a3443f]">
+                  {money(activeDebt)}
                 </p>
-                <div className="mt-3">
-                  <span
-                    className={`inline-flex rounded-md px-2 py-1 text-[11px] font-medium ${getDebtStatusClass(selectedCustomer.debtStatus)}`}
-                  >
-                    {getDebtStatusLabel(selectedCustomer.debtStatus)}
-                  </span>
-                </div>
+                <span
+                  className={`mt-3 inline-flex rounded-md px-2 py-1 text-[11px] font-medium ${debtStyle(selectedCustomer.debtStatus)}`}
+                >
+                  {debtLabel(selectedCustomer.debtStatus)}
+                </span>
               </div>
             </div>
 
-            {/* Customer summary */}
-            <div className="space-y-4">
+            {/* Activity */}
+            <div className="space-y-3">
               <h3 className="text-xs font-semibold text-[#50453e]">
                 Aktivitas pelanggan
               </h3>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-[#e5e2dd] p-4">
+                <div className="rounded-lg border border-[#e5e2dd] p-4">
                   <p className="text-xs text-[#82746d]">Total belanja</p>
                   <p className="mt-2 break-words text-base font-semibold tabular-nums text-[#1c1c19]">
-                    {formatRupiah(selectedCustomer.totalSpend || 0)}
+                    {money(selectedCustomer.totalSpend)}
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-[#e5e2dd] p-4">
+                <div className="rounded-lg border border-[#e5e2dd] p-4">
                   <p className="text-xs text-[#82746d]">Jumlah pesanan</p>
                   <p className="mt-2 text-base font-semibold tabular-nums text-[#1c1c19]">
-                    {formatNumber(selectedCustomer.ordersCount || 0)}
+                    {number(selectedCustomer.ordersCount)}
                   </p>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-[#e5e2dd] p-4">
-                <p className="text-xs text-[#82746d]">Transaksi terakhir</p>
-                <p className="mt-1 text-sm font-medium text-[#1c1c19]">
-                  {selectedCustomer.lastTransactionDate ||
-                    "Belum ada transaksi"}
-                </p>
+              <div className="divide-y divide-[#f0ede9] rounded-lg border border-[#e5e2dd] px-4">
+                <div className="py-3">
+                  <p className="text-xs text-[#82746d]">Transaksi terakhir</p>
+                  <p className="mt-1 text-sm font-medium text-[#1c1c19]">
+                    {selectedCustomer.lastTransactionDate ||
+                      "Belum ada transaksi"}
+                  </p>
+                </div>
 
-                <div className="mt-4 border-t border-[#f0ede9] pt-3">
+                <div className="py-3">
                   <p className="text-xs text-[#82746d]">Termin pembayaran</p>
                   <p className="mt-1 text-sm font-medium text-[#1c1c19]">
                     {selectedCustomer.terms || "Belum ditentukan"}
@@ -936,15 +872,15 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
               </div>
             </div>
 
-            {/* Contact details */}
-            <div className="space-y-4">
+            {/* Contact */}
+            <div className="space-y-3">
               <h3 className="text-xs font-semibold text-[#50453e]">
                 Informasi kontak
               </h3>
 
-              <div className="divide-y divide-[#f0ede9] rounded-xl border border-[#e5e2dd] px-4">
+              <div className="divide-y divide-[#f0ede9] rounded-lg border border-[#e5e2dd] px-4">
                 <div className="py-3">
-                  <p className="text-xs text-[#82746d]">PIC / Pemilik</p>
+                  <p className="text-xs text-[#82746d]">PIC / pemilik</p>
                   <p className="mt-1 break-words text-sm font-medium text-[#1c1c19]">
                     {selectedCustomer.picName || "Belum diisi"}
                   </p>
@@ -959,9 +895,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                       rel="noreferrer"
                       className="mt-1 inline-flex items-center gap-2 break-all text-sm font-medium text-[#5f402a] hover:underline"
                     >
-                      <span className="material-symbols-outlined text-base">
-                        chat
-                      </span>
+                      <Icon name="chat" className="text-base" />
                       {selectedCustomer.phone}
                     </a>
                   ) : (
@@ -993,25 +927,23 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             </div>
           </div>
         </section>
-      ) : (
+      )}
+
+      {!selectedCustomer && customers.length === 0 && (
         <section className="rounded-xl border border-dashed border-[#d9d1c9] bg-white px-6 py-10 text-center">
-          <span className="material-symbols-outlined text-3xl text-[#82746d]">
-            person
-          </span>
+          <Icon name="person" className="text-3xl text-[#82746d]" />
           <p className="mt-2 text-sm font-medium text-[#1c1c19]">
             Belum ada pelanggan
           </p>
           <p className="mt-1 text-xs text-[#82746d]">
-            Tambahkan pelanggan untuk mulai mengelola data dan transaksi.
+            Tambahkan pelanggan untuk mulai mencatat transaksi.
           </p>
           <button
             type="button"
             onClick={openAddModal}
-            className={`${BUTTON_PRIMARY} mt-4`}
+            className={`${PRIMARY} mt-4`}
           >
-            <span className="material-symbols-outlined text-lg">
-              person_add
-            </span>
+            <Icon name="person_add" className="text-lg" />
             Tambah pelanggan
           </button>
         </section>
@@ -1020,7 +952,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       {/* Add customer modal */}
       {showAddModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#1c1c19]/45 p-3 backdrop-blur-[2px] sm:p-5"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#1c1c19]/45 p-3 sm:p-5"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               setShowAddModal(false);
@@ -1031,263 +963,206 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="add-customer-title"
-            className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#e5e2dd] bg-white shadow-2xl"
+            className="flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-[#e5e2dd] bg-white shadow-xl"
           >
-            {/* Modal header */}
-            <div className="flex items-start justify-between gap-4 border-b border-[#e5e2dd] px-5 py-4 sm:px-6">
-              <div className="flex min-w-0 items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f0e2d6] text-[#5f402a]">
-                  <span className="material-symbols-outlined text-xl">
-                    person_add
-                  </span>
-                </div>
-
-                <div>
-                  <h2
-                    id="add-customer-title"
-                    className="text-base font-semibold text-[#1c1c19]"
-                  >
-                    Tambah pelanggan
-                  </h2>
-                  <p className="mt-1 text-xs leading-relaxed text-[#82746d]">
-                    Lengkapi informasi dasar dan ketentuan pembayaran.
-                  </p>
-                </div>
+            <div className="flex items-center justify-between gap-4 border-b border-[#e5e2dd] px-5 py-4">
+              <div>
+                <h2
+                  id="add-customer-title"
+                  className="text-base font-semibold text-[#1c1c19]"
+                >
+                  Tambah pelanggan
+                </h2>
+                <p className="mt-1 text-xs text-[#82746d]">
+                  Isi data pelanggan dan ketentuan pembayarannya.
+                </p>
               </div>
 
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
                 aria-label="Tutup formulir"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#f0ede9] hover:text-[#1c1c19]"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#82746d] hover:bg-[#f0ede9] hover:text-[#1c1c19]"
               >
-                <span className="material-symbols-outlined text-xl">close</span>
+                <Icon name="close" className="text-xl" />
               </button>
             </div>
 
-            {/* Modal form */}
             <form
               onSubmit={handleSaveCustomer}
               className="flex min-h-0 flex-col"
             >
-              <div className="overflow-y-auto px-5 py-5 sm:px-6">
-                <div className="space-y-5">
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#1c1c19]">
-                      Informasi pelanggan
-                    </h3>
-                    <p className="mt-1 text-[11px] text-[#82746d]">
-                      Informasi yang bertanda * wajib diisi.
-                    </p>
-                  </div>
+              <div className="space-y-5 overflow-y-auto px-5 py-5">
+                <div>
+                  <h3 className="text-xs font-semibold text-[#1c1c19]">
+                    Data pelanggan
+                  </h3>
+                  <p className="mt-1 text-xs text-[#82746d]">
+                    Kolom bertanda * wajib diisi.
+                  </p>
+                </div>
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field label="Nama pelanggan / toko" required>
-                      <input
-                        autoFocus
-                        type="text"
-                        required
-                        maxLength={120}
-                        value={newCustName}
-                        onChange={(event) => setNewCustName(event.target.value)}
-                        placeholder="Nama pelanggan atau toko"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field label="Nama pelanggan / toko" required>
+                    <input
+                      autoFocus
+                      type="text"
+                      required
+                      maxLength={120}
+                      value={newCustName}
+                      onChange={(event) => setNewCustName(event.target.value)}
+                      placeholder="Nama pelanggan atau toko"
+                      className={INPUT}
+                    />
+                  </Field>
 
-                    <Field label="Nama PIC / pemilik">
-                      <input
-                        type="text"
-                        maxLength={100}
-                        value={newCustPic}
-                        onChange={(event) => setNewCustPic(event.target.value)}
-                        placeholder="Nama penanggung jawab"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
+                  <Field label="PIC / pemilik">
+                    <input
+                      type="text"
+                      maxLength={100}
+                      value={newCustPic}
+                      onChange={(event) => setNewCustPic(event.target.value)}
+                      placeholder="Nama penanggung jawab"
+                      className={INPUT}
+                    />
+                  </Field>
 
-                    <Field label="Nomor telepon / WhatsApp" required>
-                      <input
-                        type="tel"
-                        required
-                        maxLength={30}
-                        value={newCustPhone}
-                        onChange={(event) =>
-                          setNewCustPhone(event.target.value)
-                        }
-                        placeholder="08xxxxxxxxxx"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
+                  <Field label="Telepon / WhatsApp" required>
+                    <input
+                      type="tel"
+                      required
+                      maxLength={30}
+                      value={newCustPhone}
+                      onChange={(event) => setNewCustPhone(event.target.value)}
+                      placeholder="08xxxxxxxxxx"
+                      className={INPUT}
+                    />
+                  </Field>
 
-                    <Field label="Kota / provinsi">
-                      <input
-                        type="text"
-                        maxLength={100}
-                        value={newCustCity}
-                        onChange={(event) => setNewCustCity(event.target.value)}
-                        placeholder="Contoh: Mataram, Kota Mataram"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
-                  </div>
-
-                  <div className="border-t border-[#f0ede9]" />
-
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#1c1c19]">
-                      Kategori harga
-                    </h3>
-                    <p className="mt-1 text-[11px] text-[#82746d]">
-                      Pilih kategori pelanggan untuk menentukan tier harga pada
-                      transaksi POS.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                    {(
-                      [
-                        {
-                          value: "Retail",
-                          title: "Retail",
-                          description: "Harga eceran",
-                        },
-                        {
-                          value: "Reseller",
-                          title: "Reseller",
-                          description: "Harga mitra",
-                        },
-                        {
-                          value: "Grosir",
-                          title: "Grosir",
-                          description: "Harga volume",
-                        },
-                      ] as {
-                        value: CustomerTier;
-                        title: string;
-                        description: string;
-                      }[]
-                    ).map((tier) => {
-                      const isActive = newCustTier === tier.value;
-
-                      return (
-                        <button
-                          key={tier.value}
-                          type="button"
-                          aria-pressed={isActive}
-                          onClick={() => setNewCustTier(tier.value)}
-                          className={`rounded-xl border p-3 text-left transition ${
-                            isActive
-                              ? "border-[#5f402a] bg-[#faf3ec] ring-1 ring-[#5f402a]/10"
-                              : "border-[#e5e2dd] bg-white hover:bg-[#faf8f5]"
-                          }`}
-                        >
-                          <span className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-semibold text-[#1c1c19]">
-                              {tier.title}
-                            </span>
-                            <span
-                              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                                isActive
-                                  ? "border-[#5f402a] bg-[#5f402a] text-white"
-                                  : "border-[#d4ccc3]"
-                              }`}
-                            >
-                              {isActive && (
-                                <span className="material-symbols-outlined text-xs">
-                                  check
-                                </span>
-                              )}
-                            </span>
-                          </span>
-                          <span className="mt-1 block text-xs text-[#82746d]">
-                            {tier.description}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="border-t border-[#f0ede9]" />
-
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#1c1c19]">
-                      Kredit dan pembayaran
-                    </h3>
-                    <p className="mt-1 text-[11px] text-[#82746d]">
-                      Isi limit hanya jika pelanggan diperbolehkan bertransaksi
-                      dengan kredit.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field
-                      label="Limit kredit (Rp)"
-                      hint="Isi 0 atau kosongkan untuk pelanggan tanpa limit kredit."
-                    >
-                      <input
-                        type="number"
-                        min="0"
-                        step="1000"
-                        value={newCustLimit}
-                        onChange={(event) =>
-                          setNewCustLimit(event.target.value)
-                        }
-                        placeholder="0"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
-
-                    <Field label="Termin pembayaran">
-                      <select
-                        value={newCustTerms}
-                        onChange={(event) =>
-                          setNewCustTerms(event.target.value)
-                        }
-                        className={INPUT_CLASS}
-                      >
-                        <option value="Cash Before Delivery">
-                          Cash Before Delivery (CBD)
-                        </option>
-                        <option value="DP 50% + Pelunasan Saat Kirim">
-                          DP 50% + pelunasan saat kirim
-                        </option>
-                        <option value="Net 14 Hari">Net 14 hari</option>
-                        <option value="Net 30 Hari">Net 30 hari</option>
-                        <option value="Net 45 Hari">Net 45 hari</option>
-                      </select>
-                    </Field>
-                  </div>
-
-                  <Field label="Alamat pengiriman / workshop">
-                    <textarea
-                      rows={3}
-                      maxLength={500}
-                      value={newCustAddress}
-                      onChange={(event) =>
-                        setNewCustAddress(event.target.value)
-                      }
-                      placeholder="Alamat lengkap atau catatan lokasi pengiriman"
-                      className={`${INPUT_CLASS} resize-y`}
+                  <Field label="Kota / provinsi">
+                    <input
+                      type="text"
+                      maxLength={100}
+                      value={newCustCity}
+                      onChange={(event) => setNewCustCity(event.target.value)}
+                      placeholder="Contoh: Mataram"
+                      className={INPUT}
                     />
                   </Field>
                 </div>
+
+                <div className="border-t border-[#f0ede9]" />
+
+                <div>
+                  <h3 className="text-xs font-semibold text-[#1c1c19]">
+                    Kategori harga
+                  </h3>
+                  <p className="mt-1 text-xs text-[#82746d]">
+                    Kategori ini digunakan saat memilih pelanggan di POS.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {CUSTOMER_TIERS.map((tier) => {
+                    const active = newCustTier === tier.value;
+
+                    return (
+                      <button
+                        key={tier.value}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => setNewCustTier(tier.value)}
+                        className={`rounded-lg border p-3 text-left transition ${
+                          active
+                            ? "border-[#5f402a] bg-[#faf5ef]"
+                            : "border-[#e5e2dd] hover:bg-[#faf8f5]"
+                        }`}
+                      >
+                        <span className="flex items-center justify-between gap-2">
+                          <span className="text-sm font-semibold text-[#1c1c19]">
+                            {tier.label}
+                          </span>
+                          {active && (
+                            <Icon
+                              name="check_circle"
+                              className="text-lg text-[#5f402a]"
+                            />
+                          )}
+                        </span>
+                        <span className="mt-1 block text-xs text-[#82746d]">
+                          {tier.description}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="border-t border-[#f0ede9]" />
+
+                <div>
+                  <h3 className="text-xs font-semibold text-[#1c1c19]">
+                    Kredit dan pembayaran
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Limit kredit (Rp)"
+                    hint="Kosongkan atau isi 0 jika tidak menggunakan kredit."
+                  >
+                    <input
+                      type="number"
+                      min="0"
+                      step="1000"
+                      value={newCustLimit}
+                      onChange={(event) => setNewCustLimit(event.target.value)}
+                      placeholder="0"
+                      className={INPUT}
+                    />
+                  </Field>
+
+                  <Field label="Termin pembayaran">
+                    <select
+                      value={newCustTerms}
+                      onChange={(event) => setNewCustTerms(event.target.value)}
+                      className={INPUT}
+                    >
+                      <option value="Cash Before Delivery">
+                        Cash Before Delivery (CBD)
+                      </option>
+                      <option value="DP 50% + Pelunasan Saat Kirim">
+                        DP 50% + pelunasan saat kirim
+                      </option>
+                      <option value="Net 14 Hari">Net 14 hari</option>
+                      <option value="Net 30 Hari">Net 30 hari</option>
+                      <option value="Net 45 Hari">Net 45 hari</option>
+                    </select>
+                  </Field>
+                </div>
+
+                <Field label="Alamat pengiriman / workshop">
+                  <textarea
+                    rows={3}
+                    maxLength={500}
+                    value={newCustAddress}
+                    onChange={(event) => setNewCustAddress(event.target.value)}
+                    placeholder="Alamat lengkap atau catatan pengiriman"
+                    className={`${INPUT} resize-y`}
+                  />
+                </Field>
               </div>
 
-              {/* Modal footer */}
-              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#faf8f5] px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#faf8f5] px-5 py-4 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className={BUTTON_SECONDARY}
+                  className={SECONDARY}
                 >
                   Batal
                 </button>
 
-                <button type="submit" className={BUTTON_PRIMARY}>
-                  <span className="material-symbols-outlined text-lg">
-                    save
-                  </span>
+                <button type="submit" className={PRIMARY}>
+                  <Icon name="save" className="text-lg" />
                   Simpan pelanggan
                 </button>
               </div>

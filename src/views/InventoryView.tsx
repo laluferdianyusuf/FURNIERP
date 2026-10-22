@@ -430,10 +430,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
       {/* Header */}
       <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
         <div className="min-w-0">
-          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.12em] text-[#82746d]">
-            <span>FurniERP</span>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-medium text-[#82746d]">
+            <span>Persediaan</span>
             <Icon name="chevron_right" className="text-sm" />
-            <span className="text-[#5f402a]">Persediaan</span>
+            <span className="text-[#795740]">Stok & Bahan</span>
           </div>
 
           <h1 className="font-headline text-2xl font-semibold tracking-tight sm:text-3xl">
