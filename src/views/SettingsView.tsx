@@ -301,7 +301,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
   const [phone, setPhone] = useState("+62 811-9876-5432");
   const [email, setEmail] = useState("billing@furnierp.id");
   const [address, setAddress] = useState(
-    "Jl. Raya Jepara - Kudus KM 7, Tahunan, Kab. Jepara, Jawa Tengah 59427",
+    "Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota Mataram.",
   );
 
   const [retailMargin, setRetailMargin] = useState(48);

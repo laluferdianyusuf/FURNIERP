@@ -1126,7 +1126,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                         maxLength={100}
                         value={newCustCity}
                         onChange={(event) => setNewCustCity(event.target.value)}
-                        placeholder="Contoh: Jepara, Jawa Tengah"
+                        placeholder="Contoh: Mataram, Kota Mataram"
                         className={INPUT_CLASS}
                       />
                     </Field>

@@ -394,7 +394,7 @@ function InvoicePaper() {
             <p className="mt-2 max-w-xs leading-5 text-[#50453e]">
               Bespoke Solid Woodworks & Premium Teak Craftsmanship
               <br />
-              Jl. Raya Jepara–Kudus KM 7, Tahunan, Jepara, Jawa Tengah 59427
+              Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota Mataram.
               <br />
               WA: +62 811-9876-5432
               <br />
@@ -430,7 +430,7 @@ function InvoicePaper() {
           <p className="mt-1 text-[#50453e]">{INVOICE.customerCompany}</p>
           <p className="text-[#50453e]">{INVOICE.customerContact}</p>
           <p className="mt-1 leading-5 text-[#82746d]">
-            Jl. Rungkut Industri No. 42, Surabaya, Jawa Timur
+            Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota Mataram.
           </p>
           <p className="mt-1 font-mono text-[#5f402a]">
             WA: {INVOICE.customerPhone}

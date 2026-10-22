@@ -1,644 +1,1867 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-fixed-dim":"#eabea1","on-background":"#1c1c19","primary":"#5f402a","surface-dim":"#dcdad5","outline":"#82746d","on-secondary-container":"#795f51","surface":"#fcf9f4","secondary-fixed-dim":"#e1c0af","error":"#ba1a1a","on-surface":"#1c1c19","primary-container":"#795740","on-primary-fixed-variant":"#5f402a","inverse-surface":"#31302d","on-primary-container":"#fdcfb2","on-secondary":"#ffffff","background":"#fcf9f4","on-secondary-fixed":"#29170d","error-container":"#ffdad6","on-secondary-fixed-variant":"#594235","outline-variant":"#d4c3ba","tertiary":"#61401f","surface-container-lowest":"#ffffff","on-tertiary":"#ffffff","on-tertiary-fixed":"#2d1600","tertiary-container":"#7b5734","on-tertiary-container":"#ffd0a7","surface-tint":"#795740","secondary-container":"#ffdbca","surface-container-low":"#f6f3ee","surface-container-highest":"#e5e2dd","surface-bright":"#fcf9f4","primary-fixed":"#ffdcc6","on-primary-fixed":"#2d1605","on-tertiary-fixed-variant":"#61401f","inverse-primary":"#eabea1","inverse-on-surface":"#f3f0eb","on-error-container":"#93000a","tertiary-fixed-dim":"#eebd93","on-surface-variant":"#50453e","on-error":"#ffffff","surface-container-high":"#ebe8e3","secondary-fixed":"#ffdbca","surface-variant":"#e5e2dd","on-primary":"#ffffff","tertiary-fixed":"#ffdcbf","surface-container":"#f0ede9","secondary":"#73594b"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","gutter-compact":"0.5rem","space-xs":"0.25rem","margin-mobile":"1rem","gutter":"1rem","space-xl":"2rem","space-md":"1rem","margin":"1.5rem","space-lg":"1.5rem"},"fontFamily":{"headline-lg":["Plus Jakarta Sans"],"financial-sm":["Inter"],"financial-lg":["Inter"],"label-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"financial-md":["Inter"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"financial-xl":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"500"}],"financial-lg":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"headline-xl-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"600"}],"financial-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"financial-xl":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-primary z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-md pt-space-lg pb-space-md"><div class="flex items-center gap-space-sm"><img alt="FurniERP Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UMfI2EWyHZej3Vl2CBTGXgMvWw3_8s_RBfsjsKMmLR2TXSjntXE3HZjisYZNTejx8nwxl7W23o3JjtOSD1MCp2qC0wFyw7CW_WnOUi3YwMGzmn9MpsMF_LZ0ZLK0jeBQIztyiG3uqPTh3PdwSHWnvzBavmNtaNegn-WrU6nhDKAUESQPo6KnnGqacMdf84l_soAnPU_xsSxb7fPhD_1U_WKNKCiL3dlqXeqXXoMNBn3Niy_uLYeY1QUV0"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FurniERP</span><div class="flex items-center gap-1.5 mt-0.5"><span class="font-label-sm text-label-sm text-primary-fixed-dim">Atelier Operations</span><span class="px-1.5 py-0.2 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm">Owner Mode</span></div></div></div></div><nav class="flex flex-col px-space-sm space-y-space-md mt-space-sm" data-active-classes="bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full"><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Utama</span><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[18px]">dashboard</span><span>Dashboard</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Operasional</span><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="pos" href="#"><span class="material-symbols-outlined text-[18px]">point_of_sale</span><span>Penjualan / POS</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="orders" href="#"><span class="material-symbols-outlined text-[18px]">inventory_2</span><span>Pesanan</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="customers" href="#"><span class="material-symbols-outlined text-[18px]">group</span><span>Pelanggan</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="products" href="#"><span class="material-symbols-outlined text-[18px]">chair</span><span>Produk</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Persediaan</span><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="inventory" href="#"><span class="material-symbols-outlined text-[18px]">package_2</span><span>Stok Selesai</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="raw-materials" href="#"><span class="material-symbols-outlined text-[18px]">layers</span><span>Bahan Baku</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="production" href="#"><span class="material-symbols-outlined text-[18px]">handyman</span><span>Produksi</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="shipping" href="#"><span class="material-symbols-outlined text-[18px]">local_shipping</span><span>Pengiriman</span></a></div><div class="flex flex-col gap-0.5"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Keuangan</span><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="cash-flow" href="#"><span class="material-symbols-outlined text-[18px]">account_balance_wallet</span><span>Cash Flow</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="expenses" href="#"><span class="material-symbols-outlined text-[18px]">receipt_long</span><span>Pengeluaran</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="receivables" href="#"><span class="material-symbols-outlined text-[18px]">request_quote</span><span>Piutang</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="financial-reports" href="#"><span class="material-symbols-outlined text-[18px]">bar_chart_4_bars</span><span>Laporan Keuangan</span></a></div><div class="flex flex-col gap-0.5 pb-space-lg"><span class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70">Lainnya</span><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="ai-advisor" href="#"><span class="material-symbols-outlined text-[18px]">smart_toy</span><span>Tanya AI</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span>Pengaturan</span></a></div></nav></div></aside><div class="pl-60 min-h-screen flex flex-col bg-background"><header class="fixed top-0 left-60 right-0 h-16 z-40 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-base">storefront</span><span>FurniERP</span><span class="text-outline-variant">/</span><span class="text-on-surface font-medium">Executive Overview</span></div><div class="hidden xl:flex items-center bg-surface-container px-space-sm py-1.5 rounded-lg w-80 text-on-surface-variant focus-within:ring-1 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><span class="material-symbols-outlined text-base mr-2 text-outline">search</span><input class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari transaksi, produk, pelanggan..." type="text"/><kbd class="text-label-sm font-label-sm bg-surface-container-high px-1.5 py-0.5 rounded text-on-surface-variant">/</kbd></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-base text-primary">calendar_today</span><span>Rabu, 23 Okt 2024</span></div><div class="relative flex items-center"><button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors relative" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-semibold text-on-error">2</span></button></div><button class="flex items-center gap-1.5 bg-primary-container text-on-primary px-space-md py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-base">add</span><span>+ Transaksi</span></button><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjD297V4VN7MHXlVKzV90nFbA3hKCfuzzCFZsl3NBYl1BhN8BEp94sbq65nMXFktn77ePVRM2RcGcmQ0x_HmDtuMVbA7xYRGN8CBLhrRl9bbhG9E-aFGkKD8IUCBTxrR9I8bAhFTiYgSdLJ4oeCQsyq17Qx_8hGK1U41HZiCSjZD84I6aqIrf9CrOmuialhvjh31HEq4__Kfx8RjnuqNd4p-Im2E8L5-8qAOPttoNzyW0oUZstpRy2"/><div class="hidden lg:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface font-medium leading-tight">Hendra Wijaya</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Owner</span></div></div></div></header><main class="w-full pt-16 bg-background flex-1 px-space-lg py-space-lg"><div class="flex flex-col w-full">
-<!-- Navigasi Breadcrumb & Top Bar -->
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-space-sm mb-space-md">
-<div class="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant flex-wrap">
-<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
-<span class="material-symbols-outlined text-[16px]">storefront</span>
-<span>FurniERP</span>
-</a>
-<span class="text-outline-variant font-light">/</span>
-<a class="hover:text-primary transition-colors" href="#">Operasional</a>
-<span class="text-outline-variant font-light">/</span>
-<a class="hover:text-primary transition-colors" href="#">Penjualan &amp; POS</a>
-<span class="text-outline-variant font-light">/</span>
-<span class="text-on-surface font-label-md font-semibold text-primary">Detail Nota #INV-20241023-004</span>
-</div>
-<!-- Quick back button & auto-sync info -->
-<div class="flex items-center gap-space-sm">
-<span class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">
-<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-<span>Tersinkronisasi ke General Ledger &amp; SPK Workshop</span>
-</span>
-<a class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-highest transition-colors text-label-md font-label-md" href="#">
-<span class="material-symbols-outlined text-[18px]">arrow_back</span>
-<span>Kembali ke POS Kasir</span>
-</a>
-</div>
-</div>
-<!-- Header Dokumen Nota & Action Ribbon -->
-<div class="bg-surface-container-lowest p-space-md lg:p-space-lg rounded-xl shadow-sm mb-space-lg">
-<div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-space-md">
-<!-- Title & Status Chips -->
-<div class="flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-sm flex-wrap">
-<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-semibold">
-            Nota Penjualan &amp; Bukti SPK <span class="text-primary font-mono font-medium">#INV-20241023-004</span>
-</h1>
-<span class="px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-fixed-variant text-label-sm font-label-sm font-semibold tracking-wide flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">pending</span>
-<span>Terbayar Sebagian (DP 46.3%)</span>
-</span>
-<span class="px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm font-medium">
-            Tier Grosir B2B
-          </span>
-</div>
-<div class="flex items-center gap-3 text-body-sm font-body-sm text-on-surface-variant flex-wrap mt-0.5">
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
-<span>23 Oktober 2024 • 14:32 WIB</span>
-</span>
-<span class="text-outline-variant">•</span>
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-outline">badge</span>
-<span>Kasir / Otentikasi: <strong class="text-on-surface font-medium">Hendra Wijaya (Owner)</strong></span>
-</span>
-<span class="text-outline-variant">•</span>
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-outline">sync_alt</span>
-<span>No. SPK: <strong class="text-primary font-mono">SPK-2024-098</strong></span>
-</span>
-</div>
-</div>
-<!-- Action Buttons Ribbon -->
-<div class="flex items-center gap-space-xs flex-wrap">
-<button class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors text-label-md font-label-md shadow-sm" onclick="window.print()" type="button">
-<span class="material-symbols-outlined text-[18px]">receipt_long</span>
-<span>Thermal POS (80mm)</span>
-</button>
-<button class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-colors text-label-md font-label-md shadow-sm" onclick="window.print()" type="button">
-<span class="material-symbols-outlined text-[18px]">print</span>
-<span>Cetak Faktur A4 / PDF</span>
-</button>
-<button class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-lowest text-emerald-800 hover:bg-emerald-50 transition-colors text-label-md font-label-md shadow-sm" id="btnShareWA" type="button">
-<span class="material-symbols-outlined text-[18px] text-emerald-700">chat</span>
-<span>Kirim WhatsApp (+62 812-8821)</span>
-</button>
-<div class="relative inline-block text-left">
-<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors" id="btnMoreAction" type="button">
-<span class="material-symbols-outlined text-[20px]">more_vert</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- Main 2-Column Responsive Workspace -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- KOLOM KIRI (7/12 ~60-65%): Pratinjau Kertas Lembar Fisik Nota A4 Mebel Mewah -->
-<div class="lg:col-span-8 flex flex-col gap-space-md">
-<!-- Toolbar Mini Atas Kertas -->
-<div class="flex items-center justify-between px-space-sm">
-<div class="flex items-center gap-2">
-<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
-<span class="material-symbols-outlined text-[14px]">menu_book</span>
-</span>
-<span class="font-label-md text-label-md font-semibold text-on-surface">Pratinjau Lembar Fisik Kertas A4 (Atelier Edition)</span>
-</div>
-<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
-<span class="px-2 py-0.5 rounded bg-surface-container">Skala: 100% Standar Cetak</span>
-<span>•</span>
-<span>2 Lembar Rangkap (Asli &amp; Arsip Workshop)</span>
-</div>
-</div>
-<!-- KERTAS NOTA CETAK FISIK (A4 Styled Card) -->
-<div class="bg-surface-container-lowest p-space-lg md:p-10 rounded-xl shadow-[0_4px_24px_-4px_rgba(74,52,40,0.08)] flex flex-col relative overflow-hidden transition-all" id="printSheet">
-<!-- Watermark Lunas/DP Latar Belakang Kertas -->
-<div class="absolute right-8 top-44 select-none pointer-events-none opacity-[0.04] rotate-[-18deg]">
-<span class="text-[120px] font-black uppercase text-primary tracking-widest">FURNIERP</span>
-</div>
-<!-- 1. KOP NOTA ATELIER FURNITURE -->
-<div class="flex flex-col md:flex-row md:items-start justify-between gap-space-md pb-space-lg bg-surface-container-low/40 p-space-md rounded-lg">
-<div class="flex items-start gap-3.5">
-<div class="w-14 h-14 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm flex-shrink-0">
-<span class="material-symbols-outlined text-[32px]">chair</span>
-</div>
-<div class="flex flex-col">
-<div class="flex items-center gap-2">
-<span class="font-headline-md text-headline-md text-primary tracking-tight font-bold">FURNIERP ATELIER</span>
-<span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-semibold bg-primary/15 text-primary tracking-wider">Workshop Jepara</span>
-</div>
-<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Bespoke Solid Woodworks &amp; Premium Teak Craftsmanship</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed max-w-md">
-                Jl. Raya Jepara - Kudus KM 7, Tahunan, Kab. Jepara, Jawa Tengah 59427<br/>
-                WA / Telepon: <span class="text-on-surface font-medium">+62 811-9876-5432</span> • Email: <span class="text-on-surface font-medium">billing@furnierp.id</span>
-</p>
-</div>
-</div>
-<div class="flex flex-col md:text-right items-start md:items-end justify-between self-stretch">
-<div>
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">FAKTUR PENJUALAN RESMI</span>
-<div class="font-financial-lg text-financial-lg font-bold text-on-surface tracking-tight font-mono mt-0.5">
-                INV-20241023-004
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_dashboard" name="shell-type" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @layer base {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          overscroll-behavior: none;
+        }
+        main > :first-child {
+          margin-top: 0 !important;
+        }
+        main > :last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#eabea1",
+              "on-background": "#1c1c19",
+              primary: "#5f402a",
+              "surface-dim": "#dcdad5",
+              outline: "#82746d",
+              "on-secondary-container": "#795f51",
+              surface: "#fcf9f4",
+              "secondary-fixed-dim": "#e1c0af",
+              error: "#ba1a1a",
+              "on-surface": "#1c1c19",
+              "primary-container": "#795740",
+              "on-primary-fixed-variant": "#5f402a",
+              "inverse-surface": "#31302d",
+              "on-primary-container": "#fdcfb2",
+              "on-secondary": "#ffffff",
+              background: "#fcf9f4",
+              "on-secondary-fixed": "#29170d",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#594235",
+              "outline-variant": "#d4c3ba",
+              tertiary: "#61401f",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed": "#2d1600",
+              "tertiary-container": "#7b5734",
+              "on-tertiary-container": "#ffd0a7",
+              "surface-tint": "#795740",
+              "secondary-container": "#ffdbca",
+              "surface-container-low": "#f6f3ee",
+              "surface-container-highest": "#e5e2dd",
+              "surface-bright": "#fcf9f4",
+              "primary-fixed": "#ffdcc6",
+              "on-primary-fixed": "#2d1605",
+              "on-tertiary-fixed-variant": "#61401f",
+              "inverse-primary": "#eabea1",
+              "inverse-on-surface": "#f3f0eb",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#eebd93",
+              "on-surface-variant": "#50453e",
+              "on-error": "#ffffff",
+              "surface-container-high": "#ebe8e3",
+              "secondary-fixed": "#ffdbca",
+              "surface-variant": "#e5e2dd",
+              "on-primary": "#ffffff",
+              "tertiary-fixed": "#ffdcbf",
+              "surface-container": "#f0ede9",
+              secondary: "#73594b",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "space-sm": "0.5rem",
+              "gutter-compact": "0.5rem",
+              "space-xs": "0.25rem",
+              "margin-mobile": "1rem",
+              gutter: "1rem",
+              "space-xl": "2rem",
+              "space-md": "1rem",
+              margin: "1.5rem",
+              "space-lg": "1.5rem",
+            },
+            fontFamily: {
+              "headline-lg": ["Plus Jakarta Sans"],
+              "financial-sm": ["Inter"],
+              "financial-lg": ["Inter"],
+              "label-sm": ["Inter"],
+              "headline-xl": ["Plus Jakarta Sans"],
+              "body-md": ["Inter"],
+              "headline-xl-mobile": ["Plus Jakarta Sans"],
+              "financial-md": ["Inter"],
+              "body-sm": ["Inter"],
+              "headline-md": ["Plus Jakarta Sans"],
+              "body-lg": ["Inter"],
+              "headline-sm": ["Plus Jakarta Sans"],
+              "financial-xl": ["Inter"],
+              "label-md": ["Inter"],
+            },
+            fontSize: {
+              "headline-lg": [
+                "24px",
+                {
+                  lineHeight: "32px",
+                  letterSpacing: "-0.015em",
+                  fontWeight: "600",
+                },
+              ],
+              "financial-sm": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0", fontWeight: "500" },
+              ],
+              "financial-lg": [
+                "18px",
+                {
+                  lineHeight: "24px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "label-sm": [
+                "11px",
+                {
+                  lineHeight: "14px",
+                  letterSpacing: "0.04em",
+                  fontWeight: "600",
+                },
+              ],
+              "headline-xl": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": [
+                "14px",
+                { lineHeight: "20px", letterSpacing: "0", fontWeight: "400" },
+              ],
+              "headline-xl-mobile": [
+                "26px",
+                {
+                  lineHeight: "34px",
+                  letterSpacing: "-0.015em",
+                  fontWeight: "600",
+                },
+              ],
+              "financial-md": [
+                "14px",
+                { lineHeight: "20px", letterSpacing: "0", fontWeight: "500" },
+              ],
+              "body-sm": [
+                "12px",
+                { lineHeight: "16px", letterSpacing: "0", fontWeight: "400" },
+              ],
+              "headline-md": [
+                "20px",
+                {
+                  lineHeight: "28px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-lg": [
+                "16px",
+                { lineHeight: "24px", letterSpacing: "0", fontWeight: "400" },
+              ],
+              "headline-sm": [
+                "16px",
+                {
+                  lineHeight: "24px",
+                  letterSpacing: "-0.005em",
+                  fontWeight: "600",
+                },
+              ],
+              "financial-xl": [
+                "28px",
+                {
+                  lineHeight: "34px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "600",
+                },
+              ],
+              "label-md": [
+                "13px",
+                {
+                  lineHeight: "18px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-background font-body-md text-on-surface antialiased">
+    <aside
+      class="fixed left-0 top-0 h-screen w-60 bg-primary z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+    >
+      <div class="flex flex-col">
+        <div class="px-space-md pt-space-lg pb-space-md">
+          <div class="flex items-center gap-space-sm">
+            <img
+              alt="FurniERP Logo"
+              class="h-8 w-auto object-contain"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1UMfI2EWyHZej3Vl2CBTGXgMvWw3_8s_RBfsjsKMmLR2TXSjntXE3HZjisYZNTejx8nwxl7W23o3JjtOSD1MCp2qC0wFyw7CW_WnOUi3YwMGzmn9MpsMF_LZ0ZLK0jeBQIztyiG3uqPTh3PdwSHWnvzBavmNtaNegn-WrU6nhDKAUESQPo6KnnGqacMdf84l_soAnPU_xsSxb7fPhD_1U_WKNKCiL3dlqXeqXXoMNBn3Niy_uLYeY1QUV0"
+            />
+            <div class="flex flex-col">
+              <span
+                class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold"
+                >FurniERP</span
+              >
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="font-label-sm text-label-sm text-primary-fixed-dim"
+                  >Atelier Operations</span
+                ><span
+                  class="px-1.5 py-0.2 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm"
+                  >Owner Mode</span
+                >
               </div>
-<span class="text-body-sm font-body-sm text-on-surface-variant block mt-0.5">
-                No. SPK Bengkel: <strong class="text-primary font-mono">SPK-2024-098</strong>
-</span>
-</div>
-<div class="mt-2 text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded inline-block">
-              NPWP: <span class="font-mono text-on-surface">31.849.201.4-512.000</span>
-</div>
-</div>
-</div>
-<!-- 2. IDENTITAS PELANGGAN & PARAMETER PENGIRIMAN -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md py-space-md my-space-sm bg-surface-container-low/60 p-space-md rounded-lg">
-<!-- Kepada -->
-<div class="flex flex-col">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1">Ditagihkan Kepada (Pelanggan Grosir):</span>
-<div class="flex items-center gap-2">
-<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Toko Mebel Jepara Makmur</span>
-<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant text-[10px] font-semibold">B2B ID #CUST-089</span>
-</div>
-<span class="font-body-md text-body-md text-on-surface font-medium mt-0.5">UP: Bpk. Subur Hartanto</span>
-<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
-<span class="material-symbols-outlined text-[14px] text-emerald-700">call</span>
-<span class="font-mono">+62 812-8821-9011</span>
-</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 leading-snug">
-              Alamat Kirim: Gudang Showroom Utama, Jl. Basuki Rahmat No. 45, Embong Kaliasin, Genteng, Kota Surabaya, Jawa Timur 60271
-            </p>
-</div>
-<!-- Parameter Pesanan & Ekspedisi -->
-<div class="flex flex-col md:items-end justify-between text-left md:text-right">
-<div>
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1 block">Metode Pengiriman &amp; Tim Pengantar:</span>
-<div class="flex items-center md:justify-end gap-1.5 text-on-surface font-label-md font-semibold">
-<span class="material-symbols-outlined text-[16px] text-primary">local_shipping</span>
-<span>Armada Truk Bengkel L300 (Door-to-Door)</span>
-</div>
-<span class="font-body-sm text-body-sm text-on-surface-variant block mt-0.5">
-                Layanan Termasuk: Bongkar Muat &amp; Jasa Instalasi Rakit di Lantai 1
+            </div>
+          </div>
+        </div>
+        <nav
+          class="flex flex-col px-space-sm space-y-space-md mt-space-sm"
+          data-active-classes="bg-primary-container text-on-primary font-semibold relative before:content-[''] before:absolute before:left-2 before:w-1.5 before:h-1.5 before:bg-primary-fixed before:rounded-full"
+        >
+          <div class="flex flex-col gap-0.5">
+            <span
+              class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70"
+              >Utama</span
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="dashboard"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >dashboard</span
+              ><span>Dashboard</span></a
+            >
+          </div>
+          <div class="flex flex-col gap-0.5">
+            <span
+              class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70"
+              >Operasional</span
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="pos"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >point_of_sale</span
+              ><span>Penjualan / POS</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="orders"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >inventory_2</span
+              ><span>Pesanan</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="customers"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]">group</span
+              ><span>Pelanggan</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="products"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]">chair</span
+              ><span>Produk</span></a
+            >
+          </div>
+          <div class="flex flex-col gap-0.5">
+            <span
+              class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70"
+              >Persediaan</span
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="inventory"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >package_2</span
+              ><span>Stok Selesai</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="raw-materials"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]">layers</span
+              ><span>Bahan Baku</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="production"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >handyman</span
+              ><span>Produksi</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="shipping"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >local_shipping</span
+              ><span>Pengiriman</span></a
+            >
+          </div>
+          <div class="flex flex-col gap-0.5">
+            <span
+              class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70"
+              >Keuangan</span
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="cash-flow"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >account_balance_wallet</span
+              ><span>Cash Flow</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="expenses"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >receipt_long</span
+              ><span>Pengeluaran</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="receivables"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >request_quote</span
+              ><span>Piutang</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="financial-reports"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >bar_chart_4_bars</span
+              ><span>Laporan Keuangan</span></a
+            >
+          </div>
+          <div class="flex flex-col gap-0.5 pb-space-lg">
+            <span
+              class="px-space-sm pb-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim/70"
+              >Lainnya</span
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="ai-advisor"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >smart_toy</span
+              ><span>Tanya AI</span></a
+            ><a
+              class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors font-body-sm text-body-sm"
+              data-path="settings"
+              href="#"
+              ><span class="material-symbols-outlined text-[18px]"
+                >settings</span
+              ><span>Pengaturan</span></a
+            >
+          </div>
+        </nav>
+      </div>
+    </aside>
+    <div class="pl-60 min-h-screen flex flex-col bg-background">
+      <header
+        class="fixed top-0 left-60 right-0 h-16 z-40 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-space-lg flex items-center justify-between"
+      >
+        <div class="flex items-center gap-space-md">
+          <div
+            class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md"
+          >
+            <span class="material-symbols-outlined text-base">storefront</span
+            ><span>FurniERP</span><span class="text-outline-variant">/</span
+            ><span class="text-on-surface font-medium">Executive Overview</span>
+          </div>
+          <div
+            class="hidden xl:flex items-center bg-surface-container px-space-sm py-1.5 rounded-lg w-80 text-on-surface-variant focus-within:ring-1 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"
+          >
+            <span class="material-symbols-outlined text-base mr-2 text-outline"
+              >search</span
+            ><input
+              class="w-full bg-transparent border-0 p-0 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none"
+              placeholder="Cari transaksi, produk, pelanggan..."
+              type="text"
+            /><kbd
+              class="text-label-sm font-label-sm bg-surface-container-high px-1.5 py-0.5 rounded text-on-surface-variant"
+              >/</kbd
+            >
+          </div>
+        </div>
+        <div class="flex items-center gap-space-md">
+          <div
+            class="hidden md:flex items-center gap-1.5 px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface font-label-md text-label-md"
+          >
+            <span class="material-symbols-outlined text-base text-primary"
+              >calendar_today</span
+            ><span>Rabu, 23 Okt 2024</span>
+          </div>
+          <div class="relative flex items-center">
+            <button
+              class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors relative"
+              type="button"
+            >
+              <span class="material-symbols-outlined">notifications</span
+              ><span
+                class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-semibold text-on-error"
+                >2</span
+              >
+            </button>
+          </div>
+          <button
+            class="flex items-center gap-1.5 bg-primary-container text-on-primary px-space-md py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-base">add</span
+            ><span>+ Transaksi</span>
+          </button>
+          <div class="flex items-center gap-space-sm pl-space-xs">
+            <img
+              alt="Profile"
+              class="w-8 h-8 rounded-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjD297V4VN7MHXlVKzV90nFbA3hKCfuzzCFZsl3NBYl1BhN8BEp94sbq65nMXFktn77ePVRM2RcGcmQ0x_HmDtuMVbA7xYRGN8CBLhrRl9bbhG9E-aFGkKD8IUCBTxrR9I8bAhFTiYgSdLJ4oeCQsyq17Qx_8hGK1U41HZiCSjZD84I6aqIrf9CrOmuialhvjh31HEq4__Kfx8RjnuqNd4p-Im2E8L5-8qAOPttoNzyW0oUZstpRy2"
+            />
+            <div class="hidden lg:flex flex-col text-left">
+              <span
+                class="font-label-md text-label-md text-on-surface font-medium leading-tight"
+                >Hendra Wijaya</span
+              ><span
+                class="font-label-sm text-label-sm text-primary font-semibold leading-tight"
+                >Owner</span
+              >
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="w-full pt-16 bg-background flex-1 px-space-lg py-space-lg">
+        <div class="flex flex-col w-full">
+          <!-- Navigasi Breadcrumb & Top Bar -->
+          <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-space-sm mb-space-md"
+          >
+            <div
+              class="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant flex-wrap"
+            >
+              <a
+                class="hover:text-primary transition-colors flex items-center gap-1"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[16px]"
+                  >storefront</span
+                >
+                <span>FurniERP</span>
+              </a>
+              <span class="text-outline-variant font-light">/</span>
+              <a class="hover:text-primary transition-colors" href="#"
+                >Operasional</a
+              >
+              <span class="text-outline-variant font-light">/</span>
+              <a class="hover:text-primary transition-colors" href="#"
+                >Penjualan &amp; POS</a
+              >
+              <span class="text-outline-variant font-light">/</span>
+              <span
+                class="text-on-surface font-label-md font-semibold text-primary"
+                >Detail Nota #INV-20241023-004</span
+              >
+            </div>
+            <!-- Quick back button & auto-sync info -->
+            <div class="flex items-center gap-space-sm">
+              <span
+                class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"
+                ></span>
+                <span
+                  >Tersinkronisasi ke General Ledger &amp; SPK Workshop</span
+                >
               </span>
-</div>
-<div class="flex flex-col md:items-end mt-2 pt-2 bg-surface-container-highest/40 p-2 rounded w-full md:w-auto">
-<span class="text-label-sm font-label-sm text-on-surface-variant">Estimasi Siap Kirim (QC Selesai):</span>
-<span class="font-label-md font-semibold text-primary">03 November 2024</span>
-<span class="text-label-sm text-error font-medium">Jatuh Tempo Sisa Piutang: 05 November 2024</span>
-</div>
-</div>
-</div>
-<!-- 3. TABEL DAFTAR BARANG & SPESIFIKASI ATELIER (DATA DENSE) -->
-<div class="flex flex-col mt-space-sm">
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="bg-surface-container text-primary font-label-sm text-label-sm uppercase tracking-wider">
-<th class="py-2.5 px-3 rounded-l-lg w-10 text-center">No</th>
-<th class="py-2.5 px-3">Rincian Item &amp; Spesifikasi Kayu / Material Finishing</th>
-<th class="py-2.5 px-3 text-center w-24">Kuantitas</th>
-<th class="py-2.5 px-3 text-right w-36">Harga Satuan (Rp)</th>
-<th class="py-2.5 px-3 text-right w-40 rounded-r-lg">Subtotal (Rp)</th>
-</tr>
-</thead>
-<tbody class="font-body-sm text-body-sm text-on-surface">
-<!-- Baris 1: Sofa Scandinavian -->
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="py-3.5 px-3 text-center align-top font-mono text-on-surface-variant">01</td>
-<td class="py-3.5 px-3 align-top">
-<div class="flex flex-col">
-<div class="flex items-center gap-2">
-<span class="font-label-md text-label-md font-semibold text-on-surface">Sofa L Scandinavian Teak Custom</span>
-<span class="px-1.5 py-0.2 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant">SKU: SF-SCAN-01</span>
-</div>
-<div class="text-label-sm font-label-sm text-on-surface-variant mt-1 space-y-0.5 leading-relaxed bg-surface-container-low/50 p-2 rounded">
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[13px] text-primary">forest</span>
-<span><strong>Rangka:</strong> Kayu Jati Solid TPK Perhutani Oven Kering (MC 12-14%)</span>
-</div>
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[13px] text-primary">texture</span>
-<span><strong>Busa &amp; Kain:</strong> Busa Royal Foam LG D-28 Density Tinggi, Upholstery Linen Vienna Warna Oatmeal</span>
-</div>
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[13px] text-primary">straighten</span>
-<span><strong>Dimensi &amp; Finishing:</strong> 240 x 160 cm Sudut Kiri, Natural Matt PU 2-Lapisan</span>
-</div>
-</div>
-</div>
-</td>
-<td class="py-3.5 px-3 align-top text-center font-financial-md text-financial-md font-semibold text-on-surface">
-                    2 <span class="text-on-surface-variant text-body-sm font-normal">Unit</span>
-</td>
-<td class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md tabular-nums text-on-surface">
-                    3.100.000
-                    <span class="block text-[10px] text-on-surface-variant font-normal">Tier Grosir Toko</span>
-</td>
-<td class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md font-semibold tabular-nums text-on-surface">
-                    6.200.000
-                  </td>
-</tr>
-<!-- Baris 2: Meja Makan Trembesi -->
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="py-3.5 px-3 text-center align-top font-mono text-on-surface-variant">02</td>
-<td class="py-3.5 px-3 align-top">
-<div class="flex flex-col">
-<div class="flex items-center gap-2">
-<span class="font-label-md text-label-md font-semibold text-on-surface">Meja Makan Trembesi Utuh Natural 200cm</span>
-<span class="px-1.5 py-0.2 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant">SKU: TB-TRM-200</span>
-</div>
-<div class="text-label-sm font-label-sm text-on-surface-variant mt-1 space-y-0.5 leading-relaxed bg-surface-container-low/50 p-2 rounded">
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[13px] text-primary">nature</span>
-<span><strong>Top Table:</strong> Kayu Suar / Trembesi Utuh Alami Tanpa Sambungan, Ketebalan 8.0 cm</span>
-</div>
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[13px] text-primary">hardware</span>
-<span><strong>Kaki Penyangga:</strong> Rangka Hollow Steel 50x100mm Matte Black Sandblasted Powder Coating</span>
-</div>
-<div class="flex items-center gap-1.5 text-tertiary">
-<span class="material-symbols-outlined text-[13px]">verified</span>
-<span><em>Catatan Owner: Harga paket display nego grosir disetujui H. Wijaya</em></span>
-</div>
-</div>
-</div>
-</td>
-<td class="py-3.5 px-3 align-top text-center font-financial-md text-financial-md font-semibold text-on-surface">
-                    1 <span class="text-on-surface-variant text-body-sm font-normal">Unit</span>
-</td>
-<td class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md tabular-nums text-on-surface">
-                    4.200.000
-                    <span class="block text-[10px] text-on-surface-variant font-normal">Harga Diskon Khusus</span>
-</td>
-<td class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md font-semibold tabular-nums text-on-surface">
-                    4.200.000
-                  </td>
-</tr>
-<!-- Baris 3: Jasa Logistik Ekspedisi -->
-<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
-<td class="py-2 px-3 text-center align-middle font-mono text-on-surface-variant">03</td>
-<td class="py-2 px-3 align-middle">
-<span class="font-label-md text-label-md text-on-surface">Ongkos Kirim Truk Ekspedisi Workshop (Jepara ke Surabaya)</span>
-<span class="block text-label-sm text-on-surface-variant">Pengiriman langsung door-to-door dengan selimut packing foam tebal</span>
-</td>
-<td class="py-2 px-3 align-middle text-center font-financial-md text-financial-md text-on-surface">1 Trip</td>
-<td class="py-2 px-3 align-middle text-right font-financial-md text-financial-md tabular-nums text-on-surface">250.000</td>
-<td class="py-2 px-3 align-middle text-right font-financial-md text-financial-md font-medium tabular-nums text-on-surface">250.000</td>
-</tr>
-<!-- Baris 4: Jasa Rakit -->
-<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
-<td class="py-2 px-3 text-center align-middle font-mono text-on-surface-variant">04</td>
-<td class="py-2 px-3 align-middle">
-<span class="font-label-md text-label-md text-on-surface">Jasa Pemasangan &amp; Perakitan di Lokasi Showroom Pembeli</span>
-<span class="block text-label-sm text-on-surface-variant">Oleh 2 personel teknisi workshop mebel berpengalaman</span>
-</td>
-<td class="py-2 px-3 align-middle text-center font-financial-md text-financial-md text-on-surface">1 Paket</td>
-<td class="py-2 px-3 align-middle text-right font-financial-md text-financial-md tabular-nums text-on-surface">150.000</td>
-<td class="py-2 px-3 align-middle text-right font-financial-md text-financial-md font-medium tabular-nums text-on-surface">150.000</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<!-- 4. REKAPITULASI PEMBAYARAN, DP & SISA PIUTANG -->
-<div class="mt-space-md grid grid-cols-1 md:grid-cols-12 gap-space-md bg-surface-container-low p-space-md rounded-xl">
-<!-- Terbilang & Catatan Pembayaran Kasir -->
-<div class="md:col-span-6 flex flex-col justify-between">
-<div class="flex flex-col">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1">Terbilang (Total Nilai Transaksi):</span>
-<p class="font-body-md text-body-md italic text-primary font-medium bg-surface-container-lowest p-2.5 rounded-lg leading-snug">
-                "Sepuluh Juta Delapan Ratus Ribu Rupiah"
-              </p>
-<!-- Tag Transaksi Pembayaran -->
-<div class="mt-3 flex flex-col gap-1.5">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Riwayat Bukti Kas Masuk (DP):</span>
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest text-label-sm font-label-sm">
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[16px] text-emerald-700">task_alt</span>
-<span class="text-on-surface font-mono font-medium">#CR-202410-092 (BCA Bisnis)</span>
-</div>
-<span class="font-financial-sm text-financial-sm font-semibold text-emerald-800">Rp 5.000.000</span>
-</div>
-</div>
-</div>
-<!-- Stempel & Legalitas Singkat -->
-<div class="mt-4 flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
-<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
-<span>Dokumen cetak ini sah dan diakui sebagai bukti perjanjian pemesanan mebel workshop resmi.</span>
-</div>
-</div>
-<!-- Rincian Hitungan Angka Tegas -->
-<div class="md:col-span-6 flex flex-col gap-2 bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant">
-<span>Subtotal Produk Mebel (2 Item)</span>
-<span class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium">Rp 10.400.000</span>
-</div>
-<div class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant">
-<span>Total Jasa Kirim &amp; Perakitan</span>
-<span class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium">Rp 400.000</span>
-</div>
-<div class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant">
-<span>Diskon Pesanan Khusus</span>
-<span class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium">Rp 0</span>
-</div>
-<div class="flex justify-between items-center pt-2 bg-surface-container-low px-2.5 py-1.5 rounded-lg text-on-surface">
-<span class="font-label-md text-label-md font-semibold">Total Nilai Pesanan</span>
-<span class="font-financial-lg text-financial-lg font-bold tabular-nums text-primary">Rp 10.800.000</span>
-</div>
-<div class="flex justify-between items-center text-body-sm font-body-sm text-emerald-800 pt-1">
-<span class="flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[15px]">check_circle</span>
-<span>Uang Muka Diterima (DP 46.3%)</span>
-</span>
-<span class="font-financial-md text-financial-md font-semibold tabular-nums text-emerald-800">- Rp 5.000.000</span>
-</div>
-<!-- Sisa Tagihan Highlight Box -->
-<div class="flex justify-between items-center p-3 rounded-lg bg-secondary-container/60 mt-1">
-<div class="flex flex-col">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-secondary-fixed-variant font-bold">SISA PIUTANG / TAGIHAN:</span>
-<span class="text-[11px] text-on-secondary-fixed-variant">Pelunasan sebelum truk berangkat (05 Nov)</span>
-</div>
-<span class="font-financial-xl text-financial-xl font-bold tabular-nums text-primary">
-                Rp 5.800.000
-              </span>
-</div>
-</div>
-</div>
-<!-- 5. SYARAT & KETENTUAN KHUSUS PRODUK MEBEL (T&C) -->
-<div class="mt-space-md p-space-sm bg-surface-container-low/40 rounded-lg">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1 block">
-            Syarat, Ketentuan &amp; Standar Mutu Kayu Bengkel FurniERP:
-          </span>
-<ol class="list-decimal list-inside space-y-1 text-label-sm font-label-sm text-on-surface-variant leading-relaxed">
-<li><strong>Karakter Alami Kayu:</strong> Bahan baku kayu solid alami memiliki corak serat, pusaran urat, dan variasi warna alami yang merupakan identitas eksklusif keaslian material kayu, bukan cacat produksi pabrik.</li>
-<li><strong>Pelunasan &amp; Surat Jalan:</strong> Pelunasan sisa piutang sebesar <em>Rp 5.800.000</em> wajib diselesaikan saat hasil produksi lolos QC akhir bengkel dan sebelum Surat Jalan Pengiriman (DO) dimuat ke armada ekspedisi.</li>
-<li><strong>Garansi Konstruksi:</strong> Garansi konstruksi sambungan purub dan lem epoksi berlaku selama 1 (satu) tahun penuh sejak tanggal serah terima fisik barang di alamat pelanggan.</li>
-</ol>
-</div>
-<!-- 6. TANDA TANGAN DUA PIHAK & QR CODE VERIFIKASI -->
-<div class="mt-space-lg pt-space-md grid grid-cols-1 md:grid-cols-12 gap-space-md items-end">
-<!-- QR Code Pelacakan Produksi -->
-<div class="md:col-span-4 flex items-center gap-3 bg-surface-container-low p-2.5 rounded-lg">
-<!-- Inline SVG QR Code Generator Mockup -->
-<div class="w-16 h-16 bg-surface-container-lowest p-1 rounded shadow-xs flex-shrink-0 flex items-center justify-center">
-<svg class="w-full h-full text-on-surface" fill="currentColor" viewbox="0 0 100 100">
-<path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z"></path>
-<path d="M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z"></path>
-<path d="M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z"></path>
-<rect height="20" width="10" x="40" y="10"></rect>
-<rect height="10" width="10" x="60" y="20"></rect>
-<rect height="10" width="20" x="10" y="40"></rect>
-<rect height="20" width="20" x="40" y="40"></rect>
-<rect height="10" width="20" x="70" y="40"></rect>
-<rect height="20" width="10" x="70" y="60"></rect>
-<rect height="30" width="10" x="90" y="50"></rect>
-<rect height="20" width="10" x="40" y="70"></rect>
-<rect height="10" width="20" x="60" y="80"></rect>
-</svg>
-</div>
-<div class="flex flex-col">
-<span class="font-label-sm text-label-sm font-semibold text-on-surface">Pindai QR Validasi SPK</span>
-<span class="text-[11px] text-on-surface-variant leading-tight mt-0.5">Pantau progres rakit &amp; finishing amplas via link live status atelier</span>
-</div>
-</div>
-<!-- Kolom Tanda Tangan Penerima -->
-<div class="md:col-span-4 flex flex-col items-center text-center">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1">
-              Pemesan / Toko Mitra:
-            </span>
-<div class="h-16 flex items-end justify-center">
-<span class="text-label-sm italic text-outline">(Tanda tangan &amp; Stempel)</span>
-</div>
-<div class="w-full pt-1.5 mt-2 bg-surface-container-high h-0.5"></div>
-<span class="font-label-md text-label-md font-semibold text-on-surface mt-1">Bpk. Subur Hartanto</span>
-<span class="text-label-sm text-on-surface-variant">Toko Mebel Jepara Makmur</span>
-</div>
-<!-- Kolom Tanda Tangan Atelier & Stempel -->
-<div class="md:col-span-4 flex flex-col items-center text-center relative">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1">
-              Hormat Kami (Atelier Bengkel):
-            </span>
-<!-- Stempel Basah Workshop Mockup Effect -->
-<div class="h-16 flex items-center justify-center relative w-full">
-<div class="absolute -top-1 opacity-80 border-2 border-primary/60 rounded-full px-3 py-1 rotate-[-8deg] pointer-events-none">
-<span class="text-[10px] font-bold tracking-widest text-primary uppercase">FURNIERP JEPARA • LUNAS SEBAGIAN</span>
-</div>
-<span class="font-headline-sm font-serif italic text-primary/80 select-none">Hendra Wijaya</span>
-</div>
-<div class="w-full pt-1.5 mt-2 bg-surface-container-high h-0.5"></div>
-<span class="font-label-md text-label-md font-semibold text-on-surface mt-1">Hendra Wijaya, S.Ds</span>
-<span class="text-label-sm text-primary font-medium">Owner &amp; Lead Woodcraft Artisan</span>
-</div>
-</div>
-</div>
-</div>
-<!-- KOLOM KANAN (5/12 ~35-40%): Panel Kontrol Cetak, Rekening Bank & Log Integrasi -->
-<div class="lg:col-span-4 flex flex-col gap-space-md">
-<!-- CARD 1: Format Cetak & Opsi Kustomisasi Dokumen -->
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between pb-space-sm mb-space-sm bg-surface-container-low p-2 rounded-lg">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px] text-primary">tune</span>
-<span class="font-label-md text-label-md font-semibold text-on-surface">Pilihan Format Cetak</span>
-</div>
-<span class="text-label-sm text-on-surface-variant font-mono">Preset Default</span>
-</div>
-<div class="space-y-space-xs">
-<!-- Radio Option 1 -->
-<label class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
-<div class="flex items-center gap-2.5">
-<input checked="" class="accent-primary w-4 h-4" name="print_mode" type="radio"/>
-<div class="flex flex-col">
-<span class="font-label-md text-label-md font-semibold text-on-surface">Faktur Standar A4 (Lengkap)</span>
-<span class="text-label-sm text-on-surface-variant">Rincian spesifikasi kayu, T&amp;C, dan tanda tangan</span>
-</div>
-</div>
-<span class="material-symbols-outlined text-[18px] text-primary">description</span>
-</label>
-<!-- Radio Option 2 -->
-<label class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
-<div class="flex items-center gap-2.5">
-<input class="accent-primary w-4 h-4" name="print_mode" type="radio"/>
-<div class="flex flex-col">
-<span class="font-label-md text-label-md font-medium text-on-surface">Kuitansi Pembayaran DP Saja</span>
-<span class="text-label-sm text-on-surface-variant">Bukti tanda terima Rp 5.000.000 kas masuk</span>
-</div>
-</div>
-<span class="material-symbols-outlined text-[18px] text-outline">payments</span>
-</label>
-<!-- Radio Option 3 -->
-<label class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
-<div class="flex items-center gap-2.5">
-<input class="accent-primary w-4 h-4" name="print_mode" type="radio"/>
-<div class="flex flex-col">
-<span class="font-label-md text-label-md font-medium text-on-surface">Thermal Kasir Struk 80mm</span>
-<span class="text-label-sm text-on-surface-variant">Ukuran hemat roll untuk kasir toko fisik</span>
-</div>
-</div>
-<span class="material-symbols-outlined text-[18px] text-outline">receipt</span>
-</label>
-<!-- Radio Option 4 -->
-<label class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
-<div class="flex items-center gap-2.5">
-<input class="accent-primary w-4 h-4" name="print_mode" type="radio"/>
-<div class="flex flex-col">
-<span class="font-label-md text-label-md font-medium text-on-surface">Surat Jalan / Delivery Order (DO)</span>
-<span class="text-label-sm text-on-surface-variant">Tanpa nilai nominal harga (Hanya qty &amp; logistik)</span>
-</div>
-</div>
-<span class="material-symbols-outlined text-[18px] text-outline">local_shipping</span>
-</label>
-</div>
-<!-- Toggles Kustomisasi Nota -->
-<div class="mt-space-md pt-space-sm flex flex-col gap-2.5 bg-surface-container-low/50 p-2.5 rounded-lg">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Tampilan Komponen:</span>
-<label class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none">
-<span>Tampilkan Logo &amp; Kop Atelier</span>
-<input checked="" class="accent-primary w-4 h-4 rounded" type="checkbox"/>
-</label>
-<label class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none">
-<span>Sertakan Rincian Spesifikasi Kayu</span>
-<input checked="" class="accent-primary w-4 h-4 rounded" type="checkbox"/>
-</label>
-<label class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none">
-<span>Sertakan No. Rekening Bank Pelunasan</span>
-<input checked="" class="accent-primary w-4 h-4 rounded" type="checkbox"/>
-</label>
-</div>
-<!-- Tombol Aksi Download Cepat -->
-<div class="mt-space-md grid grid-cols-2 gap-2">
-<button class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors font-label-md text-label-md text-on-surface" type="button">
-<span class="material-symbols-outlined text-[18px]">download</span>
-<span>Download PDF</span>
-</button>
-<button class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary-container hover:bg-primary transition-colors font-label-md text-label-md text-on-primary" type="button">
-<span class="material-symbols-outlined text-[18px]">print</span>
-<span>Cetak Sekarang</span>
-</button>
-</div>
-</div>
-<!-- CARD 2: Informasi Rekening Resmi Pelunasan & Salin Format WA -->
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between mb-space-sm">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px] text-primary">account_balance</span>
-<span class="font-label-md text-label-md font-semibold text-on-surface">Rekening Resmi Pelunasan</span>
-</div>
-<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">Verifikasi Auto</span>
-</div>
-<div class="space-y-space-xs">
-<!-- Akun BCA -->
-<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1">
-<div class="flex items-center justify-between">
-<span class="font-label-md font-semibold text-on-surface">Bank Central Asia (BCA) Bisnis</span>
-<span class="text-label-sm font-mono text-primary font-semibold">BCA 014</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="font-mono text-body-lg font-bold text-on-surface tracking-wider">032-9182-111</span>
-<button class="text-label-sm text-primary hover:underline flex items-center gap-1" onclick="navigator.clipboard.writeText('0329182111'); alert('Nomor Rekening BCA tersalin!');" type="button">
-<span class="material-symbols-outlined text-[14px]">content_copy</span>
-<span>Salin</span>
-</button>
-</div>
-<span class="text-label-sm text-on-surface-variant">a.n. PT ATELIER FURNI MANDIRI</span>
-</div>
-<!-- Akun Mandiri -->
-<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1">
-<div class="flex items-center justify-between">
-<span class="font-label-md font-semibold text-on-surface">Bank Mandiri Giro Operasional</span>
-<span class="text-label-sm font-mono text-primary font-semibold">BMRI 008</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="font-mono text-body-lg font-bold text-on-surface tracking-wider">137-00-9821-4455</span>
-<button class="text-label-sm text-primary hover:underline flex items-center gap-1" onclick="navigator.clipboard.writeText('1370098214455'); alert('Nomor Rekening Mandiri tersalin!');" type="button">
-<span class="material-symbols-outlined text-[14px]">content_copy</span>
-<span>Salin</span>
-</button>
-</div>
-<span class="text-label-sm text-on-surface-variant">a.n. PT ATELIER FURNI MANDIRI</span>
-</div>
-</div>
-<!-- Tombol Salin Format WA Lengkap -->
-<button class="w-full mt-space-sm flex items-center justify-center gap-1.5 py-2 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-variant transition-colors text-label-md font-label-md text-on-surface" id="btnCopyWAText" type="button">
-<span class="material-symbols-outlined text-[18px] text-emerald-700">chat</span>
-<span>Salin Teks Ringkasan Tagihan WhatsApp</span>
-</button>
-</div>
-<!-- CARD 3: Status Terintegrasi (Buku Piutang, SPK Workshop, & Audit Log) -->
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between mb-space-sm">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px] text-primary">hub</span>
-<span class="font-label-md text-label-md font-semibold text-on-surface">Koneksi ERP &amp; Log Aktivitas</span>
-</div>
-<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-semibold">Tersinkron</span>
-</div>
-<div class="space-y-space-sm">
-<!-- SPK Bengkel Status -->
-<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-low">
-<span class="material-symbols-outlined text-[20px] text-primary mt-0.5">handyman</span>
-<div class="flex flex-col">
-<span class="font-label-md font-semibold text-on-surface">SPK Produksi #SPK-2024-098</span>
-<span class="text-body-sm text-on-surface-variant">
-                Status: <strong>Tahap Perakitan Rangka Jati &amp; Amplas Halus</strong>
-</span>
-<div class="w-full bg-surface-container-highest rounded-full h-1.5 mt-2 overflow-hidden">
-<div class="bg-primary h-1.5 rounded-full" style="width: 45%"></div>
-</div>
-<span class="text-[11px] text-on-surface-variant mt-1">Estimasi bergeser ke finishing melamik: 27 Okt</span>
-</div>
-</div>
-<!-- Buku Piutang Status -->
-<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-low">
-<span class="material-symbols-outlined text-[20px] text-amber-700 mt-0.5">request_quote</span>
-<div class="flex flex-col">
-<span class="font-label-md font-semibold text-on-surface">Buku Pembantu Piutang (AR)</span>
-<span class="text-body-sm text-on-surface-variant">
-                Sisa <strong>Rp 5.800.000</strong> tercatat lancar (Aging 0 - 13 Hari).
-              </span>
-<span class="text-[11px] text-on-surface-variant mt-0.5">Pengingat penagihan WA otomatis: H-2 sebelum kirim.</span>
-</div>
-</div>
-<!-- Audit Log Trail Timeline -->
-<div class="pt-space-xs">
-<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-2 block">
-              Audit Trail Dokumen:
-            </span>
-<div class="relative pl-4 space-y-3 before:content-[''] before:absolute before:left-1.5 before:top-1 before:bottom-1 before:w-0.5 before:bg-surface-container-high">
-<!-- Item 1 -->
-<div class="relative flex flex-col">
-<span class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-primary"></span>
-<span class="font-label-sm font-semibold text-on-surface">DP Diterima &amp; Validasi Kas Masuk</span>
-<span class="text-[11px] text-on-surface-variant">23 Okt 2024, 14:32 WIB • via BCA Mobile (Hendra W.)</span>
-</div>
-<!-- Item 2 -->
-<div class="relative flex flex-col">
-<span class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-outline-variant"></span>
-<span class="font-label-sm font-semibold text-on-surface">Faktur Penjualan Dibuat di POS</span>
-<span class="text-[11px] text-on-surface-variant">23 Okt 2024, 14:28 WIB • Kasir POS Atelier Terminal 1</span>
-</div>
-<!-- Item 3 -->
-<div class="relative flex flex-col">
-<span class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-outline-variant"></span>
-<span class="font-label-sm font-semibold text-on-surface">Penerbitan No. SPK Produksi Mebel</span>
-<span class="text-[11px] text-on-surface-variant">23 Okt 2024, 14:30 WIB • Terkirim ke Mandor Workshop</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script>
-  // Simple interaction for copying WhatsApp message format
-  document.getElementById('btnCopyWAText')?.addEventListener('click', function() {
-    const waText = `Halo Bpk. Subur Hartanto (Toko Mebel Jepara Makmur),\n\nBerikut ringkasan Nota Penjualan & SPK Mebel Anda dari FurniERP Atelier:\n\n*No. Faktur:* INV-20241023-004\n*No. SPK:* SPK-2024-098\n*Total Pesanan:* Rp 10.800.000\n*Uang Muka Diterima (DP):* Rp 5.000.000 (Lunas via BCA)\n*Sisa Piutang:* Rp 5.800.000\n*Estimasi Selesai Produksi:* 03 November 2024\n\nRekening Resmi Pelunasan:\nBCA 032-9182-111 a.n PT ATELIER FURNI MANDIRI\n\nTerima kasih atas kepercayaannya pada workshop mebel kami!`;
-    navigator.clipboard.writeText(waText).then(() => {
-      alert('Teks format pesan WhatsApp berhasil disalin ke clipboard!');
-    });
-  });
+              <a
+                class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-highest transition-colors text-label-md font-label-md"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[18px]"
+                  >arrow_back</span
+                >
+                <span>Kembali ke POS Kasir</span>
+              </a>
+            </div>
+          </div>
+          <!-- Header Dokumen Nota & Action Ribbon -->
+          <div
+            class="bg-surface-container-lowest p-space-md lg:p-space-lg rounded-xl shadow-sm mb-space-lg"
+          >
+            <div
+              class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-space-md"
+            >
+              <!-- Title & Status Chips -->
+              <div class="flex flex-col gap-space-xs">
+                <div class="flex items-center gap-space-sm flex-wrap">
+                  <h1
+                    class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-semibold"
+                  >
+                    Nota Penjualan &amp; Bukti SPK
+                    <span class="text-primary font-mono font-medium"
+                      >#INV-20241023-004</span
+                    >
+                  </h1>
+                  <span
+                    class="px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-fixed-variant text-label-sm font-label-sm font-semibold tracking-wide flex items-center gap-1"
+                  >
+                    <span class="material-symbols-outlined text-[14px]"
+                      >pending</span
+                    >
+                    <span>Terbayar Sebagian (DP 46.3%)</span>
+                  </span>
+                  <span
+                    class="px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm font-medium"
+                  >
+                    Tier Grosir B2B
+                  </span>
+                </div>
+                <div
+                  class="flex items-center gap-3 text-body-sm font-body-sm text-on-surface-variant flex-wrap mt-0.5"
+                >
+                  <span class="flex items-center gap-1">
+                    <span
+                      class="material-symbols-outlined text-[16px] text-outline"
+                      >schedule</span
+                    >
+                    <span>23 Oktober 2024 • 14:32 WIB</span>
+                  </span>
+                  <span class="text-outline-variant">•</span>
+                  <span class="flex items-center gap-1">
+                    <span
+                      class="material-symbols-outlined text-[16px] text-outline"
+                      >badge</span
+                    >
+                    <span
+                      >Kasir / Otentikasi:
+                      <strong class="text-on-surface font-medium"
+                        >Hendra Wijaya (Owner)</strong
+                      ></span
+                    >
+                  </span>
+                  <span class="text-outline-variant">•</span>
+                  <span class="flex items-center gap-1">
+                    <span
+                      class="material-symbols-outlined text-[16px] text-outline"
+                      >sync_alt</span
+                    >
+                    <span
+                      >No. SPK:
+                      <strong class="text-primary font-mono"
+                        >SPK-2024-098</strong
+                      ></span
+                    >
+                  </span>
+                </div>
+              </div>
+              <!-- Action Buttons Ribbon -->
+              <div class="flex items-center gap-space-xs flex-wrap">
+                <button
+                  class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors text-label-md font-label-md shadow-sm"
+                  onclick="window.print()"
+                  type="button"
+                >
+                  <span class="material-symbols-outlined text-[18px]"
+                    >receipt_long</span
+                  >
+                  <span>Thermal POS (80mm)</span>
+                </button>
+                <button
+                  class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-colors text-label-md font-label-md shadow-sm"
+                  onclick="window.print()"
+                  type="button"
+                >
+                  <span class="material-symbols-outlined text-[18px]"
+                    >print</span
+                  >
+                  <span>Cetak Faktur A4 / PDF</span>
+                </button>
+                <button
+                  class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-lowest text-emerald-800 hover:bg-emerald-50 transition-colors text-label-md font-label-md shadow-sm"
+                  id="btnShareWA"
+                  type="button"
+                >
+                  <span
+                    class="material-symbols-outlined text-[18px] text-emerald-700"
+                    >chat</span
+                  >
+                  <span>Kirim WhatsApp (+62 812-8821)</span>
+                </button>
+                <div class="relative inline-block text-left">
+                  <button
+                    class="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                    id="btnMoreAction"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined text-[20px]"
+                      >more_vert</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Main 2-Column Responsive Workspace -->
+          <div
+            class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start"
+          >
+            <!-- KOLOM KIRI (7/12 ~60-65%): Pratinjau Kertas Lembar Fisik Nota A4 Mebel Mewah -->
+            <div class="lg:col-span-8 flex flex-col gap-space-md">
+              <!-- Toolbar Mini Atas Kertas -->
+              <div class="flex items-center justify-between px-space-sm">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary"
+                  >
+                    <span class="material-symbols-outlined text-[14px]"
+                      >menu_book</span
+                    >
+                  </span>
+                  <span
+                    class="font-label-md text-label-md font-semibold text-on-surface"
+                    >Pratinjau Lembar Fisik Kertas A4 (Atelier Edition)</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant"
+                >
+                  <span class="px-2 py-0.5 rounded bg-surface-container"
+                    >Skala: 100% Standar Cetak</span
+                  >
+                  <span>•</span>
+                  <span>2 Lembar Rangkap (Asli &amp; Arsip Workshop)</span>
+                </div>
+              </div>
+              <!-- KERTAS NOTA CETAK FISIK (A4 Styled Card) -->
+              <div
+                class="bg-surface-container-lowest p-space-lg md:p-10 rounded-xl shadow-[0_4px_24px_-4px_rgba(74,52,40,0.08)] flex flex-col relative overflow-hidden transition-all"
+                id="printSheet"
+              >
+                <!-- Watermark Lunas/DP Latar Belakang Kertas -->
+                <div
+                  class="absolute right-8 top-44 select-none pointer-events-none opacity-[0.04] rotate-[-18deg]"
+                >
+                  <span
+                    class="text-[120px] font-black uppercase text-primary tracking-widest"
+                    >FURNIERP</span
+                  >
+                </div>
+                <!-- 1. KOP NOTA ATELIER FURNITURE -->
+                <div
+                  class="flex flex-col md:flex-row md:items-start justify-between gap-space-md pb-space-lg bg-surface-container-low/40 p-space-md rounded-lg"
+                >
+                  <div class="flex items-start gap-3.5">
+                    <div
+                      class="w-14 h-14 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm flex-shrink-0"
+                    >
+                      <span class="material-symbols-outlined text-[32px]"
+                        >chair</span
+                      >
+                    </div>
+                    <div class="flex flex-col">
+                      <div class="flex items-center gap-2">
+                        <span
+                          class="font-headline-md text-headline-md text-primary tracking-tight font-bold"
+                          >FURNIERP ATELIER</span
+                        >
+                        <span
+                          class="px-1.5 py-0.5 rounded text-[10px] uppercase font-semibold bg-primary/15 text-primary tracking-wider"
+                          >Workshop Jepara</span
+                        >
+                      </div>
+                      <span
+                        class="font-label-sm text-label-sm text-on-surface-variant font-medium"
+                        >Bespoke Solid Woodworks &amp; Premium Teak
+                        Craftsmanship</span
+                      >
+                      <p
+                        class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed max-w-md"
+                      >
+                        Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota
+                        Mataram, Nusa Tenggara Bar. 83127<br />
+                        WA / Telepon:
+                        <span class="text-on-surface font-medium"
+                          >+62 811-9876-5432</span
+                        >
+                        • Email:
+                        <span class="text-on-surface font-medium"
+                          >billing@furnierp.id</span
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col md:text-right items-start md:items-end justify-between self-stretch"
+                  >
+                    <div>
+                      <span
+                        class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold"
+                        >FAKTUR PENJUALAN RESMI</span
+                      >
+                      <div
+                        class="font-financial-lg text-financial-lg font-bold text-on-surface tracking-tight font-mono mt-0.5"
+                      >
+                        INV-20241023-004
+                      </div>
+                      <span
+                        class="text-body-sm font-body-sm text-on-surface-variant block mt-0.5"
+                      >
+                        No. SPK Bengkel:
+                        <strong class="text-primary font-mono"
+                          >SPK-2024-098</strong
+                        >
+                      </span>
+                    </div>
+                    <div
+                      class="mt-2 text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded inline-block"
+                    >
+                      NPWP:
+                      <span class="font-mono text-on-surface"
+                        >31.849.201.4-512.000</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- 2. IDENTITAS PELANGGAN & PARAMETER PENGIRIMAN -->
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 gap-space-md py-space-md my-space-sm bg-surface-container-low/60 p-space-md rounded-lg"
+                >
+                  <!-- Kepada -->
+                  <div class="flex flex-col">
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1"
+                      >Ditagihkan Kepada (Pelanggan Grosir):</span
+                    >
+                    <div class="flex items-center gap-2">
+                      <span
+                        class="font-headline-sm text-headline-sm text-on-surface font-semibold"
+                        >Toko Mebel Jepara Makmur</span
+                      >
+                      <span
+                        class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant text-[10px] font-semibold"
+                        >B2B ID #CUST-089</span
+                      >
+                    </div>
+                    <span
+                      class="font-body-md text-body-md text-on-surface font-medium mt-0.5"
+                      >UP: Bpk. Subur Hartanto</span
+                    >
+                    <span
+                      class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[14px] text-emerald-700"
+                        >call</span
+                      >
+                      <span class="font-mono">+62 812-8821-9011</span>
+                    </span>
+                    <p
+                      class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 leading-snug"
+                    >
+                      Alamat Kirim: Gudang Showroom Utama, Jl. Bung Karno
+                      No.100, Pagutan Tim., Kec. Mataram, Kota Mataram, Nusa
+                      Tenggara Bar. 83127
+                    </p>
+                  </div>
+                  <!-- Parameter Pesanan & Ekspedisi -->
+                  <div
+                    class="flex flex-col md:items-end justify-between text-left md:text-right"
+                  >
+                    <div>
+                      <span
+                        class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1 block"
+                        >Metode Pengiriman &amp; Tim Pengantar:</span
+                      >
+                      <div
+                        class="flex items-center md:justify-end gap-1.5 text-on-surface font-label-md font-semibold"
+                      >
+                        <span
+                          class="material-symbols-outlined text-[16px] text-primary"
+                          >local_shipping</span
+                        >
+                        <span>Armada Truk Bengkel L300 (Door-to-Door)</span>
+                      </div>
+                      <span
+                        class="font-body-sm text-body-sm text-on-surface-variant block mt-0.5"
+                      >
+                        Layanan Termasuk: Bongkar Muat &amp; Jasa Instalasi
+                        Rakit di Lantai 1
+                      </span>
+                    </div>
+                    <div
+                      class="flex flex-col md:items-end mt-2 pt-2 bg-surface-container-highest/40 p-2 rounded w-full md:w-auto"
+                    >
+                      <span
+                        class="text-label-sm font-label-sm text-on-surface-variant"
+                        >Estimasi Siap Kirim (QC Selesai):</span
+                      >
+                      <span class="font-label-md font-semibold text-primary"
+                        >03 November 2024</span
+                      >
+                      <span class="text-label-sm text-error font-medium"
+                        >Jatuh Tempo Sisa Piutang: 05 November 2024</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- 3. TABEL DAFTAR BARANG & SPESIFIKASI ATELIER (DATA DENSE) -->
+                <div class="flex flex-col mt-space-sm">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                      <thead>
+                        <tr
+                          class="bg-surface-container text-primary font-label-sm text-label-sm uppercase tracking-wider"
+                        >
+                          <th class="py-2.5 px-3 rounded-l-lg w-10 text-center">
+                            No
+                          </th>
+                          <th class="py-2.5 px-3">
+                            Rincian Item &amp; Spesifikasi Kayu / Material
+                            Finishing
+                          </th>
+                          <th class="py-2.5 px-3 text-center w-24">
+                            Kuantitas
+                          </th>
+                          <th class="py-2.5 px-3 text-right w-36">
+                            Harga Satuan (Rp)
+                          </th>
+                          <th class="py-2.5 px-3 text-right w-40 rounded-r-lg">
+                            Subtotal (Rp)
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="font-body-sm text-body-sm text-on-surface">
+                        <!-- Baris 1: Sofa Scandinavian -->
+                        <tr
+                          class="hover:bg-surface-container-low transition-colors"
+                        >
+                          <td
+                            class="py-3.5 px-3 text-center align-top font-mono text-on-surface-variant"
+                          >
+                            01
+                          </td>
+                          <td class="py-3.5 px-3 align-top">
+                            <div class="flex flex-col">
+                              <div class="flex items-center gap-2">
+                                <span
+                                  class="font-label-md text-label-md font-semibold text-on-surface"
+                                  >Sofa L Scandinavian Teak Custom</span
+                                >
+                                <span
+                                  class="px-1.5 py-0.2 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant"
+                                  >SKU: SF-SCAN-01</span
+                                >
+                              </div>
+                              <div
+                                class="text-label-sm font-label-sm text-on-surface-variant mt-1 space-y-0.5 leading-relaxed bg-surface-container-low/50 p-2 rounded"
+                              >
+                                <div class="flex items-center gap-1.5">
+                                  <span
+                                    class="material-symbols-outlined text-[13px] text-primary"
+                                    >forest</span
+                                  >
+                                  <span
+                                    ><strong>Rangka:</strong> Kayu Jati Solid
+                                    TPK Perhutani Oven Kering (MC 12-14%)</span
+                                  >
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                  <span
+                                    class="material-symbols-outlined text-[13px] text-primary"
+                                    >texture</span
+                                  >
+                                  <span
+                                    ><strong>Busa &amp; Kain:</strong> Busa
+                                    Royal Foam LG D-28 Density Tinggi,
+                                    Upholstery Linen Vienna Warna Oatmeal</span
+                                  >
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                  <span
+                                    class="material-symbols-outlined text-[13px] text-primary"
+                                    >straighten</span
+                                  >
+                                  <span
+                                    ><strong>Dimensi &amp; Finishing:</strong>
+                                    240 x 160 cm Sudut Kiri, Natural Matt PU
+                                    2-Lapisan</span
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-center font-financial-md text-financial-md font-semibold text-on-surface"
+                          >
+                            2
+                            <span
+                              class="text-on-surface-variant text-body-sm font-normal"
+                              >Unit</span
+                            >
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md tabular-nums text-on-surface"
+                          >
+                            3.100.000
+                            <span
+                              class="block text-[10px] text-on-surface-variant font-normal"
+                              >Tier Grosir Toko</span
+                            >
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md font-semibold tabular-nums text-on-surface"
+                          >
+                            6.200.000
+                          </td>
+                        </tr>
+                        <!-- Baris 2: Meja Makan Trembesi -->
+                        <tr
+                          class="hover:bg-surface-container-low transition-colors"
+                        >
+                          <td
+                            class="py-3.5 px-3 text-center align-top font-mono text-on-surface-variant"
+                          >
+                            02
+                          </td>
+                          <td class="py-3.5 px-3 align-top">
+                            <div class="flex flex-col">
+                              <div class="flex items-center gap-2">
+                                <span
+                                  class="font-label-md text-label-md font-semibold text-on-surface"
+                                  >Meja Makan Trembesi Utuh Natural 200cm</span
+                                >
+                                <span
+                                  class="px-1.5 py-0.2 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant"
+                                  >SKU: TB-TRM-200</span
+                                >
+                              </div>
+                              <div
+                                class="text-label-sm font-label-sm text-on-surface-variant mt-1 space-y-0.5 leading-relaxed bg-surface-container-low/50 p-2 rounded"
+                              >
+                                <div class="flex items-center gap-1.5">
+                                  <span
+                                    class="material-symbols-outlined text-[13px] text-primary"
+                                    >nature</span
+                                  >
+                                  <span
+                                    ><strong>Top Table:</strong> Kayu Suar /
+                                    Trembesi Utuh Alami Tanpa Sambungan,
+                                    Ketebalan 8.0 cm</span
+                                  >
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                  <span
+                                    class="material-symbols-outlined text-[13px] text-primary"
+                                    >hardware</span
+                                  >
+                                  <span
+                                    ><strong>Kaki Penyangga:</strong> Rangka
+                                    Hollow Steel 50x100mm Matte Black
+                                    Sandblasted Powder Coating</span
+                                  >
+                                </div>
+                                <div
+                                  class="flex items-center gap-1.5 text-tertiary"
+                                >
+                                  <span
+                                    class="material-symbols-outlined text-[13px]"
+                                    >verified</span
+                                  >
+                                  <span
+                                    ><em
+                                      >Catatan Owner: Harga paket display nego
+                                      grosir disetujui H. Wijaya</em
+                                    ></span
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-center font-financial-md text-financial-md font-semibold text-on-surface"
+                          >
+                            1
+                            <span
+                              class="text-on-surface-variant text-body-sm font-normal"
+                              >Unit</span
+                            >
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md tabular-nums text-on-surface"
+                          >
+                            4.200.000
+                            <span
+                              class="block text-[10px] text-on-surface-variant font-normal"
+                              >Harga Diskon Khusus</span
+                            >
+                          </td>
+                          <td
+                            class="py-3.5 px-3 align-top text-right font-financial-md text-financial-md font-semibold tabular-nums text-on-surface"
+                          >
+                            4.200.000
+                          </td>
+                        </tr>
+                        <!-- Baris 3: Jasa Logistik Ekspedisi -->
+                        <tr
+                          class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest"
+                        >
+                          <td
+                            class="py-2 px-3 text-center align-middle font-mono text-on-surface-variant"
+                          >
+                            03
+                          </td>
+                          <td class="py-2 px-3 align-middle">
+                            <span
+                              class="font-label-md text-label-md text-on-surface"
+                              >Ongkos Kirim Truk Ekspedisi Workshop (Jepara ke
+                              Surabaya)</span
+                            >
+                            <span
+                              class="block text-label-sm text-on-surface-variant"
+                              >Pengiriman langsung door-to-door dengan selimut
+                              packing foam tebal</span
+                            >
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-center font-financial-md text-financial-md text-on-surface"
+                          >
+                            1 Trip
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-right font-financial-md text-financial-md tabular-nums text-on-surface"
+                          >
+                            250.000
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-right font-financial-md text-financial-md font-medium tabular-nums text-on-surface"
+                          >
+                            250.000
+                          </td>
+                        </tr>
+                        <!-- Baris 4: Jasa Rakit -->
+                        <tr
+                          class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest"
+                        >
+                          <td
+                            class="py-2 px-3 text-center align-middle font-mono text-on-surface-variant"
+                          >
+                            04
+                          </td>
+                          <td class="py-2 px-3 align-middle">
+                            <span
+                              class="font-label-md text-label-md text-on-surface"
+                              >Jasa Pemasangan &amp; Perakitan di Lokasi
+                              Showroom Pembeli</span
+                            >
+                            <span
+                              class="block text-label-sm text-on-surface-variant"
+                              >Oleh 2 personel teknisi workshop mebel
+                              berpengalaman</span
+                            >
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-center font-financial-md text-financial-md text-on-surface"
+                          >
+                            1 Paket
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-right font-financial-md text-financial-md tabular-nums text-on-surface"
+                          >
+                            150.000
+                          </td>
+                          <td
+                            class="py-2 px-3 align-middle text-right font-financial-md text-financial-md font-medium tabular-nums text-on-surface"
+                          >
+                            150.000
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- 4. REKAPITULASI PEMBAYARAN, DP & SISA PIUTANG -->
+                <div
+                  class="mt-space-md grid grid-cols-1 md:grid-cols-12 gap-space-md bg-surface-container-low p-space-md rounded-xl"
+                >
+                  <!-- Terbilang & Catatan Pembayaran Kasir -->
+                  <div class="md:col-span-6 flex flex-col justify-between">
+                    <div class="flex flex-col">
+                      <span
+                        class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1"
+                        >Terbilang (Total Nilai Transaksi):</span
+                      >
+                      <p
+                        class="font-body-md text-body-md italic text-primary font-medium bg-surface-container-lowest p-2.5 rounded-lg leading-snug"
+                      >
+                        "Sepuluh Juta Delapan Ratus Ribu Rupiah"
+                      </p>
+                      <!-- Tag Transaksi Pembayaran -->
+                      <div class="mt-3 flex flex-col gap-1.5">
+                        <span
+                          class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold"
+                          >Riwayat Bukti Kas Masuk (DP):</span
+                        >
+                        <div
+                          class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest text-label-sm font-label-sm"
+                        >
+                          <div class="flex items-center gap-1.5">
+                            <span
+                              class="material-symbols-outlined text-[16px] text-emerald-700"
+                              >task_alt</span
+                            >
+                            <span class="text-on-surface font-mono font-medium"
+                              >#CR-202410-092 (BCA Bisnis)</span
+                            >
+                          </div>
+                          <span
+                            class="font-financial-sm text-financial-sm font-semibold text-emerald-800"
+                            >Rp 5.000.000</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Stempel & Legalitas Singkat -->
+                    <div
+                      class="mt-4 flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[16px] text-primary"
+                        >verified_user</span
+                      >
+                      <span
+                        >Dokumen cetak ini sah dan diakui sebagai bukti
+                        perjanjian pemesanan mebel workshop resmi.</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Rincian Hitungan Angka Tegas -->
+                  <div
+                    class="md:col-span-6 flex flex-col gap-2 bg-surface-container-lowest p-space-md rounded-xl shadow-sm"
+                  >
+                    <div
+                      class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant"
+                    >
+                      <span>Subtotal Produk Mebel (2 Item)</span>
+                      <span
+                        class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium"
+                        >Rp 10.400.000</span
+                      >
+                    </div>
+                    <div
+                      class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant"
+                    >
+                      <span>Total Jasa Kirim &amp; Perakitan</span>
+                      <span
+                        class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium"
+                        >Rp 400.000</span
+                      >
+                    </div>
+                    <div
+                      class="flex justify-between items-center text-body-sm font-body-sm text-on-surface-variant"
+                    >
+                      <span>Diskon Pesanan Khusus</span>
+                      <span
+                        class="font-financial-md text-financial-md tabular-nums text-on-surface font-medium"
+                        >Rp 0</span
+                      >
+                    </div>
+                    <div
+                      class="flex justify-between items-center pt-2 bg-surface-container-low px-2.5 py-1.5 rounded-lg text-on-surface"
+                    >
+                      <span class="font-label-md text-label-md font-semibold"
+                        >Total Nilai Pesanan</span
+                      >
+                      <span
+                        class="font-financial-lg text-financial-lg font-bold tabular-nums text-primary"
+                        >Rp 10.800.000</span
+                      >
+                    </div>
+                    <div
+                      class="flex justify-between items-center text-body-sm font-body-sm text-emerald-800 pt-1"
+                    >
+                      <span class="flex items-center gap-1 font-medium">
+                        <span class="material-symbols-outlined text-[15px]"
+                          >check_circle</span
+                        >
+                        <span>Uang Muka Diterima (DP 46.3%)</span>
+                      </span>
+                      <span
+                        class="font-financial-md text-financial-md font-semibold tabular-nums text-emerald-800"
+                        >- Rp 5.000.000</span
+                      >
+                    </div>
+                    <!-- Sisa Tagihan Highlight Box -->
+                    <div
+                      class="flex justify-between items-center p-3 rounded-lg bg-secondary-container/60 mt-1"
+                    >
+                      <div class="flex flex-col">
+                        <span
+                          class="font-label-sm text-label-sm uppercase tracking-wider text-on-secondary-fixed-variant font-bold"
+                          >SISA PIUTANG / TAGIHAN:</span
+                        >
+                        <span
+                          class="text-[11px] text-on-secondary-fixed-variant"
+                          >Pelunasan sebelum truk berangkat (05 Nov)</span
+                        >
+                      </div>
+                      <span
+                        class="font-financial-xl text-financial-xl font-bold tabular-nums text-primary"
+                      >
+                        Rp 5.800.000
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 5. SYARAT & KETENTUAN KHUSUS PRODUK MEBEL (T&C) -->
+                <div
+                  class="mt-space-md p-space-sm bg-surface-container-low/40 rounded-lg"
+                >
+                  <span
+                    class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1 block"
+                  >
+                    Syarat, Ketentuan &amp; Standar Mutu Kayu Bengkel FurniERP:
+                  </span>
+                  <ol
+                    class="list-decimal list-inside space-y-1 text-label-sm font-label-sm text-on-surface-variant leading-relaxed"
+                  >
+                    <li>
+                      <strong>Karakter Alami Kayu:</strong> Bahan baku kayu
+                      solid alami memiliki corak serat, pusaran urat, dan
+                      variasi warna alami yang merupakan identitas eksklusif
+                      keaslian material kayu, bukan cacat produksi pabrik.
+                    </li>
+                    <li>
+                      <strong>Pelunasan &amp; Surat Jalan:</strong> Pelunasan
+                      sisa piutang sebesar <em>Rp 5.800.000</em> wajib
+                      diselesaikan saat hasil produksi lolos QC akhir bengkel
+                      dan sebelum Surat Jalan Pengiriman (DO) dimuat ke armada
+                      ekspedisi.
+                    </li>
+                    <li>
+                      <strong>Garansi Konstruksi:</strong> Garansi konstruksi
+                      sambungan purub dan lem epoksi berlaku selama 1 (satu)
+                      tahun penuh sejak tanggal serah terima fisik barang di
+                      alamat pelanggan.
+                    </li>
+                  </ol>
+                </div>
+                <!-- 6. TANDA TANGAN DUA PIHAK & QR CODE VERIFIKASI -->
+                <div
+                  class="mt-space-lg pt-space-md grid grid-cols-1 md:grid-cols-12 gap-space-md items-end"
+                >
+                  <!-- QR Code Pelacakan Produksi -->
+                  <div
+                    class="md:col-span-4 flex items-center gap-3 bg-surface-container-low p-2.5 rounded-lg"
+                  >
+                    <!-- Inline SVG QR Code Generator Mockup -->
+                    <div
+                      class="w-16 h-16 bg-surface-container-lowest p-1 rounded shadow-xs flex-shrink-0 flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-full h-full text-on-surface"
+                        fill="currentColor"
+                        viewbox="0 0 100 100"
+                      >
+                        <path
+                          d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z"
+                        ></path>
+                        <path
+                          d="M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z"
+                        ></path>
+                        <path
+                          d="M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z"
+                        ></path>
+                        <rect height="20" width="10" x="40" y="10"></rect>
+                        <rect height="10" width="10" x="60" y="20"></rect>
+                        <rect height="10" width="20" x="10" y="40"></rect>
+                        <rect height="20" width="20" x="40" y="40"></rect>
+                        <rect height="10" width="20" x="70" y="40"></rect>
+                        <rect height="20" width="10" x="70" y="60"></rect>
+                        <rect height="30" width="10" x="90" y="50"></rect>
+                        <rect height="20" width="10" x="40" y="70"></rect>
+                        <rect height="10" width="20" x="60" y="80"></rect>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col">
+                      <span
+                        class="font-label-sm text-label-sm font-semibold text-on-surface"
+                        >Pindai QR Validasi SPK</span
+                      >
+                      <span
+                        class="text-[11px] text-on-surface-variant leading-tight mt-0.5"
+                        >Pantau progres rakit &amp; finishing amplas via link
+                        live status atelier</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Kolom Tanda Tangan Penerima -->
+                  <div
+                    class="md:col-span-4 flex flex-col items-center text-center"
+                  >
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1"
+                    >
+                      Pemesan / Toko Mitra:
+                    </span>
+                    <div class="h-16 flex items-end justify-center">
+                      <span class="text-label-sm italic text-outline"
+                        >(Tanda tangan &amp; Stempel)</span
+                      >
+                    </div>
+                    <div
+                      class="w-full pt-1.5 mt-2 bg-surface-container-high h-0.5"
+                    ></div>
+                    <span
+                      class="font-label-md text-label-md font-semibold text-on-surface mt-1"
+                      >Bpk. Subur Hartanto</span
+                    >
+                    <span class="text-label-sm text-on-surface-variant"
+                      >Toko Mebel Jepara Makmur</span
+                    >
+                  </div>
+                  <!-- Kolom Tanda Tangan Atelier & Stempel -->
+                  <div
+                    class="md:col-span-4 flex flex-col items-center text-center relative"
+                  >
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-1"
+                    >
+                      Hormat Kami (Atelier Bengkel):
+                    </span>
+                    <!-- Stempel Basah Workshop Mockup Effect -->
+                    <div
+                      class="h-16 flex items-center justify-center relative w-full"
+                    >
+                      <div
+                        class="absolute -top-1 opacity-80 border-2 border-primary/60 rounded-full px-3 py-1 rotate-[-8deg] pointer-events-none"
+                      >
+                        <span
+                          class="text-[10px] font-bold tracking-widest text-primary uppercase"
+                          >FURNIERP JEPARA • LUNAS SEBAGIAN</span
+                        >
+                      </div>
+                      <span
+                        class="font-headline-sm font-serif italic text-primary/80 select-none"
+                        >Hendra Wijaya</span
+                      >
+                    </div>
+                    <div
+                      class="w-full pt-1.5 mt-2 bg-surface-container-high h-0.5"
+                    ></div>
+                    <span
+                      class="font-label-md text-label-md font-semibold text-on-surface mt-1"
+                      >Hendra Wijaya, S.Ds</span
+                    >
+                    <span class="text-label-sm text-primary font-medium"
+                      >Owner &amp; Lead Woodcraft Artisan</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- KOLOM KANAN (5/12 ~35-40%): Panel Kontrol Cetak, Rekening Bank & Log Integrasi -->
+            <div class="lg:col-span-4 flex flex-col gap-space-md">
+              <!-- CARD 1: Format Cetak & Opsi Kustomisasi Dokumen -->
+              <div
+                class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm"
+              >
+                <div
+                  class="flex items-center justify-between pb-space-sm mb-space-sm bg-surface-container-low p-2 rounded-lg"
+                >
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-[18px] text-primary"
+                      >tune</span
+                    >
+                    <span
+                      class="font-label-md text-label-md font-semibold text-on-surface"
+                      >Pilihan Format Cetak</span
+                    >
+                  </div>
+                  <span class="text-label-sm text-on-surface-variant font-mono"
+                    >Preset Default</span
+                  >
+                </div>
+                <div class="space-y-space-xs">
+                  <!-- Radio Option 1 -->
+                  <label
+                    class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <input
+                        checked=""
+                        class="accent-primary w-4 h-4"
+                        name="print_mode"
+                        type="radio"
+                      />
+                      <div class="flex flex-col">
+                        <span
+                          class="font-label-md text-label-md font-semibold text-on-surface"
+                          >Faktur Standar A4 (Lengkap)</span
+                        >
+                        <span class="text-label-sm text-on-surface-variant"
+                          >Rincian spesifikasi kayu, T&amp;C, dan tanda
+                          tangan</span
+                        >
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-[18px] text-primary"
+                      >description</span
+                    >
+                  </label>
+                  <!-- Radio Option 2 -->
+                  <label
+                    class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <input
+                        class="accent-primary w-4 h-4"
+                        name="print_mode"
+                        type="radio"
+                      />
+                      <div class="flex flex-col">
+                        <span
+                          class="font-label-md text-label-md font-medium text-on-surface"
+                          >Kuitansi Pembayaran DP Saja</span
+                        >
+                        <span class="text-label-sm text-on-surface-variant"
+                          >Bukti tanda terima Rp 5.000.000 kas masuk</span
+                        >
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-[18px] text-outline"
+                      >payments</span
+                    >
+                  </label>
+                  <!-- Radio Option 3 -->
+                  <label
+                    class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <input
+                        class="accent-primary w-4 h-4"
+                        name="print_mode"
+                        type="radio"
+                      />
+                      <div class="flex flex-col">
+                        <span
+                          class="font-label-md text-label-md font-medium text-on-surface"
+                          >Thermal Kasir Struk 80mm</span
+                        >
+                        <span class="text-label-sm text-on-surface-variant"
+                          >Ukuran hemat roll untuk kasir toko fisik</span
+                        >
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-[18px] text-outline"
+                      >receipt</span
+                    >
+                  </label>
+                  <!-- Radio Option 4 -->
+                  <label
+                    class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <input
+                        class="accent-primary w-4 h-4"
+                        name="print_mode"
+                        type="radio"
+                      />
+                      <div class="flex flex-col">
+                        <span
+                          class="font-label-md text-label-md font-medium text-on-surface"
+                          >Surat Jalan / Delivery Order (DO)</span
+                        >
+                        <span class="text-label-sm text-on-surface-variant"
+                          >Tanpa nilai nominal harga (Hanya qty &amp;
+                          logistik)</span
+                        >
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-[18px] text-outline"
+                      >local_shipping</span
+                    >
+                  </label>
+                </div>
+                <!-- Toggles Kustomisasi Nota -->
+                <div
+                  class="mt-space-md pt-space-sm flex flex-col gap-2.5 bg-surface-container-low/50 p-2.5 rounded-lg"
+                >
+                  <span
+                    class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold"
+                    >Tampilan Komponen:</span
+                  >
+                  <label
+                    class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none"
+                  >
+                    <span>Tampilkan Logo &amp; Kop Atelier</span>
+                    <input
+                      checked=""
+                      class="accent-primary w-4 h-4 rounded"
+                      type="checkbox"
+                    />
+                  </label>
+                  <label
+                    class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none"
+                  >
+                    <span>Sertakan Rincian Spesifikasi Kayu</span>
+                    <input
+                      checked=""
+                      class="accent-primary w-4 h-4 rounded"
+                      type="checkbox"
+                    />
+                  </label>
+                  <label
+                    class="flex items-center justify-between text-body-sm text-on-surface cursor-pointer select-none"
+                  >
+                    <span>Sertakan No. Rekening Bank Pelunasan</span>
+                    <input
+                      checked=""
+                      class="accent-primary w-4 h-4 rounded"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+                <!-- Tombol Aksi Download Cepat -->
+                <div class="mt-space-md grid grid-cols-2 gap-2">
+                  <button
+                    class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors font-label-md text-label-md text-on-surface"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined text-[18px]"
+                      >download</span
+                    >
+                    <span>Download PDF</span>
+                  </button>
+                  <button
+                    class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary-container hover:bg-primary transition-colors font-label-md text-label-md text-on-primary"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined text-[18px]"
+                      >print</span
+                    >
+                    <span>Cetak Sekarang</span>
+                  </button>
+                </div>
+              </div>
+              <!-- CARD 2: Informasi Rekening Resmi Pelunasan & Salin Format WA -->
+              <div
+                class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm"
+              >
+                <div class="flex items-center justify-between mb-space-sm">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-[18px] text-primary"
+                      >account_balance</span
+                    >
+                    <span
+                      class="font-label-md text-label-md font-semibold text-on-surface"
+                      >Rekening Resmi Pelunasan</span
+                    >
+                  </div>
+                  <span
+                    class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800"
+                    >Verifikasi Auto</span
+                  >
+                </div>
+                <div class="space-y-space-xs">
+                  <!-- Akun BCA -->
+                  <div
+                    class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="font-label-md font-semibold text-on-surface"
+                        >Bank Central Asia (BCA) Bisnis</span
+                      >
+                      <span
+                        class="text-label-sm font-mono text-primary font-semibold"
+                        >BCA 014</span
+                      >
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span
+                        class="font-mono text-body-lg font-bold text-on-surface tracking-wider"
+                        >032-9182-111</span
+                      >
+                      <button
+                        class="text-label-sm text-primary hover:underline flex items-center gap-1"
+                        onclick="
+                          navigator.clipboard.writeText('0329182111');
+                          alert('Nomor Rekening BCA tersalin!');
+                        "
+                        type="button"
+                      >
+                        <span class="material-symbols-outlined text-[14px]"
+                          >content_copy</span
+                        >
+                        <span>Salin</span>
+                      </button>
+                    </div>
+                    <span class="text-label-sm text-on-surface-variant"
+                      >a.n. PT ATELIER FURNI MANDIRI</span
+                    >
+                  </div>
+                  <!-- Akun Mandiri -->
+                  <div
+                    class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="font-label-md font-semibold text-on-surface"
+                        >Bank Mandiri Giro Operasional</span
+                      >
+                      <span
+                        class="text-label-sm font-mono text-primary font-semibold"
+                        >BMRI 008</span
+                      >
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span
+                        class="font-mono text-body-lg font-bold text-on-surface tracking-wider"
+                        >137-00-9821-4455</span
+                      >
+                      <button
+                        class="text-label-sm text-primary hover:underline flex items-center gap-1"
+                        onclick="
+                          navigator.clipboard.writeText('1370098214455');
+                          alert('Nomor Rekening Mandiri tersalin!');
+                        "
+                        type="button"
+                      >
+                        <span class="material-symbols-outlined text-[14px]"
+                          >content_copy</span
+                        >
+                        <span>Salin</span>
+                      </button>
+                    </div>
+                    <span class="text-label-sm text-on-surface-variant"
+                      >a.n. PT ATELIER FURNI MANDIRI</span
+                    >
+                  </div>
+                </div>
+                <!-- Tombol Salin Format WA Lengkap -->
+                <button
+                  class="w-full mt-space-sm flex items-center justify-center gap-1.5 py-2 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-variant transition-colors text-label-md font-label-md text-on-surface"
+                  id="btnCopyWAText"
+                  type="button"
+                >
+                  <span
+                    class="material-symbols-outlined text-[18px] text-emerald-700"
+                    >chat</span
+                  >
+                  <span>Salin Teks Ringkasan Tagihan WhatsApp</span>
+                </button>
+              </div>
+              <!-- CARD 3: Status Terintegrasi (Buku Piutang, SPK Workshop, & Audit Log) -->
+              <div
+                class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm"
+              >
+                <div class="flex items-center justify-between mb-space-sm">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-[18px] text-primary"
+                      >hub</span
+                    >
+                    <span
+                      class="font-label-md text-label-md font-semibold text-on-surface"
+                      >Koneksi ERP &amp; Log Aktivitas</span
+                    >
+                  </div>
+                  <span
+                    class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-semibold"
+                    >Tersinkron</span
+                  >
+                </div>
+                <div class="space-y-space-sm">
+                  <!-- SPK Bengkel Status -->
+                  <div
+                    class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-low"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[20px] text-primary mt-0.5"
+                      >handyman</span
+                    >
+                    <div class="flex flex-col">
+                      <span class="font-label-md font-semibold text-on-surface"
+                        >SPK Produksi #SPK-2024-098</span
+                      >
+                      <span class="text-body-sm text-on-surface-variant">
+                        Status:
+                        <strong
+                          >Tahap Perakitan Rangka Jati &amp; Amplas
+                          Halus</strong
+                        >
+                      </span>
+                      <div
+                        class="w-full bg-surface-container-highest rounded-full h-1.5 mt-2 overflow-hidden"
+                      >
+                        <div
+                          class="bg-primary h-1.5 rounded-full"
+                          style="width: 45%"
+                        ></div>
+                      </div>
+                      <span class="text-[11px] text-on-surface-variant mt-1"
+                        >Estimasi bergeser ke finishing melamik: 27 Okt</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Buku Piutang Status -->
+                  <div
+                    class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-low"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[20px] text-amber-700 mt-0.5"
+                      >request_quote</span
+                    >
+                    <div class="flex flex-col">
+                      <span class="font-label-md font-semibold text-on-surface"
+                        >Buku Pembantu Piutang (AR)</span
+                      >
+                      <span class="text-body-sm text-on-surface-variant">
+                        Sisa <strong>Rp 5.800.000</strong> tercatat lancar
+                        (Aging 0 - 13 Hari).
+                      </span>
+                      <span class="text-[11px] text-on-surface-variant mt-0.5"
+                        >Pengingat penagihan WA otomatis: H-2 sebelum
+                        kirim.</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Audit Log Trail Timeline -->
+                  <div class="pt-space-xs">
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold mb-2 block"
+                    >
+                      Audit Trail Dokumen:
+                    </span>
+                    <div
+                      class="relative pl-4 space-y-3 before:content-[''] before:absolute before:left-1.5 before:top-1 before:bottom-1 before:w-0.5 before:bg-surface-container-high"
+                    >
+                      <!-- Item 1 -->
+                      <div class="relative flex flex-col">
+                        <span
+                          class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-primary"
+                        ></span>
+                        <span
+                          class="font-label-sm font-semibold text-on-surface"
+                          >DP Diterima &amp; Validasi Kas Masuk</span
+                        >
+                        <span class="text-[11px] text-on-surface-variant"
+                          >23 Okt 2024, 14:32 WIB • via BCA Mobile (Hendra
+                          W.)</span
+                        >
+                      </div>
+                      <!-- Item 2 -->
+                      <div class="relative flex flex-col">
+                        <span
+                          class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-outline-variant"
+                        ></span>
+                        <span
+                          class="font-label-sm font-semibold text-on-surface"
+                          >Faktur Penjualan Dibuat di POS</span
+                        >
+                        <span class="text-[11px] text-on-surface-variant"
+                          >23 Okt 2024, 14:28 WIB • Kasir POS Atelier Terminal
+                          1</span
+                        >
+                      </div>
+                      <!-- Item 3 -->
+                      <div class="relative flex flex-col">
+                        <span
+                          class="absolute -left-4 top-1.5 w-2 h-2 rounded-full bg-outline-variant"
+                        ></span>
+                        <span
+                          class="font-label-sm font-semibold text-on-surface"
+                          >Penerbitan No. SPK Produksi Mebel</span
+                        >
+                        <span class="text-[11px] text-on-surface-variant"
+                          >23 Okt 2024, 14:30 WIB • Terkirim ke Mandor
+                          Workshop</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          // Simple interaction for copying WhatsApp message format
+          document
+            .getElementById("btnCopyWAText")
+            ?.addEventListener("click", function () {
+              const waText = `Halo Bpk. Subur Hartanto (Toko Mebel Jepara Makmur),\n\nBerikut ringkasan Nota Penjualan & SPK Mebel Anda dari FurniERP Atelier:\n\n*No. Faktur:* INV-20241023-004\n*No. SPK:* SPK-2024-098\n*Total Pesanan:* Rp 10.800.000\n*Uang Muka Diterima (DP):* Rp 5.000.000 (Lunas via BCA)\n*Sisa Piutang:* Rp 5.800.000\n*Estimasi Selesai Produksi:* 03 November 2024\n\nRekening Resmi Pelunasan:\nBCA 032-9182-111 a.n PT ATELIER FURNI MANDIRI\n\nTerima kasih atas kepercayaannya pada workshop mebel kami!`;
+              navigator.clipboard.writeText(waText).then(() => {
+                alert(
+                  "Teks format pesan WhatsApp berhasil disalin ke clipboard!",
+                );
+              });
+            });
 
-  // Action for sending WhatsApp directly
-  document.getElementById('btnShareWA')?.addEventListener('click', function() {
-    const phone = "6281288219011";
-    const msg = encodeURIComponent("Halo Bpk. Subur (Jepara Makmur), berikut kami kirimkan faktur resmi INV-20241023-004 dan bukti tanda terima DP pesanan mebel Anda.");
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-  });
+          // Action for sending WhatsApp directly
+          document
+            .getElementById("btnShareWA")
+            ?.addEventListener("click", function () {
+              const phone = "6281288219011";
+              const msg = encodeURIComponent(
+                "Halo Bpk. Subur (Jepara Makmur), berikut kami kirimkan faktur resmi INV-20241023-004 dan bukti tanda terima DP pesanan mebel Anda.",
+              );
+              window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+            });
 
-  // More action button dummy feedback
-  document.getElementById('btnMoreAction')?.addEventListener('click', function() {
-    alert('Opsi Lainnya: \n1. Batalkan Transaksi / Void\n2. Buat Nota Retur / Garansi Kayu\n3. Export Excel Data Barang');
-  });
-</script></main></div></body></html>
+          // More action button dummy feedback
+          document
+            .getElementById("btnMoreAction")
+            ?.addEventListener("click", function () {
+              alert(
+                "Opsi Lainnya: \n1. Batalkan Transaksi / Void\n2. Buat Nota Retur / Garansi Kayu\n3. Export Excel Data Barang",
+              );
+            });
+        </script>
+      </main>
+    </div>
+  </body>
+</html>
