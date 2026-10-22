@@ -93,11 +93,11 @@ const navSections: NavSection[] = [
         label: "Faktur / Nota",
         icon: "description",
       },
-      {
-        path: "ai-advisor" as PageView,
-        label: "Tanya AI Atelier",
-        icon: "psychology",
-      },
+      // {
+      //   path: "ai-advisor" as PageView,
+      //   label: "Tanya AI Atelier",
+      //   icon: "psychology",
+      // },
       {
         path: "settings" as PageView,
         label: "Pengaturan",

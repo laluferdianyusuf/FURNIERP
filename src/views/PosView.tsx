@@ -763,7 +763,7 @@ export const PosView: React.FC<PosViewProps> = ({
                       onClick={() => onNavigate("customers")}
                       className="shrink-0 text-xs font-semibold text-[#5f402a] hover:underline"
                     >
-                      + Tambah
+                      Tambah
                     </button>
                   }
                 />
