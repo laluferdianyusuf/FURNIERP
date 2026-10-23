@@ -79,27 +79,26 @@ const OUT_CATEGORIES = [
   { value: "Hardware Mebel", label: "Hardware Mebel" },
 ];
 
-const PRIMARY = "#5f402a";
-const HOVER = "#795740";
-
-const currency = (amount: number) => `Rp ${amount.toLocaleString("id-ID")}`;
+const currency = (amount: number) =>
+  `Rp ${(Number(amount) || 0).toLocaleString("id-ID")}`;
 
 const compactCurrency = (amount: number) => {
-  const absoluteAmount = Math.abs(amount);
+  const value = Number(amount) || 0;
+  const absoluteAmount = Math.abs(value);
 
   if (absoluteAmount >= 1_000_000_000) {
-    return `Rp ${(amount / 1_000_000_000).toLocaleString("id-ID", {
+    return `Rp ${(value / 1_000_000_000).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
     })} M`;
   }
 
   if (absoluteAmount >= 1_000_000) {
-    return `Rp ${(amount / 1_000_000).toLocaleString("id-ID", {
+    return `Rp ${(value / 1_000_000).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
     })} jt`;
   }
 
-  return currency(amount);
+  return currency(value);
 };
 
 const today = () => new Date().toLocaleDateString("id-ID");
@@ -115,7 +114,9 @@ const makeReference = (type: "IN" | "OUT" | "TRANSFER") => {
   return `${prefix}-${yearMonth}-${String(Date.now()).slice(-5)}`;
 };
 
-const inputClass = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
+const PRIMARY_BUTTON_CLASS = "bg-[#5f402a] text-white hover:bg-[#795740]";
+
+const INPUT_CLASS = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
 
 function accountFromBankId(id: string): Account {
   if (id === "bca") return "BCA";
@@ -139,9 +140,11 @@ function SectionHeading({
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <h2 className="text-base font-semibold tracking-tight text-stone-900">
-          {title}
-        </h2>
+        {title && (
+          <h2 className="text-base font-semibold tracking-tight text-stone-900">
+            {title}
+          </h2>
+        )}
         {description && (
           <p className="mt-1 text-sm leading-5 text-stone-500">{description}</p>
         )}
@@ -215,7 +218,7 @@ function BankAccountCard({
         </p>
         <div className="mt-2 flex items-center justify-between gap-2">
           <p className="truncate text-xs text-stone-500">{bank.holder}</p>
-          <span className="text-xs font-medium text-[#5f402a]">
+          <span className="shrink-0 text-xs font-medium text-[#5f402a]">
             {bank.share}
           </span>
         </div>
@@ -246,132 +249,274 @@ function FormField({
   );
 }
 
-function CashMutationTable({ mutations }: { mutations: CashMutation[] }) {
-  if (mutations.length === 0) {
+function TransactionTypeBadge({ type }: { type: MutationType }) {
+  if (type === "IN") {
     return (
-      <div className="flex flex-col items-center justify-center px-4 py-14 text-center">
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-100 text-stone-500">
-          <ReceiptText className="h-6 w-6" />
-        </span>
-        <p className="mt-3 text-sm font-semibold text-stone-700">
-          Tidak ada transaksi ditemukan
-        </p>
-        <p className="mt-1 text-xs text-stone-500">
-          Coba ubah kata kunci atau filter yang digunakan.
-        </p>
-      </div>
+      <Badge
+        variant="outline"
+        className="border-emerald-200 bg-emerald-50 text-emerald-700"
+      >
+        <ArrowDownLeft className="mr-1 h-3 w-3" />
+        Pemasukan
+      </Badge>
+    );
+  }
+
+  if (type === "OUT") {
+    return (
+      <Badge
+        variant="outline"
+        className="border-red-200 bg-red-50 text-red-700"
+      >
+        <ArrowUpRight className="mr-1 h-3 w-3" />
+        Pengeluaran
+      </Badge>
     );
   }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-stone-50 hover:bg-stone-50">
-            <TableHead className="whitespace-nowrap px-4 text-xs font-semibold">
-              Tanggal
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-xs font-semibold">
-              Referensi
-            </TableHead>
-            <TableHead className="min-w-[200px] text-xs font-semibold">
-              Keterangan
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-xs font-semibold">
-              Kategori
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-xs font-semibold">
-              Rekening
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
-              Masuk
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
-              Keluar
-            </TableHead>
-            <TableHead className="whitespace-nowrap px-4 text-right text-xs font-semibold">
-              Saldo berjalan
-            </TableHead>
-          </TableRow>
-        </TableHeader>
+    <Badge
+      variant="outline"
+      className="border-stone-200 bg-stone-100 text-stone-700"
+    >
+      <ArrowLeftRight className="mr-1 h-3 w-3" />
+      Transfer
+    </Badge>
+  );
+}
 
-        <TableBody>
-          {mutations.map((tx) => (
-            <TableRow
-              key={tx.id}
-              className="transition-colors hover:bg-stone-50/80"
-            >
-              <TableCell className="whitespace-nowrap px-4 py-3.5">
-                <p className="font-medium text-stone-900">{tx.date}</p>
-                <p className="mt-1 text-xs text-stone-500">{tx.time}</p>
-              </TableCell>
+function CashMutationTable({ mutations }: { mutations: CashMutation[] }) {
+  if (mutations.length === 0) {
+    return <EmptyTransactions />;
+  }
 
-              <TableCell className="whitespace-nowrap py-3.5">
-                <p className="font-mono text-xs font-semibold text-[#5f402a]">
-                  {tx.refNumber}
-                </p>
-                {tx.tag && (
+  return (
+    <>
+      {/* Desktop: tabel */}
+      <div className="hidden w-full overflow-x-auto md:block">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-stone-50 hover:bg-stone-50">
+              <TableHead className="whitespace-nowrap px-4 text-xs font-semibold">
+                Tanggal
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-xs font-semibold">
+                Referensi
+              </TableHead>
+              <TableHead className="min-w-[200px] text-xs font-semibold">
+                Keterangan
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-xs font-semibold">
+                Kategori
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-xs font-semibold">
+                Rekening
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
+                Masuk
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
+                Keluar
+              </TableHead>
+              <TableHead className="whitespace-nowrap px-4 text-right text-xs font-semibold">
+                Saldo berjalan
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {mutations.map((tx) => (
+              <TableRow
+                key={tx.id}
+                className="transition-colors hover:bg-stone-50/80"
+              >
+                <TableCell className="whitespace-nowrap px-4 py-3.5">
+                  <p className="font-medium text-stone-900">{tx.date}</p>
+                  <p className="mt-1 text-xs text-stone-500">{tx.time}</p>
+                </TableCell>
+
+                <TableCell className="whitespace-nowrap py-3.5">
+                  <p className="font-mono text-xs font-semibold text-[#5f402a]">
+                    {tx.refNumber}
+                  </p>
+                  {tx.tag && (
+                    <Badge
+                      variant="secondary"
+                      className="mt-1.5 border-0 bg-stone-100 text-[10px] font-normal text-stone-500"
+                    >
+                      {tx.tag}
+                    </Badge>
+                  )}
+                </TableCell>
+
+                <TableCell className="max-w-[260px] py-3.5">
+                  <p className="font-medium text-stone-900">{tx.description}</p>
+                  <p className="mt-1 truncate text-xs text-stone-500">
+                    {tx.entity}
+                  </p>
+                </TableCell>
+
+                <TableCell className="py-3.5">
                   <Badge
                     variant="secondary"
-                    className="mt-1.5 border-0 bg-stone-100 text-[10px] font-normal text-stone-500"
+                    className="border-0 bg-stone-100 font-normal text-stone-600"
                   >
-                    {tx.tag}
+                    {tx.category}
                   </Badge>
-                )}
-              </TableCell>
+                </TableCell>
 
-              <TableCell className="max-w-[260px] py-3.5">
-                <p className="font-medium text-stone-900">{tx.description}</p>
-                <p className="mt-1 truncate text-xs text-stone-500">
-                  {tx.entity}
-                </p>
-              </TableCell>
+                <TableCell className="whitespace-nowrap py-3.5 text-xs font-medium text-stone-700">
+                  {tx.account}
+                  {tx.type === "TRANSFER" && tx.destAccount && (
+                    <p className="mt-1 text-[11px] text-stone-500">
+                      Ke: {tx.destAccount}
+                    </p>
+                  )}
+                </TableCell>
 
-              <TableCell className="py-3.5">
-                <Badge
-                  variant="secondary"
-                  className="border-0 bg-stone-100 font-normal text-stone-600"
-                >
-                  {tx.category}
-                </Badge>
-              </TableCell>
+                <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
+                  {tx.type === "IN" && tx.amountIn > 0 ? (
+                    <span className="text-emerald-700">
+                      +{currency(tx.amountIn)}
+                    </span>
+                  ) : (
+                    <span className="text-stone-300">—</span>
+                  )}
+                </TableCell>
 
-              <TableCell className="whitespace-nowrap py-3.5 text-xs font-medium text-stone-700">
-                {tx.account}
-                {tx.type === "TRANSFER" && tx.destAccount && (
-                  <p className="mt-1 text-[11px] text-stone-500">
-                    Ke: {tx.destAccount}
+                <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
+                  {tx.type === "OUT" && tx.amountOut > 0 ? (
+                    <span className="text-red-700">
+                      −{currency(tx.amountOut)}
+                    </span>
+                  ) : (
+                    <span className="text-stone-300">—</span>
+                  )}
+                </TableCell>
+
+                <TableCell className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-xs font-semibold text-stone-900">
+                  {currency(tx.runningBalance)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Mobile: daftar kartu */}
+      <div className="space-y-3 p-3 md:hidden">
+        {mutations.map((tx) => {
+          const isInflow = tx.type === "IN" && tx.amountIn > 0;
+          const isOutflow = tx.type === "OUT" && tx.amountOut > 0;
+
+          return (
+            <article
+              key={tx.id}
+              className="rounded-xl border border-stone-200 bg-white p-3.5"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="break-words text-sm font-semibold text-stone-900">
+                    {tx.description}
                   </p>
-                )}
-              </TableCell>
+                  <p className="mt-1 text-xs text-stone-500">
+                    {tx.date} · {tx.time}
+                  </p>
+                </div>
+                <TransactionTypeBadge type={tx.type} />
+              </div>
 
-              <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
-                {tx.type === "IN" && tx.amountIn > 0 ? (
-                  <span className="text-emerald-700">
-                    +{currency(tx.amountIn)}
+              <div className="mt-3 rounded-lg bg-stone-50 p-3">
+                <p className="text-[11px] text-stone-500">
+                  {isInflow
+                    ? "Uang masuk"
+                    : isOutflow
+                      ? "Uang keluar"
+                      : "Transfer antar rekening"}
+                </p>
+                <p
+                  className={`mt-1 break-words text-lg font-semibold tracking-tight ${
+                    isInflow
+                      ? "text-emerald-700"
+                      : isOutflow
+                        ? "text-red-700"
+                        : "text-stone-800"
+                  }`}
+                >
+                  {isInflow
+                    ? `+${currency(tx.amountIn)}`
+                    : isOutflow
+                      ? `−${currency(tx.amountOut)}`
+                      : "Transfer internal"}
+                </p>
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3">
+                <div className="min-w-0">
+                  <p className="text-[11px] text-stone-500">Referensi</p>
+                  <p className="mt-1 break-all font-mono text-xs font-medium text-[#5f402a]">
+                    {tx.refNumber}
+                  </p>
+                  {tx.tag && (
+                    <p className="mt-1 text-[10px] text-stone-500">{tx.tag}</p>
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-[11px] text-stone-500">Kategori</p>
+                  <p className="mt-1 break-words text-xs font-medium text-stone-800">
+                    {tx.category}
+                  </p>
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-[11px] text-stone-500">Rekening</p>
+                  <p className="mt-1 break-words text-xs font-medium text-stone-800">
+                    {tx.account}
+                  </p>
+                  {tx.type === "TRANSFER" && tx.destAccount && (
+                    <p className="mt-1 break-words text-[11px] text-stone-500">
+                      Tujuan: {tx.destAccount}
+                    </p>
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-[11px] text-stone-500">Pihak terkait</p>
+                  <p className="mt-1 break-words text-xs font-medium text-stone-800">
+                    {tx.entity || "—"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 border-t border-stone-100 pt-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-xs text-stone-500">Saldo berjalan</span>
+                  <span className="break-words text-right font-mono text-sm font-semibold text-stone-900">
+                    {currency(tx.runningBalance)}
                   </span>
-                ) : (
-                  <span className="text-stone-300">—</span>
-                )}
-              </TableCell>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </>
+  );
+}
 
-              <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
-                {tx.type === "OUT" && tx.amountOut > 0 ? (
-                  <span className="text-red-700">
-                    −{currency(tx.amountOut)}
-                  </span>
-                ) : (
-                  <span className="text-stone-300">—</span>
-                )}
-              </TableCell>
-
-              <TableCell className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-xs font-semibold text-stone-900">
-                {currency(tx.runningBalance)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+function EmptyTransactions() {
+  return (
+    <div className="flex flex-col items-center justify-center px-4 py-12 text-center sm:py-14">
+      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-100 text-stone-500">
+        <ReceiptText className="h-6 w-6" />
+      </span>
+      <p className="mt-3 text-sm font-semibold text-stone-700">
+        Tidak ada transaksi ditemukan
+      </p>
+      <p className="mt-1 max-w-xs text-xs leading-5 text-stone-500">
+        Coba ubah kata kunci atau filter yang digunakan.
+      </p>
     </div>
   );
 }
@@ -395,7 +540,8 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
   const [transferDest, setTransferDest] = useState<Account>("Kas Tunai");
   const [formError, setFormError] = useState("");
 
-  // Saldo awal masih data contoh. Nantinya ambil dari konfigurasi saldo awal.
+  // Saldo awal contoh. Dalam implementasi backend, gunakan saldo awal
+  // dan saldo rekening yang disimpan di database.
   const initialBalance = 152_150_000;
 
   const totalInflow = useMemo(
@@ -411,16 +557,6 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
       mutations
         .filter((mutation) => mutation.type === "OUT")
         .reduce((sum, mutation) => sum + mutation.amountOut, 0),
-    [mutations],
-  );
-
-  const inflowCount = useMemo(
-    () => mutations.filter((mutation) => mutation.type === "IN").length,
-    [mutations],
-  );
-
-  const outflowCount = useMemo(
-    () => mutations.filter((mutation) => mutation.type === "OUT").length,
     [mutations],
   );
 
@@ -608,7 +744,6 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
 
   return (
     <div className="flex w-full flex-col gap-5 text-stone-900">
-      {/* Page header */}
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-stone-900">
@@ -619,7 +754,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3 sm:flex">
           <Button
             type="button"
             variant="outline"
@@ -643,7 +778,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
           <Button
             type="button"
             onClick={() => openModal("IN")}
-            className="bg-[#5f402a] text-white hover:bg-[#795740]"
+            className={PRIMARY_BUTTON_CLASS}
           >
             <Plus className="mr-2 h-4 w-4" />
             Pemasukan
@@ -651,7 +786,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         </div>
       </header>
 
-      {/* Bank accounts */}
+      {/* Rekening */}
       <section className="space-y-4">
         <SectionHeading
           title=""
@@ -692,7 +827,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         </div>
       </section>
 
-      {/* Transactions */}
+      {/* Daftar transaksi */}
       <Card className="overflow-hidden rounded-xl border-stone-200 bg-[#fcf9f4] shadow-none">
         <CardHeader className="gap-4 border-b border-stone-200 px-4 py-4 sm:px-5">
           <SectionHeading
@@ -722,7 +857,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                     aria-pressed={isActive}
                     className={
                       isActive
-                        ? "shrink-0 bg-[#5f402a] text-white hover:bg-[#795740]"
+                        ? `shrink-0 ${PRIMARY_BUTTON_CLASS}`
                         : "shrink-0 text-stone-600 hover:bg-white hover:text-stone-900"
                     }
                   >
@@ -741,7 +876,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Cari transaksi..."
                   aria-label="Cari transaksi"
-                  className={`${inputClass} pl-9`}
+                  className={`${INPUT_CLASS} pl-9`}
                 />
               </div>
 
@@ -753,7 +888,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
               >
                 <SelectTrigger
                   aria-label="Filter rekening"
-                  className={`${inputClass} w-full sm:w-52`}
+                  className={`${INPUT_CLASS} w-full sm:w-52`}
                 >
                   <SelectValue placeholder="Semua rekening" />
                 </SelectTrigger>
@@ -775,7 +910,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         </CardContent>
 
         <div className="flex flex-col gap-2 border-t border-stone-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <p className="text-xs text-stone-500">
+          <p className="text-xs leading-5 text-stone-500">
             Menampilkan transaksi berdasarkan filter aktif.
           </p>
 
@@ -794,14 +929,14 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         </div>
       </Card>
 
-      {/* Transaction dialog */}
+      {/* Dialog transaksi */}
       <Dialog
         open={activeModal !== null}
         onOpenChange={(open) => {
           if (!open) closeModal();
         }}
       >
-        <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden border-stone-200 bg-[#fcf9f4] p-0 sm:max-w-lg">
+        <DialogContent className="flex max-h-[90dvh] w-[calc(100%-1.5rem)] flex-col gap-0 overflow-hidden border-stone-200 bg-[#fcf9f4] p-0 sm:max-w-lg">
           <DialogHeader className="border-b border-stone-200 px-5 py-4 text-left">
             <div className="flex items-start gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-100 text-[#5f402a]">
@@ -835,7 +970,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                           setTransferSource(value as Account)
                         }
                       >
-                        <SelectTrigger className={inputClass}>
+                        <SelectTrigger className={INPUT_CLASS}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -858,7 +993,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                           setTransferDest(value as Account)
                         }
                       >
-                        <SelectTrigger className={inputClass}>
+                        <SelectTrigger className={INPUT_CLASS}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -895,9 +1030,12 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                       step="1"
                       required
                       value={formAmount}
-                      onChange={(event) => setFormAmount(event.target.value)}
+                      onChange={(event) => {
+                        setFormAmount(event.target.value);
+                        setFormError("");
+                      }}
                       placeholder="Contoh: 5000000"
-                      className={`${inputClass} font-mono`}
+                      className={`${INPUT_CLASS} font-mono`}
                     />
                   </FormField>
 
@@ -924,9 +1062,12 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                       step="1"
                       required
                       value={formAmount}
-                      onChange={(event) => setFormAmount(event.target.value)}
+                      onChange={(event) => {
+                        setFormAmount(event.target.value);
+                        setFormError("");
+                      }}
                       placeholder="Masukkan nominal"
-                      className={`${inputClass} font-mono text-base font-semibold`}
+                      className={`${INPUT_CLASS} font-mono text-base font-semibold`}
                     />
                   </FormField>
 
@@ -939,7 +1080,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                         setFormAccount(value as Account)
                       }
                     >
-                      <SelectTrigger className={inputClass}>
+                      <SelectTrigger className={INPUT_CLASS}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -957,7 +1098,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                       value={formCategory}
                       onValueChange={(value) => setFormCategory(value ?? "")}
                     >
-                      <SelectTrigger className={inputClass}>
+                      <SelectTrigger className={INPUT_CLASS}>
                         <SelectValue placeholder="Pilih kategori" />
                       </SelectTrigger>
                       <SelectContent>
@@ -984,13 +1125,16 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                       type="text"
                       required
                       value={formDesc}
-                      onChange={(event) => setFormDesc(event.target.value)}
+                      onChange={(event) => {
+                        setFormDesc(event.target.value);
+                        setFormError("");
+                      }}
                       placeholder={
                         isInflow
                           ? "Contoh: Pelunasan pesanan meja"
                           : "Contoh: Pembelian bahan baku kayu"
                       }
-                      className={inputClass}
+                      className={INPUT_CLASS}
                     />
                   </FormField>
 
@@ -1011,7 +1155,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                           ? "Nama pelanggan"
                           : "Nama supplier atau vendor"
                       }
-                      className={inputClass}
+                      className={INPUT_CLASS}
                     />
                   </FormField>
                 </>
@@ -1033,7 +1177,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
               type="button"
               variant="outline"
               onClick={closeModal}
-              className="border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
+              className="w-full border-stone-200 bg-white text-stone-700 hover:bg-stone-100 sm:w-auto"
             >
               Batal
             </Button>
@@ -1042,11 +1186,11 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
               type="submit"
               form="cash-mutation-form"
               disabled={isTransfer && transferSource === transferDest}
-              className={
+              className={`w-full sm:w-auto ${
                 isOutflow
                   ? "bg-red-700 text-white hover:bg-red-800"
-                  : "bg-[#5f402a] text-white hover:bg-[#795740]"
-              }
+                  : PRIMARY_BUTTON_CLASS
+              }`}
             >
               {isTransfer ? (
                 <ArrowLeftRight className="mr-2 h-4 w-4" />
@@ -1067,3 +1211,5 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
     </div>
   );
 };
+
+export default CashFlowView;

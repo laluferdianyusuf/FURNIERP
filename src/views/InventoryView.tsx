@@ -122,41 +122,41 @@ const StatusBadge = ({ status }: { status: string }) => (
 
 const PRIMARY_BUTTON_CLASS = "bg-[#5f402a] text-white hover:bg-[#795740]";
 
-const INPUT_CLASS = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
+const INPUT_CLASS =
+  "border-[#e5e2dd] bg-white focus-visible:ring-[#795740] focus-visible:ring-offset-0";
 
-const InventoryStat = ({
-  label,
-  value,
-  description,
-  icon: Icon,
-  critical = false,
+const EmptyInventory = ({
+  hasActiveFilters,
+  onReset,
 }: {
-  label: string;
-  value: string;
-  description: string;
-  icon: React.ElementType;
-  critical?: boolean;
+  hasActiveFilters: boolean;
+  onReset: () => void;
 }) => (
-  <div className="flex min-w-0 items-start gap-3">
-    <div
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-        critical ? "bg-red-50 text-red-600" : "bg-stone-100 text-[#795740]"
-      }`}
-    >
-      <Icon className="h-4 w-4" />
+  <div className="flex flex-col items-center px-4 py-10 text-center">
+    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-100">
+      <PackageSearch className="h-6 w-6 text-stone-400" />
     </div>
 
-    <div className="min-w-0">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p
-        className={`mt-1 truncate text-lg font-semibold tracking-tight ${
-          critical ? "text-red-600" : "text-stone-900"
-        }`}
+    <p className="mt-3 text-sm font-semibold text-stone-900">
+      Item tidak ditemukan
+    </p>
+
+    <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted-foreground">
+      Coba ubah kata kunci pencarian atau pilih lokasi gudang yang berbeda.
+    </p>
+
+    {hasActiveFilters && (
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={onReset}
+        className="mt-4 gap-2"
       >
-        {value}
-      </p>
-      <p className="mt-0.5 text-[11px] text-muted-foreground">{description}</p>
-    </div>
+        <RotateCcw className="h-3.5 w-3.5" />
+        Reset filter
+      </Button>
+    )}
   </div>
 );
 
@@ -234,13 +234,15 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     setLocalInventory(inventory);
 
     setSelectedItem((current) => {
-      if (!inventory.length) return null;
-
       if (current) {
-        return inventory.find((item) => item.id === current.id) ?? inventory[0];
+        return (
+          inventory.find((item) => item.id === current.id) ??
+          inventory[0] ??
+          null
+        );
       }
 
-      return inventory[0];
+      return inventory[0] ?? null;
     });
   }, [inventory]);
 
@@ -299,27 +301,6 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     });
   }, [filteredItems]);
 
-  const summaryItems = activeTab === "raw" ? rawMaterials : finishedGoods;
-
-  const summary = useMemo(() => {
-    return {
-      totalItems: summaryItems.length,
-      physical: summaryItems.reduce((total, item) => total + item.physical, 0),
-      available: summaryItems.reduce(
-        (total, item) => total + item.available,
-        0,
-      ),
-      reserved: summaryItems.reduce((total, item) => total + item.reserved, 0),
-      totalHpp: summaryItems.reduce((total, item) => total + item.totalHpp, 0),
-      critical: summaryItems.filter(
-        (item) =>
-          item.status === "Kritis!" ||
-          item.status === "Menipis" ||
-          item.available <= 0,
-      ).length,
-    };
-  }, [summaryItems]);
-
   const hasActiveFilters =
     Boolean(searchQuery) || selectedLocation !== "Semua Lokasi";
 
@@ -330,6 +311,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
 
   const openMutation = (action: StockAction) => {
     if (!selectedItem) return;
+
+    if (action === "OUT" && selectedItem.available <= 0) {
+      return;
+    }
 
     setStockAction(action);
     setStockAmount("1");
@@ -385,14 +370,12 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
 
     const newAvailable = Math.max(0, newPhysical - currentItem.reserved);
 
-    const newStatus = getStatus(newAvailable, currentItem.minSafety);
-
     const updatedItem: InventoryItem = {
       ...currentItem,
       physical: newPhysical,
       available: newAvailable,
       totalHpp: Math.round(newPhysical * currentItem.hppPerUnit),
-      status: newStatus,
+      status: getStatus(newAvailable, currentItem.minSafety),
     };
 
     const updatedInventory = localInventory.map((item) =>
@@ -432,7 +415,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   };
 
   const renderInventoryTable = () => (
-    <div className="overflow-x-auto">
+    <div className="hidden overflow-x-auto md:block">
       <Table className="min-w-[900px]">
         <TableHeader>
           <TableRow className="bg-stone-50 hover:bg-stone-50">
@@ -447,96 +430,349 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
         </TableHeader>
 
         <TableBody>
-          {filteredItems.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={7}>
-                <div className="flex flex-col items-center py-12 text-center">
-                  <Search className="h-8 w-8 text-stone-300" />
-                  <p className="mt-3 text-sm font-semibold">
-                    Item tidak ditemukan
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Coba ubah kata kunci atau filter lokasi.
-                  </p>
-                  {hasActiveFilters && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={resetFilters}
-                      className="mt-4 gap-2"
-                    >
-                      <RotateCcw className="h-3.5 w-3.5" />
-                      Reset filter
-                    </Button>
-                  )}
+          {filteredItems.map((item) => {
+            const status = getStatus(item.available, item.minSafety);
+
+            const selected = selectedItem?.id === item.id;
+
+            return (
+              <TableRow
+                key={item.id}
+                onClick={() => setSelectedItem(item)}
+                aria-selected={selected}
+                className={`cursor-pointer ${selected ? "bg-stone-50" : ""}`}
+              >
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-stone-100 text-stone-500">
+                      {item.isRawMaterial ? (
+                        <Boxes className="h-5 w-5" />
+                      ) : (
+                        <Package className="h-5 w-5" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="max-w-[220px] truncate text-sm font-medium text-stone-900">
+                        {item.name}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-[#795740]">
+                        {item.sku}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {item.category || "Tanpa kategori"}
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+
+                <TableCell className="text-sm text-muted-foreground">
+                  {item.location || "Gudang Utama"}
+                </TableCell>
+
+                <TableCell className="text-right font-mono text-sm">
+                  {formatNumber(item.physical)}
+                </TableCell>
+
+                <TableCell className="text-right font-mono text-sm text-muted-foreground">
+                  {formatNumber(item.reserved)}
+                </TableCell>
+
+                <TableCell className="text-right font-mono text-sm font-semibold">
+                  {formatNumber(item.available)}
+                </TableCell>
+
+                <TableCell className="text-right font-mono text-sm">
+                  {formatCompactRupiah(item.totalHpp)}
+                </TableCell>
+
+                <TableCell>
+                  <StatusBadge status={status} />
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  const renderInventoryCards = () => (
+    <div className="space-y-3 p-3 md:hidden">
+      {filteredItems.map((item) => {
+        const status = getStatus(item.available, item.minSafety);
+
+        const selected = selectedItem?.id === item.id;
+
+        return (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => setSelectedItem(item)}
+            aria-pressed={selected}
+            className={`w-full rounded-xl border p-3 text-left transition-colors ${
+              selected
+                ? "border-[#795740] bg-[#795740]/5 ring-1 ring-[#795740]/20"
+                : "border-stone-200 bg-white hover:bg-stone-50"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-[#795740]">
+                {item.isRawMaterial ? (
+                  <Boxes className="h-5 w-5" />
+                ) : (
+                  <Package className="h-5 w-5" />
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="break-words text-sm font-semibold text-stone-900">
+                      {item.name}
+                    </p>
+                    <p className="mt-1 font-mono text-xs text-[#795740]">
+                      {item.sku}
+                    </p>
+                  </div>
+
+                  <StatusBadge status={status} />
                 </div>
+
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {item.category || "Tanpa kategori"}
+                  {" · "}
+                  {item.location || "Gudang Utama"}
+                </p>
+              </div>
+            </div>
+
+            <Separator className="my-3" />
+
+            <div className="grid grid-cols-3 gap-2">
+              <div className="min-w-0 rounded-lg bg-stone-50 p-2">
+                <p className="text-[10px] text-muted-foreground">Stok fisik</p>
+                <p className="mt-1 truncate text-sm font-semibold">
+                  {formatNumber(item.physical)}
+                </p>
+              </div>
+
+              <div className="min-w-0 rounded-lg bg-stone-50 p-2">
+                <p className="text-[10px] text-muted-foreground">Reservasi</p>
+                <p className="mt-1 truncate text-sm font-semibold">
+                  {formatNumber(item.reserved)}
+                </p>
+              </div>
+
+              <div className="min-w-0 rounded-lg bg-stone-50 p-2">
+                <p className="text-[10px] text-muted-foreground">Tersedia</p>
+                <p
+                  className={`mt-1 truncate text-sm font-semibold ${
+                    item.available <= 0 ? "text-red-600" : "text-stone-900"
+                  }`}
+                >
+                  {formatNumber(item.available)}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 flex items-center justify-between gap-2">
+              <span className="text-xs text-muted-foreground">Total HPP</span>
+              <span className="text-sm font-semibold text-stone-900">
+                {formatCompactRupiah(item.totalHpp)}
+              </span>
+            </div>
+
+            <div className="mt-3 flex items-center justify-between border-t border-dashed pt-2 text-xs">
+              <span className="text-muted-foreground">
+                {selected ? "Item terpilih" : "Ketuk untuk memilih"}
+              </span>
+              {selected && (
+                <Badge
+                  variant="outline"
+                  className="border-[#e5d4c3] bg-[#eee4da] text-[#5f402a]"
+                >
+                  Dipilih
+                </Badge>
+              )}
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const renderMovementTable = () => (
+    <div className="hidden overflow-x-auto md:block">
+      <Table className="min-w-[850px]">
+        <TableHeader>
+          <TableRow className="bg-stone-50 hover:bg-stone-50">
+            <TableHead>Tanggal</TableHead>
+            <TableHead>Produk / material</TableHead>
+            <TableHead>Referensi</TableHead>
+            <TableHead>Lokasi</TableHead>
+            <TableHead>Pengguna</TableHead>
+            <TableHead className="text-right">Jumlah</TableHead>
+            <TableHead>Tipe</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {movementLogs.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={7}
+                className="h-28 text-center text-sm text-muted-foreground"
+              >
+                Belum ada riwayat mutasi.
               </TableCell>
             </TableRow>
           ) : (
-            filteredItems.map((item) => {
-              const status = getStatus(item.available, item.minSafety);
+            movementLogs.map((log) => (
+              <TableRow key={log.id}>
+                <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
+                  {log.date}
+                </TableCell>
 
-              const selected = selectedItem?.id === item.id;
+                <TableCell>
+                  <p className="text-sm font-medium">{log.name}</p>
+                  <p className="mt-1 font-mono text-xs text-[#795740]">
+                    {log.sku}
+                  </p>
+                </TableCell>
 
-              return (
-                <TableRow
-                  key={item.id}
-                  onClick={() => setSelectedItem(item)}
-                  className={`cursor-pointer ${selected ? "bg-stone-50" : ""}`}
-                >
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-stone-100 text-stone-500">
-                        {item.isRawMaterial ? (
-                          <Boxes className="h-5 w-5" />
-                        ) : (
-                          <Package className="h-5 w-5" />
-                        )}
-                      </div>
+                <TableCell className="text-sm">{log.ref}</TableCell>
 
-                      <div className="min-w-0">
-                        <p className="max-w-[220px] truncate text-sm font-medium text-stone-900">
-                          {item.name}
-                        </p>
-                        <p className="mt-1 font-mono text-xs text-[#795740]">
-                          {item.sku}
-                        </p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          {item.category || "Tanpa kategori"}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {log.location}
+                </TableCell>
 
-                  <TableCell className="text-sm text-muted-foreground">
-                    {item.location || "Gudang Utama"}
-                  </TableCell>
+                <TableCell className="text-sm">{log.user}</TableCell>
 
-                  <TableCell className="text-right font-mono text-sm">
-                    {formatNumber(item.physical)}
-                  </TableCell>
+                <TableCell className="text-right font-mono text-sm">
+                  {log.type === "IN" ? "+" : "−"}
+                  {formatNumber(log.qty)}
+                </TableCell>
 
-                  <TableCell className="text-right font-mono text-sm text-muted-foreground">
-                    {formatNumber(item.reserved)}
-                  </TableCell>
-
-                  <TableCell className="text-right font-mono text-sm font-semibold">
-                    {formatNumber(item.available)}
-                  </TableCell>
-
-                  <TableCell className="text-right font-mono text-sm">
-                    {formatCompactRupiah(item.totalHpp)}
-                  </TableCell>
-
-                  <TableCell>
-                    <StatusBadge status={status} />
-                  </TableCell>
-                </TableRow>
-              );
-            })
+                <TableCell>
+                  <Badge
+                    variant="outline"
+                    className={
+                      log.type === "IN"
+                        ? "whitespace-nowrap border-emerald-200 bg-emerald-50 text-emerald-700"
+                        : "whitespace-nowrap border-red-200 bg-red-50 text-red-700"
+                    }
+                  >
+                    {log.type === "IN" ? (
+                      <ArrowDownLeft className="mr-1 h-3 w-3" />
+                    ) : (
+                      <ArrowUpRight className="mr-1 h-3 w-3" />
+                    )}
+                    {log.type === "IN" ? "Masuk" : "Keluar"}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))
           )}
         </TableBody>
       </Table>
+    </div>
+  );
+
+  const renderMovementCards = () => (
+    <div className="space-y-3 p-3 md:hidden">
+      {movementLogs.length === 0 ? (
+        <div className="py-8 text-center">
+          <History className="mx-auto h-8 w-8 text-stone-300" />
+          <p className="mt-3 text-sm font-medium">Belum ada riwayat mutasi</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Mutasi stok yang dicatat akan muncul di sini.
+          </p>
+        </div>
+      ) : (
+        movementLogs.map((log) => (
+          <div key={log.id} className="rounded-xl border border-stone-200 p-3">
+            <div className="flex items-start gap-3">
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
+                  log.type === "IN"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-red-50 text-red-700"
+                }`}
+              >
+                {log.type === "IN" ? (
+                  <ArrowDownLeft className="h-5 w-5" />
+                ) : (
+                  <ArrowUpRight className="h-5 w-5" />
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="break-words text-sm font-semibold">
+                      {log.name}
+                    </p>
+                    <p className="mt-1 font-mono text-xs text-[#795740]">
+                      {log.sku}
+                    </p>
+                  </div>
+
+                  <Badge
+                    variant="outline"
+                    className={
+                      log.type === "IN"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                        : "border-red-200 bg-red-50 text-red-700"
+                    }
+                  >
+                    {log.type === "IN" ? "Masuk" : "Keluar"}
+                  </Badge>
+                </div>
+
+                <p
+                  className={`mt-2 text-base font-semibold ${
+                    log.type === "IN" ? "text-emerald-700" : "text-red-700"
+                  }`}
+                >
+                  {log.type === "IN" ? "+" : "−"}
+                  {formatNumber(log.qty)} unit
+                </p>
+              </div>
+            </div>
+
+            <Separator className="my-3" />
+
+            <div className="grid grid-cols-2 gap-x-3 gap-y-3">
+              <div className="min-w-0">
+                <p className="text-[10px] text-muted-foreground">Tanggal</p>
+                <p className="mt-1 break-words text-xs font-medium">
+                  {log.date}
+                </p>
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-[10px] text-muted-foreground">Referensi</p>
+                <p className="mt-1 break-all font-mono text-xs font-medium">
+                  {log.ref}
+                </p>
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-[10px] text-muted-foreground">Lokasi</p>
+                <p className="mt-1 break-words text-xs font-medium">
+                  {log.location}
+                </p>
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-[10px] text-muted-foreground">Pengguna</p>
+                <p className="mt-1 text-xs font-medium">{log.user}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 
@@ -550,7 +786,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex">
           <Button
             type="button"
             variant="outline"
@@ -575,8 +811,8 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             type="button"
             variant="outline"
             onClick={() => openMutation("OUT")}
-            disabled={selectedItem!.available <= 0}
-            className={`gap-2 ${PRIMARY_BUTTON_CLASS}`}
+            disabled={!selectedItem || selectedItem.available <= 0}
+            className="col-span-2 gap-2 sm:col-span-1"
           >
             <ArrowUpToLine className="h-4 w-4" />
             Stok keluar
@@ -585,10 +821,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
       </header>
 
       <Card className="shadow-none">
-        <CardContent className="space-y-4 p-4">
+        <CardContent className="space-y-4 p-3 sm:p-4">
           <div className="flex flex-col gap-3 md:flex-row">
             <div className="relative min-w-0 flex-1">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
               <Input
                 type="search"
                 value={searchQuery}
@@ -601,7 +838,9 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
 
             <Select
               value={selectedLocation}
-              onValueChange={(value) => setSelectedLocation(value ?? "")}
+              onValueChange={(value) =>
+                setSelectedLocation(value ?? "Semua Lokasi")
+              }
             >
               <SelectTrigger
                 aria-label="Filter lokasi gudang"
@@ -654,7 +893,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   size="sm"
                   onClick={() => setActiveTab(tab.value)}
                   className={
-                    active ? `h-8 gap-2 ${PRIMARY_BUTTON_CLASS}` : "h-8 gap-2"
+                    active ? `h-9 gap-2 ${PRIMARY_BUTTON_CLASS}` : "h-9 gap-2"
                   }
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -676,7 +915,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={resetFilters}
-                className="h-8 gap-1.5 text-xs text-[#795740] hover:text-[#5f402a]"
+                className="h-9 gap-1.5 text-xs text-[#795740] hover:text-[#5f402a]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Reset filter
@@ -701,7 +940,17 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
               </p>
             </CardHeader>
 
-            {renderInventoryTable()}
+            {filteredItems.length === 0 ? (
+              <EmptyInventory
+                hasActiveFilters={hasActiveFilters}
+                onReset={resetFilters}
+              />
+            ) : (
+              <>
+                {renderInventoryTable()}
+                {renderInventoryCards()}
+              </>
+            )}
           </Card>
 
           <Card className="shadow-none">
@@ -719,7 +968,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                     Belum ada item dipilih
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Pilih item pada tabel untuk melihat detail stok.
+                    Pilih item pada daftar inventaris untuk melihat detail stok.
                   </p>
                 </div>
               ) : (
@@ -736,13 +985,13 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                         </div>
 
                         <div className="min-w-0">
-                          <h3 className="truncate text-sm font-semibold">
+                          <h3 className="break-words text-sm font-semibold">
                             {selectedItem.name}
                           </h3>
                           <p className="mt-1 font-mono text-xs text-[#795740]">
                             {selectedItem.sku}
                           </p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">
+                          <p className="mt-0.5 break-words text-xs text-muted-foreground">
                             {selectedItem.location || "Gudang Utama"}
                             {" · "}
                             {selectedItem.category || "Tanpa kategori"}
@@ -781,12 +1030,12 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                       ].map((item) => (
                         <div
                           key={item.label}
-                          className="rounded-lg border bg-white p-3"
+                          className="min-w-0 rounded-lg border bg-white p-3"
                         >
                           <p className="text-xs text-muted-foreground">
                             {item.label}
                           </p>
-                          <p className="mt-1 truncate text-base font-semibold tracking-tight">
+                          <p className="mt-1 break-words text-base font-semibold tracking-tight">
                             {item.value}
                           </p>
                         </div>
@@ -826,7 +1075,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                         />
                       </div>
 
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs leading-relaxed text-muted-foreground">
                         Buffer minimum: {formatNumber(selectedItem.minSafety)}{" "}
                         unit. Total nilai persediaan:{" "}
                         {formatRupiah(selectedItem.totalHpp)}.
@@ -892,85 +1141,19 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             <Badge variant="secondary">{movementLogs.length} catatan</Badge>
           </CardHeader>
 
-          <div className="overflow-x-auto">
-            <Table className="min-w-[850px]">
-              <TableHeader>
-                <TableRow className="bg-stone-50 hover:bg-stone-50">
-                  <TableHead>Tanggal</TableHead>
-                  <TableHead>Produk / material</TableHead>
-                  <TableHead>Referensi</TableHead>
-                  <TableHead>Lokasi</TableHead>
-                  <TableHead>Pengguna</TableHead>
-                  <TableHead className="text-right">Jumlah</TableHead>
-                  <TableHead>Tipe</TableHead>
-                </TableRow>
-              </TableHeader>
-
-              <TableBody>
-                {movementLogs.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="h-28 text-center text-sm text-muted-foreground"
-                    >
-                      Belum ada riwayat mutasi.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  movementLogs.map((log) => (
-                    <TableRow key={log.id}>
-                      <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
-                        {log.date}
-                      </TableCell>
-
-                      <TableCell>
-                        <p className="text-sm font-medium">{log.name}</p>
-                        <p className="mt-1 font-mono text-xs text-[#795740]">
-                          {log.sku}
-                        </p>
-                      </TableCell>
-
-                      <TableCell className="text-sm">{log.ref}</TableCell>
-
-                      <TableCell className="text-sm text-muted-foreground">
-                        {log.location}
-                      </TableCell>
-
-                      <TableCell className="text-sm">{log.user}</TableCell>
-
-                      <TableCell className="text-right font-mono text-sm">
-                        {log.type === "IN" ? "+" : "−"}
-                        {formatNumber(log.qty)}
-                      </TableCell>
-
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={
-                            log.type === "IN"
-                              ? "whitespace-nowrap border-emerald-200 bg-emerald-50 text-emerald-700"
-                              : "whitespace-nowrap border-red-200 bg-red-50 text-red-700"
-                          }
-                        >
-                          {log.type === "IN" ? (
-                            <ArrowDownLeft className="mr-1 h-3 w-3" />
-                          ) : (
-                            <ArrowUpRight className="mr-1 h-3 w-3" />
-                          )}
-                          {log.type === "IN" ? "Masuk" : "Keluar"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          {renderMovementTable()}
+          {renderMovementCards()}
         </Card>
       )}
 
-      <Dialog open={isMutationOpen} onOpenChange={setIsMutationOpen}>
-        <DialogContent className="w-[calc(100%-1.5rem)] max-w-lg">
+      <Dialog
+        open={isMutationOpen}
+        onOpenChange={(open) => {
+          setIsMutationOpen(open);
+          if (!open) setMutationError("");
+        }}
+      >
+        <DialogContent className="max-h-[90dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-base">
               {stockAction === "IN" ? "Stok masuk" : "Stok keluar"}
@@ -982,7 +1165,9 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
 
           {selectedItem && (
             <div className="rounded-lg border bg-stone-50 p-3">
-              <p className="text-sm font-semibold">{selectedItem.name}</p>
+              <p className="break-words text-sm font-semibold">
+                {selectedItem.name}
+              </p>
               <p className="mt-1 font-mono text-xs text-[#795740]">
                 {selectedItem.sku}
               </p>
@@ -1085,7 +1270,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             </div>
 
             {mutationError && (
-              <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              <div
+                role="alert"
+                className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+              >
                 {mutationError}
               </div>
             )}

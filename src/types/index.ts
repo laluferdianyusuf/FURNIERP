@@ -9,7 +9,8 @@ export type PageView =
   | "receivables"
   | "financial-reports"
   | "invoice-detail"
-  | "settings";
+  | "settings"
+  | "crm";
 
 export type CustomerTier = "Retail" | "Reseller" | "Grosir";
 
@@ -179,4 +180,47 @@ export interface CartItem {
   quantity: number;
   customPrice?: number;
   notes?: string;
+}
+
+export interface CRMActivity {
+  id: string;
+  date: string;
+  channel: "WhatsApp" | "Telepon" | "Meeting" | "Email" | "Kunjungan";
+  summary: string;
+  result: string;
+  nextAction?: string;
+}
+
+export type CRMStage =
+  | "Prospek Baru"
+  | "Sudah Dihubungi"
+  | "Negosiasi"
+  | "Menunggu Keputusan"
+  | "Deal"
+  | "Tidak Jadi";
+
+export interface CRMLead {
+  id: string;
+  code: string;
+  name: string;
+  company: string;
+  phone: string;
+  email: string;
+  source:
+    | "WhatsApp"
+    | "Referensi"
+    | "Showroom"
+    | "Instagram"
+    | "Website"
+    | "Lainnya";
+  interest: string;
+  estimatedValue: number;
+  stage: CRMStage;
+  priority: "Rendah" | "Normal" | "Tinggi";
+  pic: string;
+  createdAt: string;
+  followUpDate: string;
+  notes: string;
+  lostReason?: string;
+  activities: CRMActivity[];
 }

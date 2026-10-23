@@ -26,12 +26,13 @@ import {
   SidebarTrigger,
 } from "./components/ui/sidebar";
 import { CashFlowView } from "./views/CashFlowView";
+import CRMView from "./views/CRMView";
 import { CustomersView } from "./views/CustomersView";
 import { DashboardView } from "./views/DashboardView";
 import { FinancialReportsView } from "./views/FinancialReportsView";
 import { InventoryView } from "./views/InventoryView";
 import { InvoiceDetailView } from "./views/InvoiceDetailView";
-import { OrdersProductionView } from "./views/OrdersProductionView";
+import OrdersView, { SalesOrder, SalesOrderStatus } from "./views/OrdersView";
 import { PosCheckoutView } from "./views/PosCheckoutView";
 import { PosCheckoutData, PosView } from "./views/PosView";
 import { ProductsView } from "./views/ProductsView";
@@ -46,6 +47,7 @@ export default function App() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [salesOrders, setSalesOrders] = useState<SalesOrder[]>([]);
 
   // Quick transaction modal
   const [isQuickTxOpen, setIsQuickTxOpen] = useState(false);
@@ -267,6 +269,83 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleUpdateSalesOrderStatus = (
+    orderId: string,
+    status: SalesOrderStatus,
+  ) => {
+    setSalesOrders((current) =>
+      current.map((order) =>
+        order.id === orderId ? { ...order, status } : order,
+      ),
+    );
+  };
+
+  const handleCreateSalesOrder = (data: PosCheckoutData) => {
+    const now = new Date();
+    const timestamp = now.getTime();
+
+    const customer = customers.find((item) => item.id === data.customerId);
+
+    const items = data.items.map((item) => {
+      const unitPrice = item.customPrice ?? item.product.prices;
+      const quantity = item.quantity;
+
+      return {
+        productId: item.product.id,
+        productName: item.product.name,
+        quantity,
+        unitPrice,
+        subtotal: Number(unitPrice) * quantity,
+      };
+    });
+
+    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+
+    const shippingCost = data.includeOngkir ? 250000 : 0;
+    const assemblyCost = data.includeRakit ? 150000 : 0;
+    const total = subtotal + shippingCost + assemblyCost;
+
+    const paidAmount =
+      // data.paymentScheme === "dp"
+      //   ? Math.min(data.dpAmount || 0, total) :
+      total;
+
+    const paymentStatus: SalesOrder["paymentStatus"] =
+      paidAmount >= total ? "Lunas" : paidAmount > 0 ? "DP" : "Belum Bayar";
+
+    const order: SalesOrder = {
+      id: `SO-${timestamp}`,
+      orderNumber: `SO-${now.getFullYear()}${String(
+        now.getMonth() + 1,
+      ).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(
+        salesOrders.length + 1,
+      ).padStart(4, "0")}`,
+      createdAt: now.toISOString(),
+      customerId: data.customerId,
+      customerName: customer?.name ?? "Pelanggan",
+      customerPhone: customer?.phone ?? "",
+      items: items as any,
+      subtotal,
+      shippingCost,
+      assemblyCost,
+      discount: 0,
+      total,
+      paidAmount,
+      paymentMethod: "-",
+      paymentStatus,
+      status:
+        paidAmount === 0
+          ? "Menunggu Pembayaran"
+          : paidAmount < total
+            ? "Menunggu DP"
+            : "Diproses",
+    };
+
+    setSalesOrders((current) => [order, ...current]);
+    setCurrentPage("orders");
+    showToast(`Pesanan ${order.orderNumber} berhasil dibuat.`);
+  };
+
   return (
     <SidebarProvider
       defaultOpen
@@ -335,12 +414,11 @@ export default function App() {
                 initialData={posCheckoutData}
               />
             ))}
-
           {currentPage === "orders" && (
-            <OrdersProductionView
-              orders={orders}
+            <OrdersView
+              orders={salesOrders}
+              onUpdateStatus={handleUpdateSalesOrderStatus}
               onNavigate={setCurrentPage}
-              onOpenQuickTx={handleOpenQuickTx}
               onToast={showToast}
             />
           )}
@@ -353,6 +431,8 @@ export default function App() {
               onToast={showToast}
             />
           )}
+
+          {currentPage === "crm" && <CRMView />}
 
           {currentPage === "products" && (
             <ProductsView

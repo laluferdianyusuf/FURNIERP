@@ -5,6 +5,7 @@ import {
   ChartNoAxesCombined,
   Factory,
   FileText,
+  Handshake,
   LayoutDashboard,
   Package,
   Receipt,
@@ -79,6 +80,11 @@ const NAV_SECTIONS: NavSection[] = [
         id: "customers" as PageView,
         title: "Pelanggan",
         icon: UsersRound,
+      },
+      {
+        id: "crm" as PageView,
+        title: "CRM & Penjualan",
+        icon: Handshake,
       },
       {
         id: "products" as PageView,

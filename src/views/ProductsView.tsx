@@ -183,51 +183,49 @@ const SectionHeading = ({
   </div>
 );
 
-const INPUT_CLASS = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
-
+const INPUT_CLASS =
+  "border-[#e5e2dd] bg-white focus-visible:ring-[#795740] focus-visible:ring-offset-0";
 const PRIMARY_BUTTON_CLASS = "bg-[#5f402a] text-white hover:bg-[#795740]";
 
-const StatItem = ({
+const StockItem = ({
   label,
   value,
-  description,
-  icon: IconComponent,
-  critical = false,
+  valueClassName = "",
 }: {
   label: string;
-  value: string;
-  description?: string;
-  icon: React.ElementType;
-  critical?: boolean;
+  value: number;
+  valueClassName?: string;
 }) => (
-  <div className="flex min-w-0 items-start gap-3">
-    <div
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-        critical && value !== "0 SKU"
-          ? "bg-red-50 text-red-600"
-          : "bg-stone-100 text-[#795740]"
-      }`}
-    >
-      <IconComponent className="h-4 w-4" />
-    </div>
-
-    <div className="min-w-0">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p
-        className={`mt-1 truncate text-lg font-semibold tracking-tight ${
-          critical && value !== "0 SKU" ? "text-red-600" : "text-stone-900"
-        }`}
-      >
-        {value}
-      </p>
-      {description && (
-        <p className="mt-0.5 text-[11px] text-muted-foreground">
-          {description}
-        </p>
-      )}
-    </div>
+  <div className="min-w-0 rounded-lg bg-stone-50 px-2 py-3 text-center">
+    <p className="text-[11px] text-muted-foreground">{label}</p>
+    <p className={`mt-1 text-base font-semibold ${valueClassName}`}>{value}</p>
   </div>
 );
+
+const ProductImage = ({
+  product,
+  size = "normal",
+}: {
+  product: Product;
+  size?: "normal" | "large";
+}) => {
+  const sizeClass = size === "large" ? "h-[76px] w-[76px]" : "h-11 w-11";
+
+  return product.image ? (
+    <img
+      src={product.image}
+      alt={product.name}
+      loading="lazy"
+      className={`${sizeClass} shrink-0 rounded-lg border border-stone-200 bg-stone-50 object-cover`}
+    />
+  ) : (
+    <div
+      className={`flex ${sizeClass} shrink-0 items-center justify-center rounded-lg bg-stone-100 text-stone-500`}
+    >
+      <Armchair className={size === "large" ? "h-8 w-8" : "h-5 w-5"} />
+    </div>
+  );
+};
 
 export const ProductsView: React.FC<ProductsViewProps> = ({
   products,
@@ -275,20 +273,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
       return matchesSearch && matchesCategory && matchesType;
     });
   }, [products, searchQuery, selectedCategory, selectedType]);
-
-  const totalPhysicalStock = products.reduce(
-    (total, product) => total + product.stockPhysical,
-    0,
-  );
-
-  const totalHppInventory = products.reduce(
-    (total, product) => total + product.hpp * product.stockPhysical,
-    0,
-  );
-
-  const criticalStockCount = products.filter(
-    (product) => product.status === "Kritis" || product.stockAvailable <= 0,
-  ).length;
 
   const resetFilters = () => {
     setSearchQuery("");
@@ -385,11 +369,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
       type: newType,
       hpp,
       bomComponentsCount: 4,
-      prices: {
-        retail,
-        reseller,
-        grosir,
-      },
+      prices: { retail, reseller, grosir },
       stockPhysical: physical,
       stockReserved: 0,
       stockAvailable: physical,
@@ -452,17 +432,17 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     selectedType !== "Semua";
 
   return (
-    <div className="flex w-full flex-col gap-5 text-stone-900">
+    <div className="flex w-full min-w-0 flex-col gap-5 text-stone-900">
       {/* Header */}
       <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <div>
+        <div className="min-w-0">
           <h1 className="text-xl font-semibold tracking-tight">Produk</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Kelola katalog, harga jual, BOM, dan ketersediaan stok.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex">
           <Button
             type="button"
             variant="outline"
@@ -486,23 +466,23 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
       {/* Filters */}
       <Card className="shadow-none">
-        <CardContent className="space-y-4 p-4">
-          <div className="flex flex-col gap-3 md:flex-row">
+        <CardContent className="space-y-4 p-3 sm:p-4">
+          <div className="flex min-w-0 flex-col gap-3 md:flex-row">
             <div className="relative min-w-0 flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Cari nama produk, SKU, atau jenis kayu..."
-                aria-label="Cari produk"
+                placeholder="Cari nama, nomor telepon, atau ID..."
+                aria-label="Cari pelanggan"
                 className={`${INPUT_CLASS} pl-9`}
               />
             </div>
 
             <Select
               value={selectedType}
-              onValueChange={(value) => setSelectedType(value ?? "")}
+              onValueChange={(value) => setSelectedType(value ?? "Semua")}
             >
               <SelectTrigger
                 aria-label="Filter tipe produk"
@@ -518,49 +498,53 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
             </Select>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {CATEGORIES.map((category) => {
-              const active = selectedCategory === category;
-              const count =
-                category === "Semua"
-                  ? products.length
-                  : products.filter((product) => product.category === category)
-                      .length;
+          {/* Horizontal category filters on mobile */}
+          <div className="-mx-1 overflow-x-auto px-1 pb-1">
+            <div className="flex w-max min-w-full items-center gap-2">
+              {CATEGORIES.map((category) => {
+                const active = selectedCategory === category;
+                const count =
+                  category === "Semua"
+                    ? products.length
+                    : products.filter(
+                        (product) => product.category === category,
+                      ).length;
 
-              return (
-                <Button
-                  key={category}
-                  type="button"
-                  variant={active ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className={
-                    active
-                      ? "h-8 gap-2 bg-[#5f402a] text-white hover:bg-[#795740]"
-                      : "h-8 gap-2"
-                  }
-                >
-                  {category}
-                  <span
-                    className={`rounded px-1.5 py-0.5 text-[10px] ${
-                      active ? "bg-white/15" : "bg-stone-100"
-                    }`}
+                return (
+                  <Button
+                    key={category}
+                    type="button"
+                    variant={active ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category)}
+                    className={
+                      active
+                        ? "h-9 shrink-0 gap-2 bg-[#5f402a] text-white hover:bg-[#795740]"
+                        : "h-9 shrink-0 gap-2"
+                    }
                   >
-                    {count}
-                  </span>
-                </Button>
-              );
-            })}
+                    {category}
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[10px] ${
+                        active ? "bg-white/15" : "bg-stone-100"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Product table */}
-      <Card className="overflow-hidden shadow-none">
-        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0 border-b px-4 py-3">
+      {/* Product list */}
+      <Card className="min-w-0 overflow-hidden shadow-none">
+        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0 border-b px-3 py-3 sm:px-4">
           <CardTitle className="text-sm font-semibold">Daftar produk</CardTitle>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <p className="text-xs text-muted-foreground">
               {filteredProducts.length} dari {products.length} produk
             </p>
@@ -571,7 +555,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={resetFilters}
-                className="h-8 gap-1.5 text-xs text-[#795740] hover:text-[#5f402a]"
+                className="h-8 gap-1.5 px-2 text-xs text-[#795740] hover:text-[#5f402a]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Reset
@@ -601,73 +585,77 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
             </Button>
           </CardContent>
         ) : (
-          <div className="overflow-x-auto">
-            <Table className="min-w-[1080px]">
-              <TableHeader>
-                <TableRow className="bg-stone-50 hover:bg-stone-50">
-                  <TableHead className="w-[260px]">Produk</TableHead>
-                  <TableHead>Tipe</TableHead>
-                  <TableHead className="text-right">HPP</TableHead>
-                  <TableHead className="w-[210px]">Harga jual</TableHead>
-                  <TableHead className="text-center">Stok</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
+          <>
+            {/* Mobile: product cards */}
+            <div className="space-y-3 bg-stone-50/60 p-3 md:hidden">
+              {filteredProducts.map((product) => (
+                <article
+                  key={product.id}
+                  className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm"
+                >
+                  <div className="space-y-3 p-3">
+                    {/* Product identity */}
+                    <div className="flex min-w-0 items-start gap-3">
+                      <ProductImage product={product} size="large" />
 
-              <TableBody>
-                {filteredProducts.map((product) => (
-                  <TableRow key={product.id} className="align-middle">
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            loading="lazy"
-                            className="h-11 w-11 shrink-0 rounded-md border bg-stone-50 object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-stone-100 text-stone-500">
-                            <Armchair className="h-5 w-5" />
-                          </div>
-                        )}
-
-                        <div className="min-w-0">
-                          <p className="max-w-[220px] truncate text-sm font-medium text-stone-900">
-                            {product.name}
-                          </p>
-                          <p className="mt-1 font-mono text-xs text-[#795740]">
-                            {product.sku}
-                          </p>
-                          <p className="mt-0.5 max-w-[220px] truncate text-xs text-muted-foreground">
-                            {product.category}
-                          </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <TypeBadge type={product.type} />
+                          <StatusBadge status={product.status} />
                         </div>
+
+                        <h3 className="mt-2 break-words text-sm font-semibold leading-snug text-stone-900">
+                          {product.name}
+                        </h3>
+
+                        <p className="mt-1 font-mono text-xs text-[#795740]">
+                          {product.sku}
+                        </p>
+
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                          {product.category}
+                        </p>
+
+                        {product.dimensions && (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {product.dimensions}
+                          </p>
+                        )}
                       </div>
-                    </TableCell>
+                    </div>
 
-                    <TableCell>
-                      <TypeBadge type={product.type} />
-                    </TableCell>
+                    <Separator />
 
-                    <TableCell className="text-right">
-                      <p className="whitespace-nowrap font-mono text-sm font-medium">
-                        {formatRupiah(product.hpp)}
-                      </p>
+                    {/* HPP and BOM */}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-xs text-muted-foreground">
+                          HPP / modal produksi
+                        </p>
+                        <p className="mt-1 break-words text-sm font-semibold tabular-nums text-stone-900">
+                          {formatRupiah(product.hpp)}
+                        </p>
+                      </div>
+
                       <Button
                         type="button"
-                        variant="link"
+                        variant="outline"
                         size="sm"
                         onClick={() => setSelectedProductForBOM(product)}
-                        className="h-auto px-0 pt-1 text-xs text-[#795740]"
+                        className="shrink-0 gap-1.5 border-stone-200 text-[#795740]"
                       >
-                        Lihat BOM
+                        <FileText className="h-3.5 w-3.5" />
+                        Detail BOM
                       </Button>
-                    </TableCell>
+                    </div>
 
-                    <TableCell>
-                      <div className="space-y-1.5">
+                    {/* Selling prices */}
+                    <div className="rounded-lg border border-stone-100 bg-stone-50/80 p-3">
+                      <p className="mb-2 text-xs font-semibold text-stone-700">
+                        Harga jual
+                      </p>
+
+                      <div className="space-y-2">
                         {[
                           {
                             label: "Retail",
@@ -689,80 +677,226 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                             <span className="text-xs text-muted-foreground">
                               {tier.label}
                             </span>
-                            <span className="whitespace-nowrap font-mono text-xs font-medium">
-                              {formatCompactRupiah(tier.price)}
+                            <span className="text-right text-sm font-medium tabular-nums text-stone-900">
+                              {formatRupiah(tier.price)}
                             </span>
                           </div>
                         ))}
                       </div>
-                    </TableCell>
+                    </div>
 
-                    <TableCell>
-                      <div className="flex items-start justify-center gap-3">
-                        <div className="text-center">
-                          <p className="text-[10px] text-muted-foreground">
-                            Fisik
-                          </p>
-                          <p className="mt-1 text-sm font-semibold">
-                            {product.stockPhysical}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] text-muted-foreground">
-                            SPK
-                          </p>
-                          <p className="mt-1 text-sm font-semibold text-[#795740]">
-                            {product.stockReserved}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] text-muted-foreground">
-                            Bebas
-                          </p>
-                          <p className="mt-1 text-sm font-semibold text-emerald-700">
-                            {product.stockAvailable}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-center text-[10px] text-muted-foreground">
-                        Buffer: {product.bufferMin}
+                    {/* Stock summary */}
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-stone-700">
+                        Ringkasan stok
                       </p>
-                    </TableCell>
 
-                    <TableCell>
-                      <StatusBadge status={product.status} />
-                    </TableCell>
-
-                    <TableCell>
-                      <div className="flex justify-end gap-1.5">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          title="Lihat detail BOM"
-                          aria-label={`Lihat BOM ${product.name}`}
-                          onClick={() => setSelectedProductForBOM(product)}
-                          className="h-8 w-8 text-[#795740]"
-                        >
-                          <FileText className="h-4 w-4" />
-                        </Button>
-
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => onNavigate("pos")}
-                          className={`h-8 gap-1.5 ${PRIMARY_BUTTON_CLASS}`}
-                        >
-                          <ShoppingCart className="h-3.5 w-3.5" />
-                          Jual
-                        </Button>
+                      <div className="grid grid-cols-3 gap-2">
+                        <StockItem
+                          label="Fisik"
+                          value={product.stockPhysical}
+                        />
+                        <StockItem
+                          label="SPK"
+                          value={product.stockReserved}
+                          valueClassName="text-[#795740]"
+                        />
+                        <StockItem
+                          label="Bebas"
+                          value={product.stockAvailable}
+                          valueClassName="text-emerald-700"
+                        />
                       </div>
-                    </TableCell>
+
+                      <div className="mt-2 flex items-center justify-between gap-2 text-xs">
+                        <span className="text-muted-foreground">
+                          Buffer minimum
+                        </span>
+                        <span className="font-medium text-stone-700">
+                          {product.bufferMin} unit
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="grid grid-cols-2 gap-2 border-t border-stone-100 pt-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setSelectedProductForBOM(product)}
+                        className="min-w-0 gap-2"
+                      >
+                        <FileText className="h-4 w-4 shrink-0" />
+                        Lihat detail
+                      </Button>
+
+                      <Button
+                        type="button"
+                        onClick={() => onNavigate("pos")}
+                        className={`min-w-0 gap-2 ${PRIMARY_BUTTON_CLASS}`}
+                      >
+                        <ShoppingCart className="h-4 w-4 shrink-0" />
+                        Jual
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* Tablet and desktop: data table */}
+            <div className="hidden overflow-x-auto md:block">
+              <Table className="min-w-[1000px]">
+                <TableHeader>
+                  <TableRow className="bg-stone-50 hover:bg-stone-50">
+                    <TableHead className="w-[260px]">Produk</TableHead>
+                    <TableHead>Tipe</TableHead>
+                    <TableHead className="text-right">HPP</TableHead>
+                    <TableHead className="w-[210px]">Harga jual</TableHead>
+                    <TableHead className="text-center">Stok</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Aksi</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+
+                <TableBody>
+                  {filteredProducts.map((product) => (
+                    <TableRow key={product.id} className="align-middle">
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <ProductImage product={product} />
+
+                          <div className="min-w-0">
+                            <p className="max-w-[220px] truncate text-sm font-medium text-stone-900">
+                              {product.name}
+                            </p>
+                            <p className="mt-1 font-mono text-xs text-[#795740]">
+                              {product.sku}
+                            </p>
+                            <p className="mt-0.5 max-w-[220px] truncate text-xs text-muted-foreground">
+                              {product.category}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <TypeBadge type={product.type} />
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <p className="whitespace-nowrap font-mono text-sm font-medium">
+                          {formatRupiah(product.hpp)}
+                        </p>
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          onClick={() => setSelectedProductForBOM(product)}
+                          className="h-auto px-0 pt-1 text-xs text-[#795740]"
+                        >
+                          Lihat BOM
+                        </Button>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="space-y-1.5">
+                          {[
+                            {
+                              label: "Retail",
+                              price: product.prices.retail,
+                            },
+                            {
+                              label: "Reseller",
+                              price: product.prices.reseller,
+                            },
+                            {
+                              label: "Grosir",
+                              price: product.prices.grosir,
+                            },
+                          ].map((tier) => (
+                            <div
+                              key={tier.label}
+                              className="flex items-center justify-between gap-3"
+                            >
+                              <span className="text-xs text-muted-foreground">
+                                {tier.label}
+                              </span>
+                              <span className="whitespace-nowrap font-mono text-xs font-medium">
+                                {formatCompactRupiah(tier.price)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-start justify-center gap-3">
+                          <div className="text-center">
+                            <p className="text-[10px] text-muted-foreground">
+                              Fisik
+                            </p>
+                            <p className="mt-1 text-sm font-semibold">
+                              {product.stockPhysical}
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-muted-foreground">
+                              SPK
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-[#795740]">
+                              {product.stockReserved}
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-muted-foreground">
+                              Bebas
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-emerald-700">
+                              {product.stockAvailable}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-center text-[10px] text-muted-foreground">
+                          Buffer: {product.bufferMin}
+                        </p>
+                      </TableCell>
+
+                      <TableCell>
+                        <StatusBadge status={product.status} />
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex justify-end gap-1.5">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            title="Lihat detail BOM"
+                            aria-label={`Lihat BOM ${product.name}`}
+                            onClick={() => setSelectedProductForBOM(product)}
+                            className="h-8 w-8 text-[#795740]"
+                          >
+                            <FileText className="h-4 w-4" />
+                          </Button>
+
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => onNavigate("pos")}
+                            className={`h-8 gap-1.5 ${PRIMARY_BUTTON_CLASS}`}
+                          >
+                            <ShoppingCart className="h-3.5 w-3.5" />
+                            Jual
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </Card>
 
@@ -788,7 +922,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
               <ScrollArea className="min-h-0 flex-1">
                 <div className="space-y-6 p-5">
-                  {/* Product specification */}
                   <section className="space-y-3">
                     <SectionHeading title="Spesifikasi produk" />
 
@@ -823,7 +956,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                           <p className="text-xs text-muted-foreground">
                             {spec.label}
                           </p>
-                          <p className="mt-1 text-sm font-medium">
+                          <p className="mt-1 break-words text-sm font-medium">
                             {spec.value || "—"}
                           </p>
                         </div>
@@ -833,7 +966,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                   <Separator />
 
-                  {/* BOM items */}
                   <section className="space-y-3">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <SectionHeading
@@ -896,7 +1028,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                   <Separator />
 
-                  {/* Price margins */}
                   <section className="space-y-3">
                     <SectionHeading
                       title="Harga dan margin"
@@ -976,8 +1107,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                   <Separator />
 
-                  {/* Stock information */}
-                  <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
                       {
                         label: "Stok fisik",
@@ -1000,12 +1130,12 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="rounded-lg border bg-stone-50 p-3"
+                        className="min-w-0 rounded-lg border bg-stone-50 p-3"
                       >
                         <p className="text-xs text-muted-foreground">
                           {item.label}
                         </p>
-                        <p className="mt-1 text-sm font-semibold">
+                        <p className="mt-1 break-words text-sm font-semibold">
                           {item.value}
                         </p>
                       </div>
@@ -1062,7 +1192,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
           >
             <ScrollArea className="min-h-0 flex-1">
               <div className="space-y-6 p-5">
-                {/* Identity */}
                 <section className="space-y-3">
                   <SectionHeading
                     title="Identitas produk"
@@ -1083,7 +1212,9 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     <Field label="Kategori *">
                       <Select
                         value={newCategory}
-                        onValueChange={(value) => setNewCategory(value ?? "")}
+                        onValueChange={(value) =>
+                          setNewCategory(value ?? PRODUCT_CATEGORIES[0])
+                        }
                       >
                         <SelectTrigger className={INPUT_CLASS}>
                           <SelectValue placeholder="Pilih kategori" />
@@ -1164,7 +1295,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                 <Separator />
 
-                {/* Selling prices */}
                 <section className="space-y-3">
                   <SectionHeading
                     title="Harga jual"
@@ -1239,7 +1369,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                             );
 
                             return (
-                              <div key={tier.label}>
+                              <div key={tier.label} className="min-w-0">
                                 <p className="text-xs text-muted-foreground">
                                   {tier.label}
                                 </p>
@@ -1252,7 +1382,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                                 >
                                   {margin.toFixed(1)}%
                                 </p>
-                                <p className="mt-1 text-[10px] text-muted-foreground">
+                                <p className="mt-1 break-words text-[10px] text-muted-foreground">
                                   {formatRupiah(tier.price - Number(newHpp))}
                                 </p>
                               </div>
@@ -1265,7 +1395,6 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                 <Separator />
 
-                {/* Opening stock */}
                 <section className="space-y-3">
                   <SectionHeading
                     title="Stok awal"
