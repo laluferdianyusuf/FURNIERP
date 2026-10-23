@@ -1,5 +1,42 @@
-import React, { useState } from "react";
-import { PageView } from "../types";
+import React, { useEffect, useState } from "react";
+import type { PageView } from "../types";
+
+import {
+  ArrowLeft,
+  Banknote,
+  CalendarDays,
+  CheckCircle2,
+  Clipboard,
+  FileText,
+  Info,
+  LockKeyhole,
+  MessageCircle,
+  Printer,
+  ReceiptText,
+  Send,
+  ShoppingBag,
+  UserRound,
+  X,
+} from "lucide-react";
+
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Separator } from "../components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 interface InvoiceDetailViewProps {
   onNavigate: (page: PageView) => void;
@@ -8,23 +45,9 @@ interface InvoiceDetailViewProps {
 type ToastType = "success" | "error" | "info";
 
 interface ToastState {
+  id: number;
   message: string;
   type: ToastType;
-}
-
-interface ActionButtonProps {
-  children: React.ReactNode;
-  onClick: () => void;
-  variant?: "primary" | "secondary" | "success" | "subtle";
-  className?: string;
-  title?: string;
-  icon?: string;
-}
-
-interface InfoRowProps {
-  label: string;
-  value: string;
-  className?: string;
 }
 
 interface InvoiceItem {
@@ -37,24 +60,6 @@ interface InvoiceItem {
   subtotal: number;
   discount?: boolean;
 }
-
-const COLORS = {
-  background: "#f6f3ee",
-  surface: "#fcf9f4",
-  mutedSurface: "#f0ede9",
-  border: "#e5e2dd",
-  brown: "#5f402a",
-  brownHover: "#795740",
-  text: "#1c1c19",
-  secondary: "#50453e",
-  muted: "#82746d",
-  green: "#28734b",
-  greenBg: "#edf5ee",
-  amber: "#94651d",
-  amberBg: "#fbf2df",
-  red: "#a3443f",
-  redBg: "#f9eeeb",
-};
 
 const INVOICE = {
   number: "INV-20241023-004",
@@ -136,139 +141,81 @@ const paymentPercentage = Number(
   ((INVOICE.downPayment / INVOICE.total) * 100).toFixed(1),
 );
 
-const formatDateForPrint = "23/10/2024";
-
-function Icon({ name, className = "" }: { name: string; className?: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`material-symbols-outlined ${className}`}
-    >
-      {name}
-    </span>
-  );
-}
-
-function ActionButton({
-  children,
-  onClick,
-  variant = "secondary",
-  className = "",
+function SectionHeader({
   title,
-  icon,
-}: ActionButtonProps) {
-  const variants: Record<NonNullable<ActionButtonProps["variant"]>, string> = {
-    primary:
-      "bg-[#5f402a] text-white hover:bg-[#795740] border border-transparent",
-    secondary:
-      "bg-[#fcf9f4] text-[#50453e] border border-[#e5e2dd] hover:bg-[#f0ede9]",
-    success:
-      "bg-[#28734b] text-white border border-transparent hover:bg-[#205e3c]",
-    subtle:
-      "bg-transparent text-[#50453e] border border-transparent hover:bg-[#f0ede9]",
-  };
-
+  icon: Icon,
+  action,
+}: {
+  title: string;
+  icon: React.ElementType;
+  action?: React.ReactNode;
+}) {
   return (
-    <button
-      type="button"
-      title={title}
-      onClick={onClick}
-      className={[
-        "inline-flex items-center justify-center gap-2 rounded-lg",
-        "px-3.5 py-2.5 text-xs font-semibold",
-        "transition-colors duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a795e]",
-        "disabled:cursor-not-allowed disabled:opacity-50",
-        variants[variant],
-        className,
-      ].join(" ")}
-    >
-      {icon && <Icon name={icon} className="text-[18px]" />}
-      {children}
-    </button>
+    <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0 border-b border-stone-200 px-4 py-3.5">
+      <CardTitle className="flex items-center gap-2 text-sm font-semibold text-stone-800">
+        <Icon className="size-[17px] text-[#5f402a]" />
+        {title}
+      </CardTitle>
+      {action}
+    </CardHeader>
   );
 }
 
 function Toast({ toast, onClose }: { toast: ToastState; onClose: () => void }) {
   const styles: Record<ToastType, string> = {
-    success: "border-[#c9dfcf] bg-[#edf5ee] text-[#245b39]",
-    error: "border-[#e9c9c5] bg-[#f9eeeb] text-[#943e38]",
-    info: "border-[#ded1c2] bg-[#f5eee5] text-[#5f402a]",
+    success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+    error: "border-red-200 bg-red-50 text-red-800",
+    info: "border-stone-200 bg-white text-stone-700",
   };
 
-  const icons: Record<ToastType, string> = {
-    success: "check_circle",
-    error: "error",
-    info: "info",
-  };
+  const Icon =
+    toast.type === "success"
+      ? CheckCircle2
+      : toast.type === "error"
+        ? Info
+        : Info;
 
   return (
-    <div
+    <Alert
       role="status"
       aria-live="polite"
-      className={[
-        "fixed right-4 top-5 z-[100] flex max-w-[calc(100vw-2rem)]",
-        "items-start gap-3 rounded-xl border px-4 py-3 shadow-lg",
-        "print:hidden",
-        styles[toast.type],
-      ].join(" ")}
+      className={`fixed right-4 top-5 z-[100] flex max-w-[calc(100vw-2rem)] items-start gap-3 shadow-lg print:hidden sm:right-6 ${styles[toast.type]}`}
     >
-      <Icon name={icons[toast.type]} className="text-[19px]" />
-      <p className="text-xs font-medium leading-5">{toast.message}</p>
-      <button
+      <Icon className="mt-0.5 size-4 shrink-0" />
+      <AlertDescription className="flex-1 text-sm leading-5">
+        {toast.message}
+      </AlertDescription>
+      <Button
         type="button"
-        onClick={onClose}
+        variant="ghost"
+        size="icon"
         aria-label="Tutup notifikasi"
-        className="ml-1 rounded p-0.5 opacity-70 hover:opacity-100"
+        onClick={onClose}
+        className="-mr-2 -mt-2 size-8 shrink-0"
       >
-        <Icon name="close" className="text-[17px]" />
-      </button>
-    </div>
+        <X className="size-4" />
+      </Button>
+    </Alert>
   );
 }
 
-function SectionCard({
-  title,
-  icon,
-  children,
-  action,
-  className = "",
+function InfoRow({
+  label,
+  value,
+  valueClassName = "",
 }: {
-  title: string;
-  icon?: string;
-  children: React.ReactNode;
-  action?: React.ReactNode;
-  className?: string;
+  label: string;
+  value: string;
+  valueClassName?: string;
 }) {
   return (
-    <section
-      className={[
-        "rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]",
-        className,
-      ].join(" ")}
-    >
-      <div className="flex items-center justify-between gap-3 border-b border-[#e5e2dd] px-4 py-3.5">
-        <h2 className="flex items-center gap-2 text-xs font-bold text-[#50453e]">
-          {icon && <Icon name={icon} className="text-[18px] text-[#5f402a]" />}
-          {title}
-        </h2>
-        {action}
-      </div>
-      <div className="p-4">{children}</div>
-    </section>
-  );
-}
-
-function InfoRow({ label, value, className = "" }: InfoRowProps) {
-  return (
-    <div
-      className={[
-        "flex items-start justify-between gap-4 text-xs",
-        className,
-      ].join(" ")}
-    >
-      <span className="text-[#82746d]">{label}</span>
-      <span className="text-right font-medium text-[#1c1c19]">{value}</span>
+    <div className="flex items-start justify-between gap-4 text-sm">
+      <span className="text-stone-500">{label}</span>
+      <span
+        className={`text-right font-medium text-stone-900 ${valueClassName}`}
+      >
+        {value}
+      </span>
     </div>
   );
 }
@@ -276,27 +223,42 @@ function InfoRow({ label, value, className = "" }: InfoRowProps) {
 function InvoiceItemTable() {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[620px] border-collapse text-left text-xs">
-        <thead>
-          <tr className="border-y border-[#e5e2dd] bg-[#f0ede9] text-[10px] uppercase tracking-wide text-[#82746d]">
-            <th className="px-3 py-3 font-semibold">No.</th>
-            <th className="px-3 py-3 font-semibold">Produk & spesifikasi</th>
-            <th className="px-3 py-3 text-center font-semibold">Qty</th>
-            <th className="px-3 py-3 text-right font-semibold">Harga satuan</th>
-            <th className="px-3 py-3 text-right font-semibold">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-[#e5e2dd]">
+      <Table className="min-w-[640px]">
+        <TableHeader>
+          <TableRow className="border-stone-200 bg-stone-50 hover:bg-stone-50">
+            <TableHead className="w-12 text-center text-[10px] font-semibold uppercase tracking-wide text-stone-500">
+              No.
+            </TableHead>
+            <TableHead className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">
+              Produk & spesifikasi
+            </TableHead>
+            <TableHead className="text-center text-[10px] font-semibold uppercase tracking-wide text-stone-500">
+              Qty
+            </TableHead>
+            <TableHead className="text-right text-[10px] font-semibold uppercase tracking-wide text-stone-500">
+              Harga satuan
+            </TableHead>
+            <TableHead className="text-right text-[10px] font-semibold uppercase tracking-wide text-stone-500">
+              Subtotal
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
           {ITEMS.map((item) => (
-            <tr key={item.id} className="align-top">
-              <td className="px-3 py-4 text-center font-mono text-[#82746d]">
+            <TableRow
+              key={item.id}
+              className="border-stone-200 align-top hover:bg-transparent"
+            >
+              <TableCell className="pt-4 text-center font-mono text-xs text-stone-400">
                 {item.id}
-              </td>
-              <td className="px-3 py-4">
-                <p className="font-semibold leading-5 text-[#1c1c19]">
+              </TableCell>
+
+              <TableCell className="max-w-[300px] py-4">
+                <p className="text-sm font-semibold leading-5 text-stone-900">
                   {item.name}
                 </p>
-                <p className="mt-1 max-w-sm leading-5 text-[#82746d]">
+                <p className="mt-1 text-xs leading-5 text-stone-500">
                   {item.description}
                 </p>
                 {item.sku && (
@@ -305,29 +267,31 @@ function InvoiceItemTable() {
                   </p>
                 )}
                 {item.discount && (
-                  <span className="mt-1.5 inline-block text-[10px] font-medium text-[#28734b]">
+                  <Badge className="mt-2 border-0 bg-emerald-50 text-[10px] text-emerald-700 hover:bg-emerald-50">
                     Diskon promosi
-                  </span>
+                  </Badge>
                 )}
-              </td>
-              <td className="px-3 py-4 text-center font-mono font-medium">
+              </TableCell>
+
+              <TableCell className="whitespace-nowrap pt-4 text-center text-xs font-medium">
                 {item.quantity}
-              </td>
-              <td className="px-3 py-4 text-right font-mono whitespace-nowrap">
+              </TableCell>
+
+              <TableCell className="whitespace-nowrap pt-4 text-right font-mono text-xs">
                 {formatRupiah(item.unitPrice)}
-              </td>
-              <td
-                className={[
-                  "px-3 py-4 text-right font-mono font-semibold whitespace-nowrap",
-                  item.discount ? "text-[#28734b]" : "text-[#1c1c19]",
-                ].join(" ")}
+              </TableCell>
+
+              <TableCell
+                className={`whitespace-nowrap pt-4 text-right font-mono text-xs font-semibold ${
+                  item.discount ? "text-emerald-700" : "text-stone-900"
+                }`}
               >
                 {formatRupiah(item.subtotal)}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -335,27 +299,32 @@ function InvoiceItemTable() {
 function InvoiceTotals() {
   return (
     <div className="space-y-3">
-      <div className="flex justify-between gap-4 text-xs text-[#50453e]">
-        <span>Subtotal bruto</span>
-        <span className="font-mono">{formatRupiah(INVOICE.subtotal)}</span>
-      </div>
-      <div className="flex justify-between gap-4 text-xs text-[#a3443f]">
-        <span>Diskon negosiasi</span>
-        <span className="font-mono">− {formatRupiah(INVOICE.discount)}</span>
-      </div>
-      <div className="flex justify-between gap-4 border-t border-[#e5e2dd] pt-3 text-sm font-bold text-[#1c1c19]">
-        <span>Total tagihan</span>
-        <span className="font-mono">{formatRupiah(INVOICE.total)}</span>
-      </div>
-      <div className="flex justify-between gap-4 rounded-lg bg-[#edf5ee] px-3 py-2.5 text-xs text-[#28734b]">
-        <span>DP diterima</span>
-        <span className="font-mono font-bold">
+      <InfoRow label="Subtotal bruto" value={formatRupiah(INVOICE.subtotal)} />
+
+      <InfoRow
+        label="Diskon negosiasi"
+        value={`− ${formatRupiah(INVOICE.discount)}`}
+        valueClassName="text-red-600"
+      />
+
+      <Separator className="bg-stone-200" />
+
+      <InfoRow label="Total tagihan" value={formatRupiah(INVOICE.total)} />
+
+      <div className="flex items-center justify-between gap-3 rounded-lg bg-emerald-50 px-3 py-3">
+        <span className="text-sm text-emerald-800">DP diterima</span>
+        <span className="font-mono text-sm font-semibold text-emerald-800">
           {formatRupiah(INVOICE.downPayment)}
         </span>
       </div>
-      <div className="flex justify-between gap-4 rounded-lg bg-[#f9eeeb] px-3 py-2.5 text-sm font-bold text-[#a3443f]">
-        <span>Sisa pelunasan</span>
-        <span className="font-mono">{formatRupiah(INVOICE.remaining)}</span>
+
+      <div className="flex items-center justify-between gap-3 rounded-lg bg-red-50 px-3 py-3">
+        <span className="text-sm font-semibold text-red-800">
+          Sisa pelunasan
+        </span>
+        <span className="font-mono text-sm font-semibold text-red-800">
+          {formatRupiah(INVOICE.remaining)}
+        </span>
       </div>
     </div>
   );
@@ -365,33 +334,22 @@ function InvoicePaper() {
   return (
     <article
       id="printSheet"
-      className={[
-        "invoice-paper relative overflow-hidden",
-        "rounded-xl border border-[#e5e2dd] bg-white",
-        "p-5 sm:p-8 xl:p-9",
-        "text-xs text-[#1c1c19] shadow-sm",
-      ].join(" ")}
+      className="invoice-paper relative overflow-hidden rounded-xl border border-stone-200 bg-white p-5 text-xs text-stone-900 sm:p-8 xl:p-9"
     >
-      <div className="pointer-events-none absolute right-4 top-32 select-none opacity-[0.025] print:hidden">
-        <span className="font-serif text-7xl font-black tracking-widest">
-          FURNI
-        </span>
-      </div>
-
-      {/* Kop faktur */}
       <header className="relative flex flex-col justify-between gap-5 border-b-2 border-[#5f402a] pb-5 sm:flex-row sm:items-start">
         <div className="flex items-start gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#5f402a] text-white print:border print:border-[#5f402a] print:bg-transparent print:text-[#5f402a]">
-            <Icon name="chair" className="text-[27px]" />
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-[#5f402a] text-white print:border print:border-[#5f402a] print:bg-white print:text-[#5f402a]">
+            <ShoppingBag className="size-6" />
           </div>
+
           <div>
             <h2 className="font-serif text-lg font-bold tracking-tight text-[#5f402a]">
               FURNIERP ATELIER
             </h2>
-            <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#82746d]">
+            <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-500">
               Workshop Jepara
             </p>
-            <p className="mt-2 max-w-xs leading-5 text-[#50453e]">
+            <p className="mt-2 max-w-xs leading-5 text-stone-600">
               Bespoke Solid Woodworks & Premium Teak Craftsmanship
               <br />
               Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota Mataram.
@@ -404,32 +362,31 @@ function InvoicePaper() {
         </div>
 
         <div className="sm:min-w-[180px] sm:text-right">
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#82746d]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-stone-500">
             Faktur penjualan
           </p>
-          <p className="mt-1 break-all font-mono text-sm font-bold text-[#1c1c19]">
+          <p className="mt-1 break-all font-mono text-sm font-bold">
             {INVOICE.number}
           </p>
-          <p className="mt-1 text-[11px] text-[#50453e]">
+          <p className="mt-1 text-[11px] text-stone-600">
             No. SPK:{" "}
             <span className="font-mono font-semibold">{INVOICE.spk}</span>
           </p>
-          <p className="mt-2 text-[10px] text-[#82746d]">
-            Tanggal: {formatDateForPrint} · {INVOICE.time}
+          <p className="mt-2 text-[10px] text-stone-500">
+            Tanggal: 23/10/2024 · {INVOICE.time}
           </p>
         </div>
       </header>
 
-      {/* Informasi pelanggan */}
-      <section className="grid grid-cols-1 gap-5 border-b border-[#e5e2dd] py-5 sm:grid-cols-2">
+      <section className="grid grid-cols-1 gap-5 border-b border-stone-200 py-5 sm:grid-cols-2">
         <div>
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#82746d]">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-stone-500">
             Ditagihkan kepada
           </p>
-          <p className="text-sm font-bold text-[#1c1c19]">{INVOICE.customer}</p>
-          <p className="mt-1 text-[#50453e]">{INVOICE.customerCompany}</p>
-          <p className="text-[#50453e]">{INVOICE.customerContact}</p>
-          <p className="mt-1 leading-5 text-[#82746d]">
+          <p className="text-sm font-bold">{INVOICE.customer}</p>
+          <p className="mt-1 text-stone-600">{INVOICE.customerCompany}</p>
+          <p className="text-stone-600">{INVOICE.customerContact}</p>
+          <p className="mt-1 leading-5 text-stone-500">
             Jl. Bung Karno No.100, Pagutan Tim., Kec. Mataram, Kota Mataram.
           </p>
           <p className="mt-1 font-mono text-[#5f402a]">
@@ -438,30 +395,28 @@ function InvoicePaper() {
         </div>
 
         <div className="sm:text-right">
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#82746d]">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-stone-500">
             Pembayaran & pengiriman
           </p>
-          <p className="font-semibold text-[#1c1c19]">Uang muka / DP termin</p>
-          <p className="mt-1 text-[#50453e]">Tunai showroom</p>
-          <p className="mt-1 text-[#82746d]">Target kirim: 28 Oktober 2024</p>
-          <p className="mt-2 font-semibold text-[#94651d]">
+          <p className="font-semibold">Uang muka / DP termin</p>
+          <p className="mt-1 text-stone-600">Tunai showroom</p>
+          <p className="mt-1 text-stone-500">Target kirim: 28 Oktober 2024</p>
+          <p className="mt-2 font-semibold text-amber-700">
             Menunggu pelunasan sebelum pengiriman
           </p>
         </div>
       </section>
 
-      {/* Rincian produk */}
       <section className="py-5">
         <InvoiceItemTable />
       </section>
 
-      {/* Total dan ketentuan */}
-      <section className="grid grid-cols-1 gap-6 border-t border-[#e5e2dd] pt-5 md:grid-cols-[1fr_280px]">
+      <section className="grid grid-cols-1 gap-6 border-t border-stone-200 pt-5 md:grid-cols-[1fr_280px]">
         <div>
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#82746d]">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-stone-500">
             Ketentuan garansi & pengiriman
           </p>
-          <ol className="list-decimal space-y-1.5 pl-4 leading-5 text-[#50453e]">
+          <ol className="list-decimal space-y-1.5 pl-4 leading-5 text-stone-600">
             <li>
               Garansi konstruksi kayu selama satu tahun terhadap retak atau
               pecah akibat konstruksi.
@@ -473,36 +428,37 @@ function InvoicePaper() {
             <li>Serat dan warna kayu solid memiliki variasi alami.</li>
           </ol>
         </div>
+
         <InvoiceTotals />
       </section>
 
-      {/* Tanda tangan */}
-      <section className="mt-8 grid grid-cols-2 gap-6 border-t border-[#e5e2dd] pt-5 text-center">
+      <section className="mt-8 grid grid-cols-2 gap-6 border-t border-stone-200 pt-5 text-center">
         <div>
-          <p className="text-[11px] text-[#50453e]">Penerima / Pelanggan</p>
+          <p className="text-[11px] text-stone-600">Penerima / Pelanggan</p>
           <div className="h-16" />
-          <p className="font-bold underline decoration-[#82746d] underline-offset-4">
+          <p className="font-semibold underline decoration-stone-400 underline-offset-4">
             H. Subur Hartanto
           </p>
-          <p className="mt-1 text-[10px] text-[#82746d]">
+          <p className="mt-1 text-[10px] text-stone-500">
             Toko Mebel Subur Makmur
           </p>
         </div>
+
         <div>
-          <p className="text-[11px] text-[#50453e]">
+          <p className="text-[11px] text-stone-600">
             Hormat kami, FurniERP Atelier
           </p>
           <div className="h-16" />
-          <p className="font-bold underline decoration-[#82746d] underline-offset-4">
+          <p className="font-semibold underline decoration-stone-400 underline-offset-4">
             Hendra Wijaya
           </p>
-          <p className="mt-1 text-[10px] text-[#82746d]">
+          <p className="mt-1 text-[10px] text-stone-500">
             Owner & Atelier Master
           </p>
         </div>
       </section>
 
-      <footer className="mt-7 border-t border-dashed border-[#e5e2dd] pt-3 text-center text-[10px] text-[#82746d]">
+      <footer className="mt-7 border-t border-dashed border-stone-200 pt-3 text-center text-[10px] text-stone-500">
         Terima kasih atas kepercayaan Anda kepada FurniERP Atelier.
       </footer>
     </article>
@@ -515,31 +471,37 @@ function PaymentStatusCard({
   onNavigate: (page: PageView) => void;
 }) {
   return (
-    <SectionCard
-      title="Status pembayaran"
-      icon="payments"
-      action={
-        <span className="rounded-md bg-[#fbf2df] px-2 py-1 text-[10px] font-semibold text-[#94651d]">
-          DP diterima
-        </span>
-      }
-    >
-      <div className="space-y-3">
+    <Card className="gap-0 rounded-xl border-stone-200 bg-white py-0 shadow-none">
+      <SectionHeader
+        title="Status pembayaran"
+        icon={Banknote}
+        action={
+          <Badge className="border-0 bg-amber-50 text-amber-800 hover:bg-amber-50">
+            DP diterima
+          </Badge>
+        }
+      />
+
+      <CardContent className="space-y-4 p-4">
         <InfoRow label="Total tagihan" value={formatRupiah(INVOICE.total)} />
         <InfoRow
           label={`DP (${paymentPercentage}%)`}
           value={formatRupiah(INVOICE.downPayment)}
-          className="text-[#28734b]"
+          valueClassName="text-emerald-700"
         />
-        <div className="space-y-2 border-t border-[#e5e2dd] pt-3">
+
+        <Separator className="bg-stone-200" />
+
+        <div>
           <div className="flex items-center justify-between gap-3">
-            <span className="text-xs text-[#82746d]">Sisa piutang</span>
-            <span className="font-mono text-sm font-bold text-[#a3443f]">
+            <span className="text-sm text-stone-500">Sisa piutang</span>
+            <span className="font-mono text-sm font-semibold text-red-700">
               {formatRupiah(INVOICE.remaining)}
             </span>
           </div>
+
           <div
-            className="h-2 overflow-hidden rounded-full bg-[#e9e4dd]"
+            className="mt-3 h-2 overflow-hidden rounded-full bg-stone-100"
             role="progressbar"
             aria-label="Persentase pembayaran"
             aria-valuemin={0}
@@ -547,89 +509,103 @@ function PaymentStatusCard({
             aria-valuenow={paymentPercentage}
           >
             <div
-              className="h-full rounded-full bg-[#28734b] transition-all"
+              className="h-full rounded-full bg-emerald-600"
               style={{ width: `${paymentPercentage}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] text-[#82746d]">
+
+          <div className="mt-1.5 flex justify-between text-xs text-stone-500">
             <span>{paymentPercentage}% dibayar</span>
             <span>{(100 - paymentPercentage).toFixed(1)}% tersisa</span>
           </div>
         </div>
 
-        <ActionButton
-          variant="primary"
-          icon="account_balance_wallet"
+        <Button
+          type="button"
           onClick={() => onNavigate("receivables")}
-          className="w-full"
+          className="w-full bg-[#5f402a] text-white hover:bg-[#795740]"
         >
+          <Banknote className="mr-2 size-4" />
           Catat pelunasan
-        </ActionButton>
-      </div>
-    </SectionCard>
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 
 function BankAccountsCard({ onCopy }: { onCopy: (number: string) => void }) {
   return (
-    <SectionCard title="Rekening pembayaran" icon="account_balance">
-      <div className="space-y-3">
+    <Card className="gap-0 rounded-xl border-stone-200 bg-white py-0 shadow-none">
+      <SectionHeader title="Rekening pembayaran" icon={LockKeyhole} />
+
+      <CardContent className="space-y-3 p-4">
         {BANK_ACCOUNTS.map((account) => (
           <div
             key={account.name}
-            className="flex items-center justify-between gap-3 rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] p-3"
+            className="flex items-center justify-between gap-3 rounded-lg border border-stone-200 bg-stone-50 p-3"
           >
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-[#1c1c19]">
+              <p className="text-sm font-semibold text-stone-900">
                 {account.name}
-                <span className="ml-1 font-normal text-[#82746d]">
+                <span className="ml-1 font-normal text-stone-500">
                   · {account.type}
                 </span>
               </p>
+
               <p className="mt-1 break-all font-mono text-sm font-semibold text-[#5f402a]">
                 {account.displayNumber}
               </p>
-              <p className="mt-1 text-[9px] leading-4 text-[#82746d]">
+
+              <p className="mt-1 text-[10px] leading-4 text-stone-500">
                 a.n. {account.owner}
               </p>
             </div>
-            <button
+
+            <Button
               type="button"
-              onClick={() => onCopy(account.number)}
+              variant="outline"
+              size="icon"
               title={`Salin rekening ${account.name}`}
               aria-label={`Salin nomor rekening ${account.name}`}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] text-[#5f402a] transition-colors hover:bg-[#eae1d7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a795e]"
+              onClick={() => onCopy(account.number)}
+              className="size-9 shrink-0 border-stone-200 text-stone-600 hover:bg-stone-100"
             >
-              <Icon name="content_copy" className="text-[18px]" />
-            </button>
+              <Clipboard className="size-4" />
+            </Button>
           </div>
         ))}
-      </div>
-      <p className="mt-3 text-[10px] leading-4 text-[#82746d]">
-        Periksa kembali nama penerima dan nomor rekening sebelum melakukan
-        transfer.
-      </p>
-    </SectionCard>
+
+        <p className="text-xs leading-5 text-stone-500">
+          Periksa kembali nama penerima dan nomor rekening sebelum melakukan
+          transfer.
+        </p>
+      </CardContent>
+    </Card>
   );
 }
 
 function WhatsAppCard({ onShare }: { onShare: () => void }) {
   return (
-    <SectionCard title="Kirim ke pelanggan" icon="chat">
-      <p className="text-xs leading-5 text-[#82746d]">
-        Bagikan ringkasan tagihan kepada {INVOICE.customerContact} melalui
-        WhatsApp. Pesan berisi nomor faktur, total tagihan, DP, dan sisa
-        pelunasan.
-      </p>
-      <ActionButton
-        variant="success"
-        icon="send"
-        onClick={onShare}
-        className="mt-4 w-full"
-      >
-        Buka WhatsApp
-      </ActionButton>
-    </SectionCard>
+    <Card className="gap-0 rounded-xl border-stone-200 bg-white py-0 shadow-none">
+      <SectionHeader title="Kirim ke pelanggan" icon={MessageCircle} />
+
+      <CardContent className="p-4">
+        <p className="text-sm leading-6 text-stone-500">
+          Bagikan ringkasan tagihan kepada {INVOICE.customerContact} melalui
+          WhatsApp. Pesan berisi nomor faktur, total tagihan, DP, dan sisa
+          pelunasan.
+        </p>
+
+        <Button
+          type="button"
+          onClick={onShare}
+          className="mt-4 w-full bg-emerald-700 text-white hover:bg-emerald-800"
+        >
+          <Send className="mr-2 size-4" />
+          Buka WhatsApp
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -639,11 +615,22 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({
   const [toast, setToast] = useState<ToastState | null>(null);
 
   const showToast = (message: string, type: ToastType = "info") => {
-    setToast({ message, type });
-    window.setTimeout(() => {
-      setToast((current) => (current?.message === message ? null : current));
-    }, 3000);
+    setToast({
+      id: Date.now(),
+      message,
+      type,
+    });
   };
+
+  useEffect(() => {
+    if (!toast) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setToast((current) => (current?.id === toast.id ? null : current));
+    }, 3000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [toast]);
 
   const handlePrint = () => {
     window.print();
@@ -671,7 +658,7 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({
 
   const handleShareWhatsApp = () => {
     const message = [
-      "Halo Bpk. H. Subur Hartanto,",
+      `Halo ${INVOICE.customerContact},`,
       "",
       "Berikut rincian faktur pesanan mebel Anda di FurniERP Atelier.",
       `No. Faktur: ${INVOICE.number}`,
@@ -683,118 +670,136 @@ export const InvoiceDetailView: React.FC<InvoiceDetailViewProps> = ({
     ].join("\n");
 
     const url = `https://wa.me/${INVOICE.whatsapp}?text=${encodeURIComponent(message)}`;
+
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="invoice-detail flex w-full flex-col gap-5 text-[#1c1c19]">
+    <div className="invoice-detail flex w-full flex-col gap-5 text-stone-900">
       {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
 
       <div className="flex justify-end print:hidden">
-        <ActionButton
-          variant="secondary"
-          icon="arrow_back"
+        <Button
+          type="button"
+          variant="outline"
           onClick={() => onNavigate("pos")}
+          className="border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
         >
+          <ArrowLeft className="mr-2 size-4" />
           Kembali ke penjualan
-        </ActionButton>
+        </Button>
       </div>
 
-      {/* Header faktur */}
-      <header className="rounded-xl border border-[#e5e2dd] bg-[#fcf9f4] p-4 sm:p-5 print:hidden">
+      <header className="rounded-xl border border-stone-200 bg-white p-4 sm:p-5 print:hidden">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#82746d]">
+              <p className="text-xs font-medium uppercase tracking-wider text-stone-500">
                 Detail penjualan
               </p>
-              <span className="rounded-md border border-[#ead8b5] bg-[#fbf2df] px-2 py-1 text-[10px] font-semibold text-[#94651d]">
+              <Badge className="border-0 bg-amber-50 text-amber-800 hover:bg-amber-50">
                 Terbayar sebagian
-              </span>
+              </Badge>
             </div>
 
-            <h1 className="mt-2 break-words font-serif text-xl font-semibold tracking-tight text-[#1c1c19] sm:text-2xl">
+            <h1 className="mt-2 break-words text-xl font-semibold tracking-tight text-stone-900 sm:text-2xl">
               {INVOICE.number}
             </h1>
 
-            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#82746d]">
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-stone-500">
               <span className="inline-flex items-center gap-1.5">
-                <Icon name="calendar_today" className="text-[15px]" />
+                <CalendarDays className="size-4" />
                 {INVOICE.date} · {INVOICE.time}
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Icon name="person" className="text-[16px]" />
+                <UserRound className="size-4" />
                 Hendra Wijaya · Owner
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Icon name="assignment" className="text-[16px]" />
+                <FileText className="size-4" />
                 SPK: {INVOICE.spk}
               </span>
             </div>
 
-            <p className="mt-2 text-[11px] text-[#82746d]">
+            <p className="mt-2 text-xs text-stone-500">
               Pelanggan: {INVOICE.customer} · Tier grosir
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <ActionButton
-              variant="secondary"
-              icon="receipt_long"
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="outline"
               onClick={handlePrint}
+              className="border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
             >
+              <ReceiptText className="mr-2 size-4" />
               Cetak nota
-            </ActionButton>
-            <ActionButton variant="primary" icon="print" onClick={handlePrint}>
-              Cetak / PDF
-            </ActionButton>
-            <ActionButton
-              variant="success"
-              icon="chat"
-              onClick={handleShareWhatsApp}
+            </Button>
+
+            <Button
+              type="button"
+              onClick={handlePrint}
+              className="bg-[#5f402a] text-white hover:bg-[#795740]"
             >
+              <Printer className="mr-2 size-4" />
+              Cetak / PDF
+            </Button>
+
+            <Button
+              type="button"
+              onClick={handleShareWhatsApp}
+              className="bg-emerald-700 text-white hover:bg-emerald-800"
+            >
+              <MessageCircle className="mr-2 size-4" />
               WhatsApp
-            </ActionButton>
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Ringkasan nominal */}
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 print:hidden">
-        <div className="rounded-xl border border-[#e5e2dd] bg-[#fcf9f4] p-4">
-          <p className="text-xs text-[#82746d]">Total tagihan</p>
-          <p className="mt-2 font-mono text-lg font-bold tracking-tight text-[#1c1c19]">
-            {formatRupiah(INVOICE.total)}
-          </p>
-          <p className="mt-1 text-[10px] text-[#82746d]">Nilai faktur</p>
-        </div>
-        <div className="rounded-xl border border-[#d7e6d9] bg-[#f5f8f3] p-4">
-          <p className="text-xs text-[#627b66]">DP sudah diterima</p>
-          <p className="mt-2 font-mono text-lg font-bold tracking-tight text-[#28734b]">
-            {formatRupiah(INVOICE.downPayment)}
-          </p>
-          <p className="mt-1 text-[10px] text-[#627b66]">
-            {paymentPercentage}% dari total
-          </p>
-        </div>
-        <div className="rounded-xl border border-[#e9d3cf] bg-[#fcf5f2] p-4">
-          <p className="text-xs text-[#94615b]">Sisa piutang</p>
-          <p className="mt-2 font-mono text-lg font-bold tracking-tight text-[#a3443f]">
-            {formatRupiah(INVOICE.remaining)}
-          </p>
-          <p className="mt-1 text-[10px] text-[#94615b]">Menunggu pelunasan</p>
-        </div>
+        <Card className="gap-0 rounded-xl border-stone-200 bg-white py-0 shadow-none">
+          <CardContent className="p-4">
+            <p className="text-sm text-stone-500">Total tagihan</p>
+            <p className="mt-2 break-words font-mono text-lg font-semibold tracking-tight text-stone-900">
+              {formatRupiah(INVOICE.total)}
+            </p>
+            <p className="mt-1 text-xs text-stone-500">Nilai faktur</p>
+          </CardContent>
+        </Card>
+
+        <Card className="gap-0 rounded-xl border-emerald-200 bg-emerald-50/40 py-0 shadow-none">
+          <CardContent className="p-4">
+            <p className="text-sm text-emerald-800">DP sudah diterima</p>
+            <p className="mt-2 break-words font-mono text-lg font-semibold tracking-tight text-emerald-800">
+              {formatRupiah(INVOICE.downPayment)}
+            </p>
+            <p className="mt-1 text-xs text-emerald-700">
+              {paymentPercentage}% dari total
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="gap-0 rounded-xl border-red-200 bg-red-50/40 py-0 shadow-none">
+          <CardContent className="p-4">
+            <p className="text-sm text-red-800">Sisa piutang</p>
+            <p className="mt-2 break-words font-mono text-lg font-semibold tracking-tight text-red-800">
+              {formatRupiah(INVOICE.remaining)}
+            </p>
+            <p className="mt-1 text-xs text-red-700">Menunggu pelunasan</p>
+          </CardContent>
+        </Card>
       </section>
 
-      {/* Konten utama */}
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-12">
         <main className="min-w-0 space-y-3 xl:col-span-8">
           <div className="flex flex-wrap items-center justify-between gap-2 px-1 print:hidden">
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-[#50453e]">
-              <Icon name="description" className="text-[18px]" />
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-stone-700">
+              <FileText className="size-4 text-[#5f402a]" />
               Pratinjau faktur
             </h2>
-            <span className="text-[10px] text-[#82746d]">
+            <span className="text-xs text-stone-500">
               Format A4 · Data contoh
             </span>
           </div>

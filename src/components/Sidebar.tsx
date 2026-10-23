@@ -1,253 +1,262 @@
-import React from "react";
-import { PageView } from "../types";
+"use client";
 
-interface SidebarProps {
-  currentPage: PageView;
-  onNavigate: (page: PageView) => void;
-  isOpenMobile: boolean;
-  onCloseMobile: () => void;
-}
+import {
+  Armchair,
+  ChartNoAxesCombined,
+  Factory,
+  FileText,
+  LayoutDashboard,
+  Package,
+  Receipt,
+  Settings,
+  ShoppingCart,
+  UsersRound,
+  Wallet,
+} from "lucide-react";
+
+import type { LucideIcon } from "lucide-react";
+import type { PageView } from "../types";
+
+import {
+  Sidebar as ShadcnSidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "../components/ui/sidebar";
+
+import { Separator } from "../components/ui/separator";
+
+const BRAND = {
+  background: "#5f402a",
+  foreground: "#f6f3ee",
+  accent: "#eabea1",
+  highlight: "#f6f3ee",
+};
 
 interface NavItem {
-  path: PageView;
-  label: string;
-  icon: string;
+  id: PageView;
+  title: string;
+  icon: LucideIcon;
 }
 
 interface NavSection {
-  group: string;
+  title: string;
   items: NavItem[];
 }
 
-const navSections: NavSection[] = [
+interface AppSidebarProps {
+  currentPage: PageView;
+  onNavigate: (page: PageView) => void;
+}
+
+const NAV_SECTIONS: NavSection[] = [
   {
-    group: "Menu",
+    title: "Menu",
     items: [
-      { path: "dashboard" as PageView, label: "Dashboard", icon: "dashboard" },
-      { path: "pos" as PageView, label: "Penjualan", icon: "point_of_sale" },
       {
-        path: "orders" as PageView,
-        label: "Pesanan",
-        icon: "precision_manufacturing",
+        id: "dashboard" as PageView,
+        title: "Dashboard",
+        icon: LayoutDashboard,
       },
-      { path: "customers" as PageView, label: "Pelanggan", icon: "group" },
-      { path: "products" as PageView, label: "Produk", icon: "chair" },
-      { path: "inventory" as PageView, label: "Stok", icon: "inventory_2" },
+      {
+        id: "pos" as PageView,
+        title: "Point of Sale / Kasir",
+        icon: ShoppingCart,
+      },
+      {
+        id: "orders" as PageView,
+        title: "Pesanan & Produksi",
+        icon: Factory,
+      },
+      {
+        id: "customers" as PageView,
+        title: "Pelanggan",
+        icon: UsersRound,
+      },
+      {
+        id: "products" as PageView,
+        title: "Produk",
+        icon: Armchair,
+      },
+      {
+        id: "inventory" as PageView,
+        title: "Inventaris",
+        icon: Package,
+      },
     ],
   },
   {
-    group: "Keuangan",
+    title: "Keuangan",
     items: [
       {
-        path: "cash-flow" as PageView,
-        label: "Kas",
-        icon: "account_balance_wallet",
+        id: "cash-flow" as PageView,
+        title: "Arus Kas",
+        icon: Wallet,
       },
       {
-        path: "receivables" as PageView,
-        label: "Piutang",
-        icon: "request_quote",
+        id: "receivables" as PageView,
+        title: "Utang & Piutang",
+        icon: Receipt,
       },
       {
-        path: "financial-reports" as PageView,
-        label: "Laporan",
-        icon: "bar_chart",
+        id: "financial-reports" as PageView,
+        title: "Laporan Keuangan",
+        icon: ChartNoAxesCombined,
       },
       {
-        path: "invoice-detail" as PageView,
-        label: "Faktur",
-        icon: "description",
+        id: "invoice-detail" as PageView,
+        title: "Invoice",
+        icon: FileText,
       },
-      { path: "settings" as PageView, label: "Pengaturan", icon: "settings" },
+      {
+        id: "settings" as PageView,
+        title: "Pengaturan",
+        icon: Settings,
+      },
     ],
   },
 ];
 
-const BRAND = {
-  background: "#5f402a",
-  hover: "#795740",
-  foreground: "#f6f3ee",
-  accent: "#eabea1",
-  highlight: "#ffdcc6",
-};
-
-interface MaterialIconProps {
-  name: string;
-  className?: string;
-}
-
-const MaterialIcon: React.FC<MaterialIconProps> = ({
-  name,
-  className = "",
-}) => (
-  <span
-    aria-hidden="true"
-    className={`material-symbols-outlined select-none ${className}`}
-  >
-    {name}
-  </span>
-);
-
-interface SidebarBrandProps {
-  onCloseMobile: () => void;
-}
-
-const SidebarBrand: React.FC<SidebarBrandProps> = () => (
-  <div className="shrink-0 border-b border-white/10 px-5 py-4">
-    <div className="flex items-center gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#795740] text-[#ffdcc6]">
-        <MaterialIcon name="chair" className="text-[23px]" />
-      </div>
-
-      <div className="min-w-0">
-        <p className="truncate text-[17px] font-semibold tracking-tight text-white">
-          FurniERP
-        </p>
-        <p className="mt-0.5 text-xs text-[#eabea1]">Panel usaha mebel</p>
-      </div>
-    </div>
-  </div>
-);
-
-interface NavigationItemProps {
-  item: NavItem;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-const NavigationItem: React.FC<NavigationItemProps> = ({
-  item,
-  isActive,
-  onClick,
-}) => (
-  <button
-    type="button"
-    aria-current={isActive ? "page" : undefined}
-    onClick={onClick}
-    className={[
-      "group relative flex min-h-10 w-full items-center gap-3 rounded-md px-3 py-2 text-left text-[13px]",
-      "transition-colors duration-150",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffdcc6]",
-      "focus-visible:ring-offset-2 focus-visible:ring-offset-[#5f402a]",
-      isActive
-        ? "bg-[#f6f3ee] font-semibold text-[#5f402a]"
-        : "font-medium text-[#e8d8cc] hover:bg-white/[0.08] hover:text-white",
-    ].join(" ")}
-  >
-    {isActive && (
-      <span
-        aria-hidden="true"
-        className="absolute bottom-2 left-0 top-2 w-[3px] rounded-r-full bg-[#a56f48]"
-      />
-    )}
-
-    <MaterialIcon
-      name={item.icon}
-      className={[
-        "shrink-0 text-[20px]",
-        isActive ? "text-[#795740]" : "text-[#eabea1] group-hover:text-white",
-      ].join(" ")}
-    />
-
-    <span className="min-w-0 flex-1 truncate">{item.label}</span>
-  </button>
-);
-
-interface NavigationSectionProps {
-  section: NavSection;
-  currentPage: PageView;
-  onNavigate: (page: PageView) => void;
-}
-
-const NavigationSection: React.FC<NavigationSectionProps> = ({
-  section,
-  currentPage,
-  onNavigate,
-}) => (
-  <section aria-label={section.group}>
-    <h2 className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#eabea1]/70">
-      {section.group}
-    </h2>
-
-    <div className="space-y-1">
-      {section.items.map((item) => (
-        <NavigationItem
-          key={item.path}
-          item={item}
-          isActive={currentPage === item.path}
-          onClick={() => onNavigate(item.path)}
-        />
-      ))}
-    </div>
-  </section>
-);
-
-const SidebarFooter: React.FC = () => (
-  <div className="shrink-0 border-t border-white/10 px-5 py-3">
-    <p className="text-[11px] text-[#eabea1]/80">Akses pemilik</p>
-  </div>
-);
-
-export const Sidebar: React.FC<SidebarProps> = ({
-  currentPage,
-  onNavigate,
-  isOpenMobile,
-  onCloseMobile,
-}) => {
-  const handleNavigate = (page: PageView) => {
-    onNavigate(page);
-    onCloseMobile();
-  };
-
+export function AppSidebar({ currentPage, onNavigate }: AppSidebarProps) {
   return (
-    <>
-      {/* Latar penutup untuk tampilan mobile */}
-      <button
-        type="button"
-        aria-label="Tutup navigasi"
-        aria-hidden={!isOpenMobile}
-        tabIndex={isOpenMobile ? 0 : -1}
-        onClick={onCloseMobile}
-        className={[
-          "fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]",
-          "transition-opacity duration-200 lg:hidden",
-          isOpenMobile
-            ? "visible opacity-100"
-            : "invisible pointer-events-none opacity-0",
-        ].join(" ")}
-      />
-
-      <aside
-        id="app-sidebar"
-        aria-label="Navigasi utama"
-        className={[
-          "fixed inset-y-0 left-0 z-50 flex h-dvh w-[252px] flex-col",
-          "border-r border-[#795740]/30 bg-[#5f402a] text-[#f6f3ee]",
-          "transition-transform duration-200 ease-out",
-          "lg:translate-x-0",
-          isOpenMobile ? "translate-x-0" : "-translate-x-full",
-        ].join(" ")}
-      >
-        <SidebarBrand onCloseMobile={onCloseMobile} />
-
-        <nav
-          aria-label="Menu aplikasi"
-          className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-4"
-        >
-          <div className="space-y-5">
-            {navSections.map((section) => (
-              <NavigationSection
-                key={section.group}
-                section={section}
-                currentPage={currentPage}
-                onNavigate={handleNavigate}
-              />
-            ))}
+    <ShadcnSidebar
+      collapsible="icon"
+      variant="sidebar"
+      className="border-r-0"
+      style={
+        {
+          "--sidebar-background": "#5f402a",
+          "--sidebar-foreground": "#f6f3ee",
+          "--sidebar-primary": "#ffdcc6",
+          "--sidebar-primary-foreground": "#5f402a",
+          "--sidebar-accent": "rgba(255, 255, 255, 0.1)",
+          "--sidebar-accent-foreground": "#ffffff",
+          "--sidebar-border": "rgba(255, 255, 255, 0.15)",
+        } as React.CSSProperties
+      }
+    >
+      <SidebarHeader className="p-0">
+        <div className="flex h-[76px] items-center gap-3 px-4">
+          <div
+            className="flex shrink-0 items-center justify-center rounded-xl"
+            style={{
+              color: BRAND.foreground,
+            }}
+          >
+            <Armchair className="size-5" strokeWidth={2.2} />
           </div>
-        </nav>
 
-        <SidebarFooter />
-      </aside>
-    </>
+          <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
+            <p
+              className="truncate text-[17px] font-bold tracking-tight"
+              style={{ color: BRAND.foreground }}
+            >
+              FurniERP
+            </p>
+          </div>
+        </div>
+
+        <Separator className="bg-white/15" />
+      </SidebarHeader>
+
+      <SidebarContent className="gap-0 px-2 py-2">
+        {NAV_SECTIONS.map((section) => (
+          <SidebarGroup key={section.title} className="px-0 py-2">
+            <SidebarGroupLabel
+              className="px-3 text-[10px] font-semibold uppercase tracking-[0.14em]"
+              style={{ color: BRAND.accent }}
+            >
+              {section.title}
+            </SidebarGroupLabel>
+
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-1">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = currentPage === item.id;
+
+                  return (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton
+                        isActive={active}
+                        tooltip={item.title}
+                        onClick={() => onNavigate(item.id)}
+                        className={`h-10 rounded-lg px-3 font-medium transition-colors ${
+                          !active ? "hover:bg-white/10 hover:text-white" : ""
+                        }`}
+                        style={
+                          active
+                            ? {
+                                backgroundColor: BRAND.highlight,
+                                color: BRAND.background,
+                              }
+                            : {
+                                color: BRAND.foreground,
+                              }
+                        }
+                      >
+                        <Icon
+                          className="size-[18px] shrink-0"
+                          strokeWidth={1.9}
+                        />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
+      </SidebarContent>
+
+      <SidebarFooter className="p-2">
+        <Separator className="mb-2 bg-white/15" />
+
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Pengaturan akun"
+              onClick={() => onNavigate("settings" as PageView)}
+              className="h-12 rounded-lg px-2 hover:bg-white/10 hover:text-white transition-colors"
+              style={{ color: BRAND.foreground }}
+            >
+              <div
+                className="flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: BRAND.highlight,
+                  color: BRAND.background,
+                }}
+              >
+                O
+              </div>
+
+              <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                <span className="truncate font-semibold">Owner</span>
+                <span
+                  className="truncate text-xs"
+                  style={{ color: BRAND.accent }}
+                >
+                  Administrator
+                </span>
+              </div>
+
+              <Settings className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+
+      <SidebarRail />
+    </ShadcnSidebar>
   );
-};
+}
+
+export default AppSidebar;

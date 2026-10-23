@@ -1,5 +1,37 @@
-import React, { useState } from "react";
-import { PageView } from "../types";
+import type { FormEvent, ReactNode } from "react";
+import React, { useEffect, useState } from "react";
+import type { PageView } from "../types";
+
+import {
+  AlertCircle,
+  CheckCircle2,
+  ChevronRight,
+  Info,
+  LayoutDashboard,
+  ReceiptText,
+  Save,
+  ShieldCheck,
+  Store,
+  Tag,
+  Wallet,
+  X,
+} from "lucide-react";
+
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { Textarea } from "../components/ui/textarea";
 
 interface SettingsViewProps {
   onNavigate: (page: PageView) => void;
@@ -15,8 +47,8 @@ interface ToastState {
 interface SettingCardProps {
   title: string;
   description?: string;
-  icon?: string;
-  children: React.ReactNode;
+  icon: ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
@@ -38,69 +70,51 @@ interface MarginFieldProps {
   onChange: (value: number) => void;
 }
 
-const THEME = {
-  background: "#f6f3ee",
-  surface: "#fcf9f4",
-  subtle: "#f0ede9",
-  border: "#e5e2dd",
-  primary: "#5f402a",
-  primaryHover: "#795740",
-  text: "#1c1c19",
-  secondary: "#50453e",
-  muted: "#82746d",
-  green: "#28734b",
-  greenBackground: "#edf5ee",
-  red: "#a3443f",
-  redBackground: "#f9eeeb",
-};
+const PRIMARY_BUTTON =
+  "bg-[#5f402a] text-white hover:bg-[#795740] focus-visible:ring-[#9a795e]";
 
-const INPUT_CLASS =
-  "w-full rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition-colors placeholder:text-[#a49a91] focus:border-[#9a795e] focus:ring-2 focus:ring-[#9a795e]/15";
-
-function Icon({ name, className = "" }: { name: string; className?: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`material-symbols-outlined ${className}`}
-    >
-      {name}
-    </span>
-  );
-}
+const moneyText = (value: number) => `${value.toLocaleString("id-ID")}%`;
 
 function Toast({ toast, onClose }: { toast: ToastState; onClose: () => void }) {
-  const styles: Record<ToastType, string> = {
-    success: "border-[#c9dfcf] bg-[#edf5ee] text-[#245b39]",
-    error: "border-[#e9c9c5] bg-[#f9eeeb] text-[#943e38]",
-    info: "border-[#ded1c2] bg-[#f5eee5] text-[#5f402a]",
-  };
-
-  const icons: Record<ToastType, string> = {
-    success: "check_circle",
-    error: "error",
-    info: "info",
-  };
+  const config = {
+    success: {
+      icon: <CheckCircle2 className="h-4 w-4" />,
+      className: "border-green-200 bg-green-50 text-green-800",
+    },
+    error: {
+      icon: <AlertCircle className="h-4 w-4" />,
+      className: "border-red-200 bg-red-50 text-red-800",
+    },
+    info: {
+      icon: <Info className="h-4 w-4" />,
+      className: "border-[#e5d8ca] bg-[#f5eee5] text-[#5f402a]",
+    },
+  }[toast.type];
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className={[
-        "fixed right-4 top-5 z-50 flex max-w-[calc(100vw-2rem)]",
-        "items-start gap-3 rounded-xl border px-4 py-3 shadow-lg",
-        styles[toast.type],
-      ].join(" ")}
-    >
-      <Icon name={icons[toast.type]} className="text-[19px]" />
-      <p className="text-xs font-medium leading-5">{toast.message}</p>
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Tutup notifikasi"
-        className="ml-1 opacity-60 transition-opacity hover:opacity-100"
+    <div className="fixed right-4 top-5 z-[100] w-[calc(100%-2rem)] max-w-md print:hidden">
+      <Alert
+        role="status"
+        aria-live="polite"
+        className={`flex items-start gap-3 rounded-xl shadow-md ${config.className}`}
       >
-        <Icon name="close" className="text-[17px]" />
-      </button>
+        <span className="mt-0.5 shrink-0">{config.icon}</span>
+
+        <AlertDescription className="flex-1 text-sm leading-5">
+          {toast.message}
+        </AlertDescription>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Tutup notifikasi"
+          className="h-7 w-7 shrink-0"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </Alert>
     </div>
   );
 }
@@ -113,31 +127,27 @@ function SettingCard({
   className = "",
 }: SettingCardProps) {
   return (
-    <section
-      className={[
-        "rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]",
-        className,
-      ].join(" ")}
-    >
-      <div className="border-b border-[#e5e2dd] px-5 py-4 sm:px-6">
-        <div className="flex items-start gap-3">
-          {icon && (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
-              <Icon name={icon} className="text-[20px]" />
-            </div>
-          )}
-          <div>
-            <h2 className="text-sm font-semibold text-[#1c1c19]">{title}</h2>
-            {description && (
-              <p className="mt-1 text-xs leading-5 text-[#82746d]">
-                {description}
-              </p>
-            )}
-          </div>
+    <Card className={`rounded-xl border-stone-200 shadow-none ${className}`}>
+      <CardHeader className="flex flex-row items-start gap-3 space-y-0 border-b border-stone-100 px-5 py-4 sm:px-6">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
+          {icon}
         </div>
-      </div>
-      <div className="p-5 sm:p-6">{children}</div>
-    </section>
+
+        <div className="min-w-0">
+          <CardTitle className="text-sm font-semibold text-stone-900">
+            {title}
+          </CardTitle>
+
+          {description && (
+            <CardDescription className="mt-1 text-xs leading-5 text-stone-500">
+              {description}
+            </CardDescription>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-5 sm:p-6">{children}</CardContent>
+    </Card>
   );
 }
 
@@ -154,40 +164,35 @@ function TextField({
   const id = React.useId();
 
   return (
-    <div className="min-w-0">
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-xs font-semibold text-[#50453e]"
-      >
+    <div className="min-w-0 space-y-1.5">
+      <Label htmlFor={id} className="text-xs font-semibold text-stone-700">
         {label}
-        {required && <span className="ml-1 text-[#a3443f]">*</span>}
-      </label>
+        {required && <span className="ml-1 text-red-600">*</span>}
+      </Label>
 
       {rows ? (
-        <textarea
+        <Textarea
           id={id}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           required={required}
           rows={rows}
-          className={`${INPUT_CLASS} resize-y leading-5`}
+          className="min-h-24 resize-y border-stone-200 bg-white text-sm focus-visible:ring-[#9a795e]"
         />
       ) : (
-        <input
+        <Input
           id={id}
           type={type}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           required={required}
-          className={INPUT_CLASS}
+          className="h-10 border-stone-200 bg-white text-sm focus-visible:ring-[#9a795e]"
         />
       )}
 
-      {hint && (
-        <p className="mt-1.5 text-[10px] leading-4 text-[#82746d]">{hint}</p>
-      )}
+      {hint && <p className="text-[11px] leading-4 text-stone-500">{hint}</p>}
     </div>
   );
 }
@@ -214,20 +219,17 @@ function MarginField({
   };
 
   return (
-    <div className="rounded-xl border border-[#e5e2dd] bg-[#f6f3ee] p-4">
-      <label
-        htmlFor={id}
-        className="block text-sm font-semibold text-[#1c1c19]"
-      >
+    <div className="min-w-0 rounded-xl border border-stone-200 bg-[#fcf9f4] p-4">
+      <Label htmlFor={id} className="text-sm font-semibold text-stone-900">
         {title}
-      </label>
+      </Label>
 
-      <p className="mt-1 min-h-8 text-[11px] leading-4 text-[#82746d]">
+      <p className="mt-1 min-h-8 text-[11px] leading-4 text-stone-500">
         {description}
       </p>
 
       <div className="mt-3 flex items-center gap-2">
-        <input
+        <Input
           id={id}
           type="number"
           min={0}
@@ -235,24 +237,24 @@ function MarginField({
           step={1}
           value={value}
           onChange={(event) => updateValue(event.target.value)}
-          className={[
-            "w-full min-w-0 rounded-lg border border-[#e5e2dd]",
-            "bg-[#fcf9f4] px-3 py-2 text-right font-mono text-lg",
-            "font-semibold text-[#5f402a] outline-none",
-            "focus:border-[#9a795e] focus:ring-2 focus:ring-[#9a795e]/15",
-          ].join(" ")}
+          className="h-10 min-w-0 border-stone-200 bg-white text-right font-mono text-lg font-semibold text-[#5f402a] focus-visible:ring-[#9a795e]"
         />
-        <span className="text-sm font-semibold text-[#50453e]">%</span>
+
+        <span className="text-sm font-semibold text-stone-600">%</span>
       </div>
 
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#e5e2dd]">
-        <div
-          className="h-full rounded-full bg-[#5f402a] transition-all"
-          style={{ width: `${value}%` }}
-        />
-      </div>
+      <Progress
+        value={value}
+        aria-label={`Target margin ${title}`}
+        className="mt-4 h-1.5 bg-stone-200 [&>div]:bg-[#5f402a]"
+      />
 
-      <p className="mt-2 text-[10px] text-[#82746d]">Target margin: {value}%</p>
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span className="text-[10px] text-stone-500">Target margin</span>
+        <span className="font-mono text-xs font-semibold text-[#5f402a]">
+          {moneyText(value)}
+        </span>
+      </div>
     </div>
   );
 }
@@ -263,35 +265,33 @@ function QuickLink({
   description,
   onClick,
 }: {
-  icon: string;
+  icon: ReactNode;
   title: string;
   description: string;
   onClick: () => void;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
       onClick={onClick}
-      className={[
-        "group flex w-full items-center gap-3 rounded-lg border",
-        "border-[#e5e2dd] bg-[#fcf9f4] p-3 text-left",
-        "transition-colors hover:bg-[#f0ede9]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a795e]",
-      ].join(" ")}
+      className="group h-auto w-full justify-start gap-3 whitespace-normal rounded-lg border-stone-200 bg-white px-3 py-3 text-left hover:bg-stone-50"
     >
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a] transition-colors group-hover:bg-[#e8ded3]">
-        <Icon name={icon} className="text-[19px]" />
-      </div>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
+        {icon}
+      </span>
 
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold text-[#1c1c19]">{title}</p>
-        <p className="mt-1 text-[10px] leading-4 text-[#82746d]">
+      <span className="min-w-0 flex-1">
+        <span className="block text-xs font-semibold text-stone-900">
+          {title}
+        </span>
+        <span className="mt-1 block text-[11px] font-normal leading-4 text-stone-500">
           {description}
-        </p>
-      </div>
+        </span>
+      </span>
 
-      <Icon name="chevron_right" className="text-[18px] text-[#82746d]" />
-    </button>
+      <ChevronRight className="h-4 w-4 shrink-0 text-stone-400 transition-transform group-hover:translate-x-0.5" />
+    </Button>
   );
 }
 
@@ -310,15 +310,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
 
   const [toast, setToast] = useState<ToastState | null>(null);
 
+  useEffect(() => {
+    if (!toast) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 3500);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [toast]);
+
   const showToast = (message: string, type: ToastType = "info") => {
     setToast({ message, type });
-
-    window.setTimeout(() => {
-      setToast((current) => (current?.message === message ? null : current));
-    }, 3000);
   };
 
-  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (
@@ -333,8 +339,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
       return;
     }
 
-    // Integrasikan penyimpanan ke API/backend di sini.
-    // Saat ini nilai hanya tersimpan di state React.
+    // TODO: Sambungkan ke API/backend untuk penyimpanan permanen.
     showToast(
       "Validasi berhasil. Penyimpanan permanen memerlukan koneksi backend.",
       "info",
@@ -342,25 +347,37 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-6 text-[#1c1c19]">
+    <div className="flex w-full flex-col gap-5 text-stone-900">
       {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
 
-      <header>
-        <p className="max-w-2xl text-sm leading-6 text-[#82746d]">
-          Profil usaha, isi faktur, dan margin harga.
-        </p>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold tracking-tight">Pengaturan</h1>
+            <Badge
+              variant="outline"
+              className="border-stone-200 bg-white font-normal text-stone-500"
+            >
+              Pemilik
+            </Badge>
+          </div>
+
+          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-stone-500">
+            Kelola profil usaha, informasi pada faktur, dan standar margin harga
+            untuk setiap tier pelanggan.
+          </p>
+        </div>
       </header>
 
       <form
         onSubmit={handleSave}
         className="grid grid-cols-1 items-start gap-5 xl:grid-cols-12"
       >
-        {/* Kolom utama */}
         <div className="min-w-0 space-y-5 xl:col-span-8">
           <SettingCard
             title="Profil bisnis"
             description="Informasi usaha yang digunakan pada dokumen penjualan dan komunikasi pelanggan."
-            icon="storefront"
+            icon={<Store className="h-5 w-5" />}
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <TextField
@@ -410,22 +427,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
 
           <SettingCard
             title="Standar margin harga"
-            description="Atur margin target yang akan menjadi acuan penentuan harga jual produk."
-            icon="sell"
+            description="Atur target margin untuk Retail, Reseller, dan Grosir."
+            icon={<Tag className="h-5 w-5" />}
           >
-            <div className="mb-4 rounded-lg border border-[#e5e2dd] bg-[#f6f3ee] p-3">
-              <div className="flex items-start gap-2.5">
-                <Icon
-                  name="info"
-                  className="mt-0.5 text-[18px] text-[#5f402a]"
-                />
-                <p className="text-xs leading-5 text-[#50453e]">
-                  Nilai di bawah merupakan target margin untuk setiap tier
-                  pelanggan. Pengaruhnya terhadap harga POS dan harga produk
-                  perlu dihubungkan dengan logika perhitungan harga pada sistem.
-                </p>
-              </div>
-            </div>
+            <Alert className="mb-4 border-stone-200 bg-stone-50 text-stone-700">
+              <Info className="h-4 w-4 text-[#5f402a]" />
+              <AlertDescription className="text-xs leading-5">
+                Nilai ini masih berupa konfigurasi lokal pada halaman.
+                Pengaruhnya terhadap harga produk dan POS perlu dihubungkan
+                dengan logika perhitungan harga pada sistem.
+              </AlertDescription>
+            </Alert>
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
               <MarginField
@@ -450,89 +462,95 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
               />
             </div>
 
-            <div className="mt-4 border-t border-[#e5e2dd] pt-4">
-              <p className="text-[11px] leading-5 text-[#82746d]">
-                Catatan: jika yang dimaksud adalah margin terhadap harga jual,
-                rumusnya berbeda dari markup terhadap HPP. Pastikan rumus yang
-                digunakan di POS sesuai kebijakan usaha.
-              </p>
-            </div>
+            <Separator className="my-4 bg-stone-200" />
+
+            <p className="text-[11px] leading-5 text-stone-500">
+              Catatan: margin terhadap harga jual berbeda dari markup terhadap
+              HPP. Pastikan rumus yang dipakai pada POS sesuai kebijakan harga
+              usaha.
+            </p>
           </SettingCard>
         </div>
 
-        {/* Kolom samping */}
-        <aside className="space-y-5 xl:col-span-4">
-          <section className="rounded-xl border border-[#e5e2dd] bg-[#fcf9f4] p-5">
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
-                <Icon name="save" className="text-[21px]" />
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold text-[#1c1c19]">
-                  Simpan konfigurasi
-                </h2>
-                <p className="mt-1 text-xs leading-5 text-[#82746d]">
-                  Periksa kembali profil dan margin sebelum menyimpan perubahan.
-                </p>
-              </div>
-            </div>
+        <aside className="min-w-0 space-y-5 xl:col-span-4">
+          <Card className="rounded-xl border-stone-200 shadow-none">
+            <CardHeader className="pb-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0ede9] text-[#5f402a]">
+                  <Save className="h-5 w-5" />
+                </div>
 
-            <div className="my-4 border-t border-[#e5e2dd]" />
+                <div>
+                  <CardTitle className="text-sm font-semibold">
+                    Simpan konfigurasi
+                  </CardTitle>
+                  <CardDescription className="mt-1 text-xs leading-5">
+                    Periksa profil dan margin sebelum menyimpan perubahan.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
 
-            <div className="space-y-2.5">
-              <div className="flex justify-between gap-3 text-xs">
-                <span className="text-[#82746d]">Tier harga</span>
-                <span className="font-semibold text-[#50453e]">3 tier</span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs">
-                <span className="text-[#82746d]">Retail</span>
-                <span className="font-mono font-semibold">{retailMargin}%</span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs">
-                <span className="text-[#82746d]">Reseller</span>
-                <span className="font-mono font-semibold">
-                  {resellerMargin}%
-                </span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs">
-                <span className="text-[#82746d]">Grosir</span>
-                <span className="font-mono font-semibold">{grosirMargin}%</span>
-              </div>
-            </div>
+            <CardContent>
+              <Separator className="mb-4 bg-stone-200" />
 
-            <button
-              type="submit"
-              className={[
-                "mt-5 inline-flex w-full items-center justify-center gap-2",
-                "rounded-lg bg-[#5f402a] px-4 py-3 text-xs font-semibold text-white",
-                "transition-colors hover:bg-[#795740]",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a795e] focus-visible:ring-offset-2",
-              ].join(" ")}
-            >
-              <Icon name="save" className="text-[18px]" />
-              Simpan perubahan
-            </button>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3 text-xs">
+                  <span className="text-stone-500">Tier harga</span>
+                  <span className="font-semibold text-stone-700">3 tier</span>
+                </div>
 
-            <p className="mt-3 text-center text-[10px] leading-4 text-[#82746d]">
-              Perubahan saat ini belum tersimpan secara permanen.
-            </p>
-          </section>
+                <div className="flex items-center justify-between gap-3 text-xs">
+                  <span className="text-stone-500">Retail</span>
+                  <span className="font-mono font-semibold">
+                    {retailMargin}%
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 text-xs">
+                  <span className="text-stone-500">Reseller</span>
+                  <span className="font-mono font-semibold">
+                    {resellerMargin}%
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 text-xs">
+                  <span className="text-stone-500">Grosir</span>
+                  <span className="font-mono font-semibold">
+                    {grosirMargin}%
+                  </span>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                className={`mt-5 h-10 w-full gap-2 text-sm ${PRIMARY_BUTTON}`}
+              >
+                <Save className="h-4 w-4" />
+                Simpan perubahan
+              </Button>
+
+              <p className="mt-3 text-center text-[11px] leading-4 text-stone-500">
+                Perubahan belum tersimpan secara permanen.
+              </p>
+            </CardContent>
+          </Card>
 
           <SettingCard
             title="Navigasi cepat"
             description="Buka halaman terkait pengaturan."
-            icon="near_me"
+            icon={<LayoutDashboard className="h-5 w-5" />}
           >
             <div className="space-y-2">
               <QuickLink
-                icon="dashboard"
+                icon={<LayoutDashboard className="h-4 w-4" />}
                 title="Dashboard utama"
                 description="Ringkasan aktivitas dan keuangan usaha."
                 onClick={() => onNavigate("dashboard")}
               />
 
               <QuickLink
-                icon="receipt_long"
+                icon={<ReceiptText className="h-4 w-4" />}
                 title="Pratinjau faktur"
                 description="Lihat contoh nota penjualan dan tagihan."
                 onClick={() => onNavigate("invoice-detail")}
@@ -540,20 +558,27 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
             </div>
           </SettingCard>
 
-          <div className="rounded-xl border border-[#e5e2dd] bg-[#f0ede9] p-4">
-            <div className="flex items-start gap-2.5">
-              <Icon name="shield" className="text-[19px] text-[#5f402a]" />
-              <div>
-                <p className="text-xs font-semibold text-[#50453e]">
-                  Pengaturan pemilik
-                </p>
-                <p className="mt-1 text-[11px] leading-5 text-[#82746d]">
-                  Untuk penggunaan produksi, simpan konfigurasi di backend agar
-                  data tetap tersedia setelah halaman dimuat ulang atau dibuka
-                  dari perangkat lain.
-                </p>
-              </div>
-            </div>
+          <Alert className="rounded-xl border-stone-200 bg-[#f0ede9] text-stone-700">
+            <ShieldCheck className="h-4 w-4 text-[#5f402a]" />
+
+            <AlertDescription>
+              <p className="text-xs font-semibold text-stone-800">
+                Pengaturan pemilik
+              </p>
+              <p className="mt-1 text-[11px] leading-5 text-stone-600">
+                Untuk penggunaan produksi, simpan konfigurasi di backend agar
+                data tetap tersedia setelah halaman dimuat ulang atau dibuka
+                dari perangkat lain.
+              </p>
+            </AlertDescription>
+          </Alert>
+
+          <div className="flex items-start gap-2 rounded-lg border border-stone-200 bg-white p-3">
+            <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-stone-500" />
+            <p className="text-[11px] leading-5 text-stone-500">
+              Perubahan margin pada halaman ini belum otomatis mengubah harga
+              produk, harga POS, atau transaksi yang sudah tercatat.
+            </p>
           </div>
         </aside>
       </form>

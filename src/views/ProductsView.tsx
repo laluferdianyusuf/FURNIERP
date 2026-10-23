@@ -1,5 +1,56 @@
+import type { FormEvent, ReactNode } from "react";
 import React, { useMemo, useState } from "react";
-import { PageView, Product } from "../types";
+import type { PageView, Product } from "../types";
+
+import {
+  AlertCircle,
+  Armchair,
+  Check,
+  FileText,
+  Plus,
+  RotateCcw,
+  Search,
+  SearchX,
+  ShoppingCart,
+  Warehouse,
+} from "lucide-react";
+
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { ScrollArea } from "../components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Separator } from "../components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 interface ProductsViewProps {
   products: Product[];
@@ -21,13 +72,6 @@ const CATEGORIES = [
 const PRODUCT_CATEGORIES = CATEGORIES.filter(
   (category) => category !== "Semua",
 );
-
-const INPUT_CLASS =
-  "w-full rounded-md border border-[#ded8d0] bg-white px-3 py-2.5 text-sm text-[#29231f] outline-none transition placeholder:text-[#a49a91] focus:border-[#795740]";
-
-const LABEL_CLASS = "mb-1.5 block text-xs font-medium text-[#50453e]";
-
-const PANEL_CLASS = "rounded-lg border border-[#e5e2dd] bg-white";
 
 const formatRupiah = (value: number) =>
   `Rp ${Math.round(Number(value) || 0).toLocaleString("id-ID")}`;
@@ -77,68 +121,112 @@ const getNextSku = (products: Product[]) => {
   return sku;
 };
 
-const Icon: React.FC<{
-  name: string;
-  className?: string;
-}> = ({ name, className = "" }) => (
-  <span aria-hidden="true" className={`material-symbols-outlined ${className}`}>
-    {name}
-  </span>
+const STATUS_STYLES: Record<string, string> = {
+  Aman: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  Menipis: "border-amber-200 bg-amber-50 text-amber-700",
+  Kritis: "border-red-200 bg-red-50 text-red-700",
+};
+
+const StatusBadge = ({ status }: { status: string }) => (
+  <Badge
+    variant="outline"
+    className={`whitespace-nowrap font-medium ${
+      STATUS_STYLES[status] ?? "border-stone-200 bg-stone-50 text-stone-600"
+    }`}
+  >
+    {status}
+  </Badge>
 );
 
-const Field: React.FC<{
+const TypeBadge = ({ type }: { type: string }) => (
+  <Badge
+    variant="outline"
+    className={
+      type === "Ready Stock"
+        ? "whitespace-nowrap border-emerald-200 bg-emerald-50 text-emerald-700"
+        : "whitespace-nowrap border-amber-200 bg-amber-50 text-amber-800"
+    }
+  >
+    {type === "Ready Stock" ? "Ready Stock" : "Custom / PO"}
+  </Badge>
+);
+
+const Field = ({
+  label,
+  children,
+  className = "",
+}: {
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
-}> = ({ label, children, className = "" }) => (
-  <div className={className}>
-    <label className={LABEL_CLASS}>{label}</label>
+}) => (
+  <div className={`space-y-1.5 ${className}`}>
+    <Label className="text-xs font-medium text-stone-700">{label}</Label>
     {children}
   </div>
 );
 
-const SectionHeading: React.FC<{
+const SectionHeading = ({
+  title,
+  description,
+}: {
   title: string;
   description?: string;
-}> = ({ title, description }) => (
-  <div>
-    <h3 className="text-sm font-semibold text-[#29231f]">{title}</h3>
+}) => (
+  <div className="space-y-1">
+    <h3 className="text-sm font-semibold text-stone-900">{title}</h3>
     {description && (
-      <p className="mt-1 text-xs leading-relaxed text-[#82746d]">
+      <p className="text-xs leading-relaxed text-muted-foreground">
         {description}
       </p>
     )}
   </div>
 );
 
-const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const styles: Record<string, string> = {
-    Aman: "bg-[#edf4ed] text-[#416346]",
-    Menipis: "bg-[#f8f0df] text-[#8a652b]",
-    Kritis: "bg-[#f8eae6] text-[#9b493b]",
-  };
+const INPUT_CLASS = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
 
-  return (
-    <span
-      className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-medium ${
-        styles[status] || "bg-[#f0ede9] text-[#50453e]"
+const PRIMARY_BUTTON_CLASS = "bg-[#5f402a] text-white hover:bg-[#795740]";
+
+const StatItem = ({
+  label,
+  value,
+  description,
+  icon: IconComponent,
+  critical = false,
+}: {
+  label: string;
+  value: string;
+  description?: string;
+  icon: React.ElementType;
+  critical?: boolean;
+}) => (
+  <div className="flex min-w-0 items-start gap-3">
+    <div
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+        critical && value !== "0 SKU"
+          ? "bg-red-50 text-red-600"
+          : "bg-stone-100 text-[#795740]"
       }`}
     >
-      {status}
-    </span>
-  );
-};
+      <IconComponent className="h-4 w-4" />
+    </div>
 
-const TypeBadge: React.FC<{ type: string }> = ({ type }) => (
-  <span
-    className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-medium ${
-      type === "Ready Stock"
-        ? "bg-[#edf4ed] text-[#416346]"
-        : "bg-[#f1e9df] text-[#795740]"
-    }`}
-  >
-    {type === "Ready Stock" ? "Ready Stock" : "Custom / PO"}
-  </span>
+    <div className="min-w-0">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p
+        className={`mt-1 truncate text-lg font-semibold tracking-tight ${
+          critical && value !== "0 SKU" ? "text-red-600" : "text-stone-900"
+        }`}
+      >
+        {value}
+      </p>
+      {description && (
+        <p className="mt-0.5 text-[11px] text-muted-foreground">
+          {description}
+        </p>
+      )}
+    </div>
+  </div>
 );
 
 export const ProductsView: React.FC<ProductsViewProps> = ({
@@ -149,6 +237,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [selectedType, setSelectedType] = useState("Semua");
+
   const [selectedProductForBOM, setSelectedProductForBOM] =
     useState<Product | null>(null);
   const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
@@ -229,7 +318,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     setIsNewProductModalOpen(true);
   };
 
-  const handleCreateProduct = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateProduct = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -357,649 +446,660 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
     resetProductForm();
   };
 
+  const hasActiveFilters =
+    Boolean(searchQuery) ||
+    selectedCategory !== "Semua" ||
+    selectedType !== "Semua";
+
   return (
-    <div className="flex w-full flex-col gap-5 text-[#29231f]">
+    <div className="flex w-full flex-col gap-5 text-stone-900">
+      {/* Header */}
       <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <p className="text-sm text-[#82746d]">
-          Katalog, harga, dan stok produk.
-        </p>
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight">Produk</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Kelola katalog, harga jual, BOM, dan ketersediaan stok.
+          </p>
+        </div>
 
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={() => onNavigate("inventory")}
-            className="inline-flex items-center gap-2 rounded-md border border-[#e5e2dd] bg-white px-3 py-2.5 text-xs font-medium text-[#50453e] transition hover:bg-[#f6f3ee]"
+            className="gap-2"
           >
-            <Icon name="inventory_2" className="text-base" />
+            <Warehouse className="h-4 w-4" />
             Stok
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={openNewProductModal}
-            className="inline-flex items-center gap-2 rounded-md bg-[#5f402a] px-3.5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#795740]"
+            className={`gap-2 ${PRIMARY_BUTTON_CLASS}`}
           >
-            <Icon name="add" className="text-base" />
+            <Plus className="h-4 w-4" />
             Tambah produk
-          </button>
+          </Button>
         </div>
       </header>
 
-      {/* Ringkasan sederhana, tanpa kartu */}
-      <section className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-[#e5e2dd] py-3 text-xs">
-        <p className="text-[#82746d]">
-          Total produk{" "}
-          <span className="ml-1 font-semibold text-[#29231f]">
-            {products.length}
-          </span>
-        </p>
+      {/* Filters */}
+      <Card className="shadow-none">
+        <CardContent className="space-y-4 p-4">
+          <div className="flex flex-col gap-3 md:flex-row">
+            <div className="relative min-w-0 flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Cari nama produk, SKU, atau jenis kayu..."
+                aria-label="Cari produk"
+                className={`${INPUT_CLASS} pl-9`}
+              />
+            </div>
 
-        <p className="text-[#82746d]">
-          Stok fisik{" "}
-          <span className="ml-1 font-semibold text-[#29231f]">
-            {totalPhysicalStock.toLocaleString("id-ID")} unit
-          </span>
-        </p>
-
-        <p className="text-[#82746d]">
-          Nilai stok (HPP){" "}
-          <span className="ml-1 font-semibold text-[#29231f]">
-            {formatCompactRupiah(totalHppInventory)}
-          </span>
-        </p>
-
-        <p
-          className={
-            criticalStockCount > 0 ? "text-[#9b493b]" : "text-[#82746d]"
-          }
-        >
-          Stok kritis{" "}
-          <span className="ml-1 font-semibold">{criticalStockCount} SKU</span>
-        </p>
-      </section>
-
-      {/* Search and filters */}
-      <section className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2 md:flex-row">
-          <div className="relative min-w-0 flex-1">
-            <Icon
-              name="search"
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xl text-[#82746d]"
-            />
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Cari nama produk, SKU, atau jenis kayu..."
-              aria-label="Cari produk"
-              className={`${INPUT_CLASS} pl-10`}
-            />
+            <Select
+              value={selectedType}
+              onValueChange={(value) => setSelectedType(value ?? "")}
+            >
+              <SelectTrigger
+                aria-label="Filter tipe produk"
+                className="w-full bg-white md:w-[190px]"
+              >
+                <SelectValue placeholder="Semua tipe" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Semua">Semua tipe</SelectItem>
+                <SelectItem value="Ready Stock">Ready Stock</SelectItem>
+                <SelectItem value="PO 14-21 Hari">Custom / PO</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <select
-            aria-label="Filter tipe produk"
-            value={selectedType}
-            onChange={(event) => setSelectedType(event.target.value)}
-            className={`${INPUT_CLASS} md:w-48`}
-          >
-            <option value="Semua">Semua tipe</option>
-            <option value="Ready Stock">Ready Stock</option>
-            <option value="PO 14-21 Hari">Custom / PO</option>
-          </select>
-        </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {CATEGORIES.map((category) => {
+              const active = selectedCategory === category;
+              const count =
+                category === "Semua"
+                  ? products.length
+                  : products.filter((product) => product.category === category)
+                      .length;
 
-        <div className="flex flex-wrap items-center gap-2">
-          {CATEGORIES.map((category) => {
-            const active = selectedCategory === category;
-            const count =
-              category === "Semua"
-                ? products.length
-                : products.filter((product) => product.category === category)
-                    .length;
-
-            return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-                className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-2 text-xs transition ${
-                  active
-                    ? "border-[#795740] bg-[#f1e9df] font-semibold text-[#5f402a]"
-                    : "border-[#e5e2dd] bg-white text-[#50453e] hover:bg-[#f6f3ee]"
-                }`}
-              >
-                {category}
-                <span className="text-[10px] opacity-70">{count}</span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+              return (
+                <Button
+                  key={category}
+                  type="button"
+                  variant={active ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={
+                    active
+                      ? "h-8 gap-2 bg-[#5f402a] text-white hover:bg-[#795740]"
+                      : "h-8 gap-2"
+                  }
+                >
+                  {category}
+                  <span
+                    className={`rounded px-1.5 py-0.5 text-[10px] ${
+                      active ? "bg-white/15" : "bg-stone-100"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </Button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Product table */}
-      <section className={`${PANEL_CLASS} overflow-hidden`}>
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e5e2dd] px-4 py-3">
-          <p className="text-sm font-semibold text-[#29231f]">Daftar produk</p>
+      <Card className="overflow-hidden shadow-none">
+        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0 border-b px-4 py-3">
+          <CardTitle className="text-sm font-semibold">Daftar produk</CardTitle>
 
           <div className="flex items-center gap-3">
-            <p className="text-xs text-[#82746d]">
+            <p className="text-xs text-muted-foreground">
               {filteredProducts.length} dari {products.length} produk
             </p>
 
-            {(searchQuery ||
-              selectedCategory !== "Semua" ||
-              selectedType !== "Semua") && (
-              <button
+            {hasActiveFilters && (
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={resetFilters}
-                className="text-xs font-medium text-[#795740] hover:underline"
+                className="h-8 gap-1.5 text-xs text-[#795740] hover:text-[#5f402a]"
               >
-                Reset filter
-              </button>
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset
+              </Button>
             )}
           </div>
-        </div>
+        </CardHeader>
 
         {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center px-5 py-12 text-center">
-            <Icon name="search_off" className="text-3xl text-[#a49a91]" />
+          <CardContent className="flex flex-col items-center px-5 py-14 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-100">
+              <SearchX className="h-5 w-5 text-muted-foreground" />
+            </div>
             <p className="mt-3 text-sm font-semibold">Produk tidak ditemukan</p>
-            <p className="mt-1 text-xs text-[#82746d]">
-              Ubah kata kunci atau filter yang digunakan.
+            <p className="mt-1 max-w-sm text-xs text-muted-foreground">
+              Coba ubah kata kunci atau filter kategori dan tipe produk.
             </p>
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={resetFilters}
-              className="mt-3 text-xs font-medium text-[#795740] hover:underline"
+              className="mt-4 gap-2"
             >
+              <RotateCcw className="h-3.5 w-3.5" />
               Reset pencarian
-            </button>
-          </div>
+            </Button>
+          </CardContent>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1050px] text-left text-xs">
-              <thead className="border-b border-[#e5e2dd] bg-[#f8f6f2]">
-                <tr className="text-[10px] font-semibold uppercase tracking-wide text-[#82746d]">
-                  <th className="px-4 py-3">Produk</th>
-                  <th className="px-3 py-3">Tipe</th>
-                  <th className="px-3 py-3 text-right">HPP</th>
-                  <th className="px-3 py-3">Harga jual</th>
-                  <th className="px-3 py-3 text-center">Stok</th>
-                  <th className="px-3 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Aksi</th>
-                </tr>
-              </thead>
+            <Table className="min-w-[1080px]">
+              <TableHeader>
+                <TableRow className="bg-stone-50 hover:bg-stone-50">
+                  <TableHead className="w-[260px]">Produk</TableHead>
+                  <TableHead>Tipe</TableHead>
+                  <TableHead className="text-right">HPP</TableHead>
+                  <TableHead className="w-[210px]">Harga jual</TableHead>
+                  <TableHead className="text-center">Stok</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
 
-              <tbody className="divide-y divide-[#eee9e3]">
+              <TableBody>
                 {filteredProducts.map((product) => (
-                  <tr
-                    key={product.id}
-                    className="transition-colors hover:bg-[#fcfaf7]"
-                  >
-                    <td className="px-4 py-3">
+                  <TableRow key={product.id} className="align-middle">
+                    <TableCell>
                       <div className="flex items-center gap-3">
                         {product.image ? (
                           <img
                             src={product.image}
                             alt={product.name}
                             loading="lazy"
-                            className="h-11 w-11 shrink-0 rounded-md border border-[#e5e2dd] bg-[#f6f3ee] object-cover"
+                            className="h-11 w-11 shrink-0 rounded-md border bg-stone-50 object-cover"
                           />
                         ) : (
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#f1ede7] text-[#82746d]">
-                            <Icon name="chair" className="text-xl" />
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-stone-100 text-stone-500">
+                            <Armchair className="h-5 w-5" />
                           </div>
                         )}
 
-                        <div className="min-w-0 max-w-[250px]">
-                          <p className="truncate text-sm font-medium text-[#29231f]">
+                        <div className="min-w-0">
+                          <p className="max-w-[220px] truncate text-sm font-medium text-stone-900">
                             {product.name}
                           </p>
-                          <p className="mt-1 font-mono text-[11px] text-[#795740]">
+                          <p className="mt-1 font-mono text-xs text-[#795740]">
                             {product.sku}
                           </p>
-                          <p className="mt-0.5 truncate text-[11px] text-[#82746d]">
+                          <p className="mt-0.5 max-w-[220px] truncate text-xs text-muted-foreground">
                             {product.category}
                           </p>
                         </div>
                       </div>
-                    </td>
+                    </TableCell>
 
-                    <td className="px-3 py-3">
+                    <TableCell>
                       <TypeBadge type={product.type} />
-                    </td>
+                    </TableCell>
 
-                    <td className="whitespace-nowrap px-3 py-3 text-right">
-                      <p className="font-mono font-medium">
+                    <TableCell className="text-right">
+                      <p className="whitespace-nowrap font-mono text-sm font-medium">
                         {formatRupiah(product.hpp)}
                       </p>
-                      <button
+                      <Button
                         type="button"
+                        variant="link"
+                        size="sm"
                         onClick={() => setSelectedProductForBOM(product)}
-                        className="mt-1 text-[11px] text-[#795740] hover:underline"
+                        className="h-auto px-0 pt-1 text-xs text-[#795740]"
                       >
                         Lihat BOM
-                      </button>
-                    </td>
+                      </Button>
+                    </TableCell>
 
-                    <td className="px-3 py-3">
+                    <TableCell>
                       <div className="space-y-1.5">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-[11px] text-[#82746d]">
-                            Retail
-                          </span>
-                          <span className="whitespace-nowrap font-mono font-medium">
-                            {formatCompactRupiah(product.prices.retail)}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-[11px] text-[#82746d]">
-                            Reseller
-                          </span>
-                          <span className="whitespace-nowrap font-mono">
-                            {formatCompactRupiah(product.prices.reseller)}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-[11px] text-[#82746d]">
-                            Grosir
-                          </span>
-                          <span className="whitespace-nowrap font-mono">
-                            {formatCompactRupiah(product.prices.grosir)}
-                          </span>
-                        </div>
+                        {[
+                          {
+                            label: "Retail",
+                            price: product.prices.retail,
+                          },
+                          {
+                            label: "Reseller",
+                            price: product.prices.reseller,
+                          },
+                          {
+                            label: "Grosir",
+                            price: product.prices.grosir,
+                          },
+                        ].map((tier) => (
+                          <div
+                            key={tier.label}
+                            className="flex items-center justify-between gap-3"
+                          >
+                            <span className="text-xs text-muted-foreground">
+                              {tier.label}
+                            </span>
+                            <span className="whitespace-nowrap font-mono text-xs font-medium">
+                              {formatCompactRupiah(tier.price)}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    </td>
+                    </TableCell>
 
-                    <td className="px-3 py-3">
-                      <div className="flex items-center justify-center gap-4">
+                    <TableCell>
+                      <div className="flex items-start justify-center gap-3">
                         <div className="text-center">
-                          <p className="text-[10px] text-[#82746d]">Fisik</p>
-                          <p className="mt-1 font-semibold">
+                          <p className="text-[10px] text-muted-foreground">
+                            Fisik
+                          </p>
+                          <p className="mt-1 text-sm font-semibold">
                             {product.stockPhysical}
                           </p>
                         </div>
                         <div className="text-center">
-                          <p className="text-[10px] text-[#82746d]">SPK</p>
-                          <p className="mt-1 font-semibold text-[#795740]">
+                          <p className="text-[10px] text-muted-foreground">
+                            SPK
+                          </p>
+                          <p className="mt-1 text-sm font-semibold text-[#795740]">
                             {product.stockReserved}
                           </p>
                         </div>
                         <div className="text-center">
-                          <p className="text-[10px] text-[#82746d]">Bebas</p>
-                          <p className="mt-1 font-semibold text-[#416346]">
+                          <p className="text-[10px] text-muted-foreground">
+                            Bebas
+                          </p>
+                          <p className="mt-1 text-sm font-semibold text-emerald-700">
                             {product.stockAvailable}
                           </p>
                         </div>
                       </div>
-                      <p className="mt-2 text-center text-[10px] text-[#82746d]">
+                      <p className="mt-2 text-center text-[10px] text-muted-foreground">
                         Buffer: {product.bufferMin}
                       </p>
-                    </td>
+                    </TableCell>
 
-                    <td className="px-3 py-3">
+                    <TableCell>
                       <StatusBadge status={product.status} />
-                    </td>
+                    </TableCell>
 
-                    <td className="px-4 py-3">
+                    <TableCell>
                       <div className="flex justify-end gap-1.5">
-                        <button
+                        <Button
                           type="button"
+                          variant="outline"
+                          size="icon"
                           title="Lihat detail BOM"
                           aria-label={`Lihat BOM ${product.name}`}
                           onClick={() => setSelectedProductForBOM(product)}
-                          className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e5e2dd] text-[#795740] transition hover:bg-[#f6f3ee]"
+                          className="h-8 w-8 text-[#795740]"
                         >
-                          <Icon name="description" className="text-lg" />
-                        </button>
+                          <FileText className="h-4 w-4" />
+                        </Button>
 
-                        <button
+                        <Button
                           type="button"
+                          size="sm"
                           onClick={() => onNavigate("pos")}
-                          className="inline-flex items-center gap-1 rounded-md bg-[#5f402a] px-3 py-2 text-xs font-medium text-white transition hover:bg-[#795740]"
+                          className={`h-8 gap-1.5 ${PRIMARY_BUTTON_CLASS}`}
                         >
-                          <Icon name="point_of_sale" className="text-base" />
+                          <ShoppingCart className="h-3.5 w-3.5" />
                           Jual
-                        </button>
+                        </Button>
                       </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         )}
-      </section>
+      </Card>
 
-      {/* BOM detail */}
-      {selectedProductForBOM && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-3 sm:p-5"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              setSelectedProductForBOM(null);
-            }
-          }}
-        >
-          <section
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="bom-modal-title"
-            className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#e5e2dd] bg-white shadow-xl"
-          >
-            <div className="flex items-center justify-between gap-4 border-b border-[#e5e2dd] px-5 py-4">
-              <div className="min-w-0">
-                <h2
-                  id="bom-modal-title"
-                  className="truncate text-base font-semibold"
-                >
+      {/* BOM detail dialog */}
+      <Dialog
+        open={Boolean(selectedProductForBOM)}
+        onOpenChange={(open) => {
+          if (!open) setSelectedProductForBOM(null);
+        }}
+      >
+        <DialogContent className="flex max-h-[92vh] w-[calc(100%-1.5rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0">
+          {selectedProductForBOM && (
+            <>
+              <DialogHeader className="border-b px-5 py-4 pr-12 text-left">
+                <DialogTitle className="text-base">
                   {selectedProductForBOM.name}
-                </h2>
-                <p className="mt-1 text-xs text-[#82746d]">
-                  {selectedProductForBOM.sku} · HPP{" "}
-                  {formatRupiah(selectedProductForBOM.hpp)}
-                </p>
-              </div>
+                </DialogTitle>
+                <DialogDescription>
+                  <span className="font-mono">{selectedProductForBOM.sku}</span>
+                  {" · "}HPP {formatRupiah(selectedProductForBOM.hpp)}
+                </DialogDescription>
+              </DialogHeader>
 
-              <button
-                type="button"
-                aria-label="Tutup detail BOM"
-                onClick={() => setSelectedProductForBOM(null)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#82746d] hover:bg-[#f6f3ee]"
-              >
-                <Icon name="close" className="text-xl" />
-              </button>
-            </div>
+              <ScrollArea className="min-h-0 flex-1">
+                <div className="space-y-6 p-5">
+                  {/* Product specification */}
+                  <section className="space-y-3">
+                    <SectionHeading title="Spesifikasi produk" />
 
-            <div className="flex-1 space-y-5 overflow-y-auto p-5">
-              <div>
-                <SectionHeading title="Spesifikasi produk" />
-                <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-                  {[
-                    {
-                      label: "Kategori",
-                      value: selectedProductForBOM.category,
-                    },
-                    {
-                      label: "Jenis kayu / material",
-                      value: selectedProductForBOM.woodType,
-                    },
-                    {
-                      label: "Dimensi",
-                      value: selectedProductForBOM.dimensions,
-                    },
-                    {
-                      label: "Ketebalan",
-                      value: selectedProductForBOM.thickness,
-                    },
-                    {
-                      label: "Finishing",
-                      value: selectedProductForBOM.finishing,
-                    },
-                    {
-                      label: "Konstruksi kaki",
-                      value: selectedProductForBOM.legConstruction,
-                    },
-                  ].map((spec) => (
-                    <div
-                      key={spec.label}
-                      className="border-b border-[#eee9e3] pb-2"
-                    >
-                      <p className="text-[11px] text-[#82746d]">{spec.label}</p>
-                      <p className="mt-1 text-sm font-medium">
-                        {spec.value || "—"}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <SectionHeading
-                    title="Komponen BOM"
-                    description="Rincian komponen dan biaya produksi."
-                  />
-                  <p className="text-sm font-semibold">
-                    Total HPP: {formatRupiah(selectedProductForBOM.hpp)}
-                  </p>
-                </div>
-
-                <div className="mt-3 overflow-x-auto border-y border-[#e5e2dd]">
-                  <table className="w-full min-w-[480px] text-left text-xs">
-                    <thead className="bg-[#f8f6f2] text-[10px] uppercase tracking-wide text-[#82746d]">
-                      <tr>
-                        <th className="px-3 py-2.5">Komponen</th>
-                        <th className="px-3 py-2.5">Spesifikasi</th>
-                        <th className="px-3 py-2.5">Volume</th>
-                        <th className="px-3 py-2.5 text-right">Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#eee9e3]">
-                      {selectedProductForBOM.bomItems?.length ? (
-                        selectedProductForBOM.bomItems.map((item) => (
-                          <tr key={item.id}>
-                            <td className="px-3 py-3 font-medium">
-                              {item.name}
-                            </td>
-                            <td className="px-3 py-3 text-[#82746d]">
-                              {item.spec}
-                            </td>
-                            <td className="px-3 py-3">{item.volume}</td>
-                            <td className="whitespace-nowrap px-3 py-3 text-right font-mono">
-                              {formatRupiah(item.subtotal)}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan={4}
-                            className="px-3 py-8 text-center text-[#82746d]"
-                          >
-                            Belum ada rincian komponen BOM.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div>
-                <SectionHeading
-                  title="Harga dan margin"
-                  description="Margin kotor dihitung dari harga jual dikurangi HPP."
-                />
-
-                <div className="mt-3 overflow-x-auto">
-                  <table className="w-full min-w-[420px] text-left text-xs">
-                    <thead className="border-b border-[#e5e2dd] text-[#82746d]">
-                      <tr>
-                        <th className="py-2 font-medium">Tipe harga</th>
-                        <th className="py-2 text-right font-medium">
-                          Harga jual
-                        </th>
-                        <th className="py-2 text-right font-medium">Margin</th>
-                        <th className="py-2 text-right font-medium">
-                          Persentase
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#eee9e3]">
+                    <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
                       {[
                         {
-                          label: "Retail",
-                          price: selectedProductForBOM.prices.retail,
+                          label: "Kategori",
+                          value: selectedProductForBOM.category,
                         },
                         {
-                          label: "Reseller",
-                          price: selectedProductForBOM.prices.reseller,
+                          label: "Jenis kayu / material",
+                          value: selectedProductForBOM.woodType,
                         },
                         {
-                          label: "Grosir",
-                          price: selectedProductForBOM.prices.grosir,
+                          label: "Dimensi",
+                          value: selectedProductForBOM.dimensions,
                         },
-                      ].map((tier) => {
-                        const margin = tier.price - selectedProductForBOM.hpp;
-                        const percent = getMargin(
-                          tier.price,
-                          selectedProductForBOM.hpp,
-                        );
+                        {
+                          label: "Ketebalan",
+                          value: selectedProductForBOM.thickness,
+                        },
+                        {
+                          label: "Finishing",
+                          value: selectedProductForBOM.finishing,
+                        },
+                        {
+                          label: "Konstruksi kaki",
+                          value: selectedProductForBOM.legConstruction,
+                        },
+                      ].map((spec) => (
+                        <div key={spec.label} className="border-b py-3">
+                          <p className="text-xs text-muted-foreground">
+                            {spec.label}
+                          </p>
+                          <p className="mt-1 text-sm font-medium">
+                            {spec.value || "—"}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
 
-                        return (
-                          <tr key={tier.label}>
-                            <td className="py-3 font-medium">{tier.label}</td>
-                            <td className="whitespace-nowrap py-3 text-right font-mono">
-                              {formatRupiah(tier.price)}
-                            </td>
-                            <td
-                              className={`whitespace-nowrap py-3 text-right font-mono ${
-                                margin < 0 ? "text-[#9b493b]" : "text-[#416346]"
-                              }`}
-                            >
-                              {formatRupiah(margin)}
-                            </td>
-                            <td
-                              className={`whitespace-nowrap py-3 text-right ${
-                                percent < 0
-                                  ? "text-[#9b493b]"
-                                  : "text-[#416346]"
-                              }`}
-                            >
-                              {percent.toFixed(1)}%
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                  <Separator />
 
-              <div className="grid grid-cols-2 gap-4 border-t border-[#e5e2dd] pt-4 sm:grid-cols-4">
-                <div>
-                  <p className="text-[11px] text-[#82746d]">Stok fisik</p>
-                  <p className="mt-1 text-sm font-semibold">
-                    {selectedProductForBOM.stockPhysical}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-[#82746d]">Stok SPK</p>
-                  <p className="mt-1 text-sm font-semibold">
-                    {selectedProductForBOM.stockReserved}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-[#82746d]">Stok bebas</p>
-                  <p className="mt-1 text-sm font-semibold">
-                    {selectedProductForBOM.stockAvailable}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-[#82746d]">Harga minimum</p>
-                  <p className="mt-1 text-sm font-semibold">
-                    {formatRupiah(selectedProductForBOM.ownerFloorPrice)}
-                  </p>
-                </div>
-              </div>
-            </div>
+                  {/* BOM items */}
+                  <section className="space-y-3">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <SectionHeading
+                        title="Komponen BOM"
+                        description="Rincian material dan biaya produksi."
+                      />
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">
+                          Total HPP
+                        </p>
+                        <p className="mt-1 text-sm font-semibold">
+                          {formatRupiah(selectedProductForBOM.hpp)}
+                        </p>
+                      </div>
+                    </div>
 
-            <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f8f6f2] p-4 sm:flex-row sm:justify-between">
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedProductForBOM(null);
-                  onNavigate("orders");
-                }}
-                className="rounded-md border border-[#e5e2dd] bg-white px-4 py-2.5 text-xs font-medium text-[#50453e] hover:bg-[#f6f3ee]"
-              >
-                Buka SPK produksi
-              </button>
+                    <div className="overflow-x-auto rounded-md border">
+                      <Table className="min-w-[500px]">
+                        <TableHeader>
+                          <TableRow className="bg-stone-50 hover:bg-stone-50">
+                            <TableHead>Komponen</TableHead>
+                            <TableHead>Spesifikasi</TableHead>
+                            <TableHead>Volume</TableHead>
+                            <TableHead className="text-right">
+                              Subtotal
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
 
-              <button
-                type="button"
-                onClick={() => setSelectedProductForBOM(null)}
-                className="rounded-md bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#795740]"
-              >
-                Tutup
-              </button>
-            </div>
-          </section>
-        </div>
-      )}
+                        <TableBody>
+                          {selectedProductForBOM.bomItems?.length ? (
+                            selectedProductForBOM.bomItems.map((item) => (
+                              <TableRow key={item.id}>
+                                <TableCell className="font-medium">
+                                  {item.name}
+                                </TableCell>
+                                <TableCell className="text-muted-foreground">
+                                  {item.spec}
+                                </TableCell>
+                                <TableCell>{item.volume}</TableCell>
+                                <TableCell className="whitespace-nowrap text-right font-mono">
+                                  {formatRupiah(item.subtotal)}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          ) : (
+                            <TableRow>
+                              <TableCell
+                                colSpan={4}
+                                className="h-24 text-center text-muted-foreground"
+                              >
+                                Belum ada rincian komponen BOM.
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </section>
 
-      {/* Add product */}
-      {isNewProductModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-3 sm:p-5"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              setIsNewProductModalOpen(false);
-            }
-          }}
-        >
-          <section
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="new-product-title"
-            className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-[#e5e2dd] bg-white shadow-xl"
+                  <Separator />
+
+                  {/* Price margins */}
+                  <section className="space-y-3">
+                    <SectionHeading
+                      title="Harga dan margin"
+                      description="Margin kotor = harga jual dikurangi HPP. Persentase margin dihitung dari harga jual."
+                    />
+
+                    <div className="overflow-x-auto rounded-md border">
+                      <Table className="min-w-[450px]">
+                        <TableHeader>
+                          <TableRow className="bg-stone-50 hover:bg-stone-50">
+                            <TableHead>Tipe harga</TableHead>
+                            <TableHead className="text-right">
+                              Harga jual
+                            </TableHead>
+                            <TableHead className="text-right">Margin</TableHead>
+                            <TableHead className="text-right">
+                              Persentase
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+
+                        <TableBody>
+                          {[
+                            {
+                              label: "Retail",
+                              price: selectedProductForBOM.prices.retail,
+                            },
+                            {
+                              label: "Reseller",
+                              price: selectedProductForBOM.prices.reseller,
+                            },
+                            {
+                              label: "Grosir",
+                              price: selectedProductForBOM.prices.grosir,
+                            },
+                          ].map((tier) => {
+                            const margin =
+                              tier.price - selectedProductForBOM.hpp;
+                            const percent = getMargin(
+                              tier.price,
+                              selectedProductForBOM.hpp,
+                            );
+
+                            return (
+                              <TableRow key={tier.label}>
+                                <TableCell className="font-medium">
+                                  {tier.label}
+                                </TableCell>
+                                <TableCell className="whitespace-nowrap text-right font-mono">
+                                  {formatRupiah(tier.price)}
+                                </TableCell>
+                                <TableCell
+                                  className={`whitespace-nowrap text-right font-mono ${
+                                    margin < 0
+                                      ? "text-red-600"
+                                      : "text-emerald-700"
+                                  }`}
+                                >
+                                  {formatRupiah(margin)}
+                                </TableCell>
+                                <TableCell
+                                  className={`text-right font-medium ${
+                                    percent < 0
+                                      ? "text-red-600"
+                                      : "text-emerald-700"
+                                  }`}
+                                >
+                                  {percent.toFixed(1)}%
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </section>
+
+                  <Separator />
+
+                  {/* Stock information */}
+                  <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    {[
+                      {
+                        label: "Stok fisik",
+                        value: selectedProductForBOM.stockPhysical,
+                      },
+                      {
+                        label: "Stok SPK",
+                        value: selectedProductForBOM.stockReserved,
+                      },
+                      {
+                        label: "Stok bebas",
+                        value: selectedProductForBOM.stockAvailable,
+                      },
+                      {
+                        label: "Harga minimum",
+                        value: formatRupiah(
+                          selectedProductForBOM.ownerFloorPrice,
+                        ),
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="rounded-lg border bg-stone-50 p-3"
+                      >
+                        <p className="text-xs text-muted-foreground">
+                          {item.label}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold">
+                          {item.value}
+                        </p>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </ScrollArea>
+
+              <DialogFooter className="flex-col gap-2 border-t bg-stone-50 p-4 sm:flex-row sm:justify-between">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedProductForBOM(null);
+                    onNavigate("orders");
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  Buka SPK produksi
+                </Button>
+
+                <Button
+                  type="button"
+                  onClick={() => setSelectedProductForBOM(null)}
+                  className={`w-full sm:w-auto ${PRIMARY_BUTTON_CLASS}`}
+                >
+                  Tutup
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Add product dialog */}
+      <Dialog
+        open={isNewProductModalOpen}
+        onOpenChange={(open) => {
+          setIsNewProductModalOpen(open);
+          if (!open) setFormError("");
+        }}
+      >
+        <DialogContent className="flex max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl flex-col gap-0 overflow-hidden p-0">
+          <DialogHeader className="border-b px-5 py-4 pr-12 text-left">
+            <DialogTitle className="text-base">Tambah produk</DialogTitle>
+            <DialogDescription>
+              Isi identitas, harga jual, dan stok awal produk.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form
+            onSubmit={handleCreateProduct}
+            className="flex min-h-0 flex-1 flex-col"
           >
-            <div className="flex items-center justify-between border-b border-[#e5e2dd] px-5 py-4">
-              <div>
-                <h2 id="new-product-title" className="text-base font-semibold">
-                  Tambah produk
-                </h2>
-                <p className="mt-1 text-xs text-[#82746d]">
-                  Isi informasi produk, harga, dan stok awal.
-                </p>
-              </div>
+            <ScrollArea className="min-h-0 flex-1">
+              <div className="space-y-6 p-5">
+                {/* Identity */}
+                <section className="space-y-3">
+                  <SectionHeading
+                    title="Identitas produk"
+                    description="Informasi dasar produk dan spesifikasi material."
+                  />
 
-              <button
-                type="button"
-                aria-label="Tutup form produk"
-                onClick={() => setIsNewProductModalOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-[#82746d] hover:bg-[#f6f3ee]"
-              >
-                <Icon name="close" className="text-xl" />
-              </button>
-            </div>
-
-            <form
-              onSubmit={handleCreateProduct}
-              className="flex min-h-0 flex-1 flex-col"
-            >
-              <div className="flex-1 space-y-5 overflow-y-auto p-5">
-                <div>
-                  <SectionHeading title="Identitas produk" />
-                  <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="SKU produk *">
-                      <input
+                      <Input
                         required
                         value={newSku}
                         onChange={(event) => setNewSku(event.target.value)}
                         placeholder="MBL-0001"
-                        className={INPUT_CLASS}
+                        className={`${INPUT_CLASS} font-mono`}
                       />
                     </Field>
 
                     <Field label="Kategori *">
-                      <select
-                        required
+                      <Select
                         value={newCategory}
-                        onChange={(event) => setNewCategory(event.target.value)}
-                        className={INPUT_CLASS}
+                        onValueChange={(value) => setNewCategory(value ?? "")}
                       >
-                        {PRODUCT_CATEGORIES.map((category) => (
-                          <option key={category} value={category}>
-                            {category}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className={INPUT_CLASS}>
+                          <SelectValue placeholder="Pilih kategori" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PRODUCT_CATEGORIES.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
 
                     <Field label="Nama produk *" className="sm:col-span-2">
-                      <input
+                      <Input
                         required
                         value={newName}
                         onChange={(event) => setNewName(event.target.value)}
@@ -1009,7 +1109,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Jenis kayu / material">
-                      <input
+                      <Input
                         value={newWood}
                         onChange={(event) => setNewWood(event.target.value)}
                         className={INPUT_CLASS}
@@ -1017,7 +1117,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Dimensi produk">
-                      <input
+                      <Input
                         value={newDimensions}
                         onChange={(event) =>
                           setNewDimensions(event.target.value)
@@ -1028,22 +1128,28 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Tipe ketersediaan">
-                      <select
+                      <Select
                         value={newType}
-                        onChange={(event) =>
-                          setNewType(event.target.value as ProductType)
+                        onValueChange={(value) =>
+                          setNewType(value as ProductType)
                         }
-                        className={INPUT_CLASS}
                       >
-                        <option value="Ready Stock">Ready Stock</option>
-                        <option value="PO 14-21 Hari">
-                          Custom / PO 14–21 hari
-                        </option>
-                      </select>
+                        <SelectTrigger className={INPUT_CLASS}>
+                          <SelectValue placeholder="Pilih tipe" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Ready Stock">
+                            Ready Stock
+                          </SelectItem>
+                          <SelectItem value="PO 14-21 Hari">
+                            Custom / PO 14–21 hari
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </Field>
 
                     <Field label="HPP / modal produksi (Rp) *">
-                      <input
+                      <Input
                         type="number"
                         min="1"
                         step="1"
@@ -1054,17 +1160,20 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                       />
                     </Field>
                   </div>
-                </div>
+                </section>
 
-                <div className="border-t border-[#e5e2dd] pt-5">
+                <Separator />
+
+                {/* Selling prices */}
+                <section className="space-y-3">
                   <SectionHeading
                     title="Harga jual"
-                    description="Harga berdasarkan kelompok pelanggan."
+                    description="Tetapkan harga berdasarkan kelompok pelanggan."
                   />
 
-                  <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <Field label="Retail (Rp) *">
-                      <input
+                      <Input
                         type="number"
                         min="1"
                         step="1"
@@ -1076,7 +1185,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Reseller (Rp) *">
-                      <input
+                      <Input
                         type="number"
                         min="1"
                         step="1"
@@ -1088,7 +1197,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Grosir (Rp) *">
-                      <input
+                      <Input
                         type="number"
                         min="1"
                         step="1"
@@ -1104,15 +1213,25 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     Number(newRetail) > 0 &&
                     Number(newReseller) > 0 &&
                     Number(newGrosir) > 0 && (
-                      <div className="mt-4 border-t border-[#e5e2dd] pt-3">
-                        <p className="text-xs font-medium text-[#82746d]">
+                      <div className="rounded-lg border bg-stone-50 p-4">
+                        <p className="text-xs font-medium text-stone-700">
                           Estimasi margin kotor
                         </p>
-                        <div className="mt-2 grid grid-cols-3 gap-3">
+
+                        <div className="mt-3 grid grid-cols-3 gap-3">
                           {[
-                            { label: "Retail", price: Number(newRetail) },
-                            { label: "Reseller", price: Number(newReseller) },
-                            { label: "Grosir", price: Number(newGrosir) },
+                            {
+                              label: "Retail",
+                              price: Number(newRetail),
+                            },
+                            {
+                              label: "Reseller",
+                              price: Number(newReseller),
+                            },
+                            {
+                              label: "Grosir",
+                              price: Number(newGrosir),
+                            },
                           ].map((tier) => {
                             const margin = getMargin(
                               tier.price,
@@ -1121,17 +1240,20 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
 
                             return (
                               <div key={tier.label}>
-                                <p className="text-[11px] text-[#82746d]">
+                                <p className="text-xs text-muted-foreground">
                                   {tier.label}
                                 </p>
                                 <p
-                                  className={`mt-1 text-sm font-semibold ${
+                                  className={`mt-1 text-base font-semibold ${
                                     margin < 0
-                                      ? "text-[#9b493b]"
-                                      : "text-[#416346]"
+                                      ? "text-red-600"
+                                      : "text-emerald-700"
                                   }`}
                                 >
                                   {margin.toFixed(1)}%
+                                </p>
+                                <p className="mt-1 text-[10px] text-muted-foreground">
+                                  {formatRupiah(tier.price - Number(newHpp))}
                                 </p>
                               </div>
                             );
@@ -1139,17 +1261,20 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                         </div>
                       </div>
                     )}
-                </div>
+                </section>
 
-                <div className="border-t border-[#e5e2dd] pt-5">
+                <Separator />
+
+                {/* Opening stock */}
+                <section className="space-y-3">
                   <SectionHeading
                     title="Stok awal"
-                    description="Jumlah stok yang tersedia secara fisik."
+                    description="Masukkan jumlah unit fisik dan batas minimum persediaan."
                   />
 
-                  <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Stok fisik awal (unit) *">
-                      <input
+                      <Input
                         type="number"
                         min="0"
                         step="1"
@@ -1161,7 +1286,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                     </Field>
 
                     <Field label="Buffer minimum (unit) *">
-                      <input
+                      <Input
                         type="number"
                         min="0"
                         step="1"
@@ -1172,40 +1297,42 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                       />
                     </Field>
                   </div>
-                </div>
+                </section>
 
                 {formError && (
-                  <div
-                    role="alert"
-                    className="rounded-md border border-[#ebd4ce] bg-[#f8eae6] px-3 py-2.5 text-xs text-[#9b493b]"
+                  <Alert
+                    variant="destructive"
+                    className="border-red-200 bg-red-50 text-red-700"
                   >
-                    {formError}
-                  </div>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{formError}</AlertDescription>
+                  </Alert>
                 )}
               </div>
+            </ScrollArea>
 
-              <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] bg-[#f8f6f2] p-4 sm:flex-row sm:justify-end">
-                <button
-                  type="button"
-                  onClick={() => setIsNewProductModalOpen(false)}
-                  className="rounded-md border border-[#e5e2dd] bg-white px-4 py-2.5 text-xs font-medium text-[#50453e] hover:bg-[#f6f3ee]"
-                >
-                  Batal
-                </button>
+            <DialogFooter className="flex-col gap-2 border-t bg-stone-50 p-4 sm:flex-row">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsNewProductModalOpen(false)}
+                className="w-full sm:w-auto"
+              >
+                Batal
+              </Button>
 
-                <button
-                  type="submit"
-                  disabled={!onAddProduct}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-[#5f402a] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#795740] disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Icon name="check" className="text-base" />
-                  Simpan produk
-                </button>
-              </div>
-            </form>
-          </section>
-        </div>
-      )}
+              <Button
+                type="submit"
+                disabled={!onAddProduct}
+                className={`w-full gap-2 sm:w-auto ${PRIMARY_BUTTON_CLASS}`}
+              >
+                <Check className="h-4 w-4" />
+                Simpan produk
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

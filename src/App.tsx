@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Header } from "./components/Header";
 import { QuickTransactionModal } from "./components/QuickTransactionModal";
-import { Sidebar } from "./components/Sidebar";
+import AppSidebar from "./components/Sidebar";
 import {
   INITIAL_CASH_MUTATIONS,
   INITIAL_CUSTOMERS,
@@ -20,7 +19,12 @@ import {
   ReceivableInvoice,
 } from "./types";
 
-// Views
+import { Separator } from "./components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "./components/ui/sidebar";
 import { CashFlowView } from "./views/CashFlowView";
 import { CustomersView } from "./views/CustomersView";
 import { DashboardView } from "./views/DashboardView";
@@ -226,7 +230,6 @@ export default function App() {
       }),
     );
 
-    // Also record cash mutation
     const matchingInv = receivables.find((i) => i.id === invoiceId);
     handleAddMutation({
       description: `Pelunasan Piutang ${matchingInv?.invoiceNumber || ""} (${notes})`,
@@ -265,45 +268,47 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcf9f4] text-[#1c1c19] flex">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-[#5f402a] text-[#ffffff] px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 border border-[#795740] animate-bounce">
-          <span className="material-symbols-outlined text-[#86efac] text-lg">
-            check_circle
-          </span>
-          <span className="text-xs font-semibold">{toastMessage}</span>
-        </div>
-      )}
-
-      {/* Persistent / Responsive Dark Walnut Sidebar */}
-      <Sidebar
+    <SidebarProvider
+      defaultOpen
+      style={
+        {
+          "--sidebar-width": "252px",
+          "--sidebar-width-icon": "3.5rem",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar
         currentPage={currentPage}
         onNavigate={(page) => {
           setCurrentPage(page);
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
-        isOpenMobile={isMobileSidebarOpen}
-        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
-      {/* Main Container */}
-      <div className="flex min-h-screen w-full flex-1 flex-col overflow-x-hidden lg:pl-[252px]">
-        {/* Persistent Top Navigation Header */}
-        <Header
-          currentPage={currentPage}
-          onNavigate={(page) => {
-            setCurrentPage(page);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
-          onOpenQuickTx={handleOpenQuickTx}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
+      <SidebarInset className="min-w-0 bg-[#fcf9f4] text-[#1c1c19]">
+        <header className="flex h-16 shrink-0 items-center gap-3 border-b border-[#e8e0d7] bg-[#fcf9f4] px-4 sm:px-6">
+          <SidebarTrigger />
 
-        {/* Dynamic Main Workspace Content */}
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-10 pt-20 sm:px-6 lg:px-8">
+          <Separator orientation="vertical" className="h-5" />
+
+          <div>
+            <p className="text-sm font-semibold text-[#5f402a]">FurniERP</p>
+            <p className="text-xs text-muted-foreground">
+              Sistem manajemen usaha mebel
+            </p>
+          </div>
+        </header>
+
+        {toastMessage && (
+          <div className="fixed right-6 top-20 z-50 flex items-center gap-2.5 rounded-xl border border-[#795740] bg-[#5f402a] px-4 py-3 text-white shadow-xl">
+            <span className="material-symbols-outlined text-lg text-green-300">
+              check_circle
+            </span>
+            <span className="text-xs font-semibold">{toastMessage}</span>
+          </div>
+        )}
+
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
           {currentPage === "dashboard" && (
             <DashboardView
               onNavigate={setCurrentPage}
@@ -370,7 +375,7 @@ export default function App() {
               mutations={cashMutations}
               onNavigate={setCurrentPage}
               onAddMutation={(mut) => {
-                setCashMutations([mut, ...cashMutations]);
+                setCashMutations((prev) => [mut, ...prev]);
                 showToast(`Mutasi ${mut.refNumber} berhasil dicatat.`);
               }}
             />
@@ -392,27 +397,22 @@ export default function App() {
             <InvoiceDetailView onNavigate={setCurrentPage} />
           )}
 
-          {/* {currentPage === "ai-advisor" && (
-            <AiAdvisorView onNavigate={setCurrentPage} />
-          )} */}
-
           {currentPage === "settings" && (
             <SettingsView onNavigate={setCurrentPage} />
           )}
         </main>
-      </div>
 
-      {/* Global Quick Transaction Modal */}
-      <QuickTransactionModal
-        isOpen={isQuickTxOpen}
-        onClose={() => setIsQuickTxOpen(false)}
-        type={quickTxType}
-        customers={customers}
-        products={products}
-        onAddMutation={handleAddMutation}
-        onAddSPK={handleAddSPK}
-        onToast={showToast}
-      />
-    </div>
+        <QuickTransactionModal
+          isOpen={isQuickTxOpen}
+          onClose={() => setIsQuickTxOpen(false)}
+          type={quickTxType}
+          customers={customers}
+          products={products}
+          onAddMutation={handleAddMutation}
+          onAddSPK={handleAddSPK}
+          onToast={showToast}
+        />
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

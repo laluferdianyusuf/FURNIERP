@@ -1,6 +1,50 @@
+import {
+  ArrowDownLeft,
+  ArrowLeftRight,
+  ArrowUpRight,
+  CircleAlert,
+  Landmark,
+  Plus,
+  ReceiptText,
+  Search,
+  Wallet,
+  X,
+} from "lucide-react";
+import type { FormEvent, ReactNode } from "react";
 import React, { useMemo, useState } from "react";
+
 import { BANK_ACCOUNTS } from "../data/mockData";
-import { CashMutation, PageView } from "../types";
+import type { CashMutation, PageView } from "../types";
+
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader } from "../components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 type Account = "BCA" | "Mandiri" | "Kas Tunai";
 type AccountFilter = "ALL" | Account;
@@ -35,16 +79,21 @@ const OUT_CATEGORIES = [
   { value: "Hardware Mebel", label: "Hardware Mebel" },
 ];
 
+const PRIMARY = "#5f402a";
+const HOVER = "#795740";
+
 const currency = (amount: number) => `Rp ${amount.toLocaleString("id-ID")}`;
 
 const compactCurrency = (amount: number) => {
-  if (Math.abs(amount) >= 1_000_000_000) {
+  const absoluteAmount = Math.abs(amount);
+
+  if (absoluteAmount >= 1_000_000_000) {
     return `Rp ${(amount / 1_000_000_000).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
     })} M`;
   }
 
-  if (Math.abs(amount) >= 1_000_000) {
+  if (absoluteAmount >= 1_000_000) {
     return `Rp ${(amount / 1_000_000).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
     })} jt`;
@@ -66,24 +115,16 @@ const makeReference = (type: "IN" | "OUT" | "TRANSFER") => {
   return `${prefix}-${yearMonth}-${String(Date.now()).slice(-5)}`;
 };
 
-const inputClass =
-  "w-full min-w-0 rounded-lg border border-[#e5e2dd] bg-[#fcf9f4] px-3 py-2.5 text-sm text-[#1c1c19] outline-none transition placeholder:text-[#a39a91] focus:border-[#795740] focus:ring-2 focus:ring-[#795740]/10";
+const inputClass = "h-10 bg-white text-sm focus-visible:ring-[#795740]";
 
-const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50";
+function accountFromBankId(id: string): Account {
+  if (id === "bca") return "BCA";
+  if (id === "mandiri") return "Mandiri";
+  return "Kas Tunai";
+}
 
-const iconButtonClass =
-  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#82746d] transition hover:bg-[#eae5de] hover:text-[#1c1c19]";
-
-function Icon({ name, className = "" }: { name: string; className?: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`material-symbols-outlined ${className}`}
-    >
-      {name}
-    </span>
-  );
+function getAccountLabel(account: Account) {
+  return ACCOUNTS.find((item) => item.value === account)?.label ?? account;
 }
 
 function SectionHeading({
@@ -93,96 +134,20 @@ function SectionHeading({
 }: {
   title: string;
   description?: string;
-  action?: React.ReactNode;
+  action?: ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 className="text-base font-semibold tracking-tight text-[#1c1c19]">
+      <div className="min-w-0">
+        <h2 className="text-base font-semibold tracking-tight text-stone-900">
           {title}
         </h2>
         {description && (
-          <p className="mt-1 text-sm leading-5 text-[#82746d]">{description}</p>
+          <p className="mt-1 text-sm leading-5 text-stone-500">{description}</p>
         )}
       </div>
       {action}
     </div>
-  );
-}
-
-function SummaryCard({
-  label,
-  amount,
-  detail,
-  icon,
-  tone = "default",
-}: {
-  label: string;
-  amount: string;
-  detail: string;
-  icon: string;
-  tone?: "default" | "positive" | "negative" | "featured";
-}) {
-  const tones = {
-    default: {
-      iconBg: "bg-[#f0ede8]",
-      iconColor: "text-[#5f402a]",
-      amountColor: "text-[#1c1c19]",
-      card: "bg-[#fcf9f4] border-[#e5e2dd]",
-      labelColor: "text-[#82746d]",
-    },
-    positive: {
-      iconBg: "bg-[#e8efe7]",
-      iconColor: "text-[#45634a]",
-      amountColor: "text-[#45634a]",
-      card: "bg-[#fcf9f4] border-[#e5e2dd]",
-      labelColor: "text-[#82746d]",
-    },
-    negative: {
-      iconBg: "bg-[#f5e9e5]",
-      iconColor: "text-[#a85348]",
-      amountColor: "text-[#a85348]",
-      card: "bg-[#fcf9f4] border-[#e5e2dd]",
-      labelColor: "text-[#82746d]",
-    },
-    featured: {
-      iconBg: "bg-white/10",
-      iconColor: "text-[#f0d7c4]",
-      amountColor: "text-white",
-      card: "bg-[#5f402a] border-[#5f402a]",
-      labelColor: "text-[#e1cdbb]",
-    },
-  };
-
-  const style = tones[tone];
-
-  return (
-    <section
-      className={`flex min-w-0 flex-col justify-between rounded-xl border p-4 ${style.card}`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <p className={`text-xs font-medium leading-5 ${style.labelColor}`}>
-          {label}
-        </p>
-        <span
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${style.iconBg} ${style.iconColor}`}
-        >
-          <Icon name={icon} className="text-[18px]" />
-        </span>
-      </div>
-
-      <div className="mt-5 min-w-0">
-        <p
-          title={amount}
-          className={`break-words text-xl font-semibold tracking-tight sm:text-2xl ${style.amountColor}`}
-        >
-          {amount}
-        </p>
-        <p className={`mt-1.5 text-xs leading-5 ${style.labelColor}`}>
-          {detail}
-        </p>
-      </div>
-    </section>
   );
 }
 
@@ -195,8 +160,8 @@ function BankAccountCard({
   selected: boolean;
   onClick: () => void;
 }) {
-  const accountName: Account =
-    bank.id === "bca" ? "BCA" : bank.id === "mandiri" ? "Mandiri" : "Kas Tunai";
+  const account = accountFromBankId(bank.id);
+  const AccountIcon = account === "Kas Tunai" ? Wallet : Landmark;
 
   return (
     <button
@@ -206,7 +171,7 @@ function BankAccountCard({
       className={`w-full rounded-xl border p-4 text-left transition ${
         selected
           ? "border-[#795740] bg-[#f0e7dd] ring-1 ring-[#795740]/15"
-          : "border-[#e5e2dd] bg-[#fcf9f4] hover:border-[#c6b5a5] hover:bg-white"
+          : "border-stone-200 bg-[#fcf9f4] hover:border-stone-300 hover:bg-white"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -215,42 +180,41 @@ function BankAccountCard({
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
               selected
                 ? "bg-[#5f402a] text-white"
-                : "bg-[#f0ede8] text-[#5f402a]"
+                : "bg-stone-100 text-[#5f402a]"
             }`}
           >
-            <Icon
-              name={
-                accountName === "Kas Tunai" ? "payments" : "account_balance"
-              }
-              className="text-xl"
-            />
+            <AccountIcon className="h-5 w-5" />
           </span>
+
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-[#1c1c19]">
+            <p className="truncate text-sm font-semibold text-stone-900">
               {bank.name}
             </p>
-            <p className="mt-1 truncate text-xs text-[#82746d]">
+            <p className="mt-1 truncate text-xs text-stone-500">
               {bank.number}
             </p>
           </div>
         </div>
 
-        <span
-          className={`shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold ${
-            selected ? "bg-white text-[#5f402a]" : "bg-[#f0ede8] text-[#82746d]"
-          }`}
+        <Badge
+          variant="secondary"
+          className={
+            selected
+              ? "shrink-0 border-0 bg-white text-[#5f402a]"
+              : "shrink-0 border-0 bg-stone-100 text-stone-500"
+          }
         >
           {selected ? "Dipilih" : bank.badge}
-        </span>
+        </Badge>
       </div>
 
-      <div className="mt-4 border-t border-[#e5e2dd] pt-3">
-        <p className="text-xs text-[#82746d]">Saldo pada data rekening</p>
-        <p className="mt-1 text-lg font-semibold tracking-tight text-[#1c1c19]">
+      <div className="mt-4 border-t border-stone-200 pt-3">
+        <p className="text-xs text-stone-500">Saldo pada data rekening</p>
+        <p className="mt-1 text-lg font-semibold tracking-tight text-stone-900">
           {compactCurrency(bank.balance)}
         </p>
         <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="truncate text-xs text-[#82746d]">{bank.holder}</p>
+          <p className="truncate text-xs text-stone-500">{bank.holder}</p>
           <span className="text-xs font-medium text-[#5f402a]">
             {bank.share}
           </span>
@@ -262,75 +226,22 @@ function BankAccountCard({
 
 function FormField({
   label,
+  htmlFor,
   children,
   hint,
 }: {
   label: string;
-  children: React.ReactNode;
+  htmlFor?: string;
+  children: ReactNode;
   hint?: string;
 }) {
   return (
     <div className="min-w-0 space-y-1.5">
-      <label className="block text-xs font-semibold text-[#50453e]">
+      <Label htmlFor={htmlFor} className="text-xs font-semibold text-stone-700">
         {label}
-      </label>
+      </Label>
       {children}
-      {hint && <p className="text-[11px] leading-4 text-[#82746d]">{hint}</p>}
-    </div>
-  );
-}
-
-function ModalShell({
-  title,
-  subtitle,
-  icon,
-  onClose,
-  children,
-}: {
-  title: string;
-  subtitle: string;
-  icon: string;
-  onClose: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#1c1c19]/45 p-3 backdrop-blur-[2px] sm:p-5"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        className="flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[#e5e2dd] bg-[#fcf9f4] shadow-2xl"
-      >
-        <header className="flex items-start justify-between gap-4 border-b border-[#e5e2dd] px-5 py-4">
-          <div className="flex min-w-0 items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f0ede8] text-[#5f402a]">
-              <Icon name={icon} className="text-xl" />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-[#1c1c19]">
-                {title}
-              </h2>
-              <p className="mt-1 text-xs leading-5 text-[#82746d]">
-                {subtitle}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup modal"
-            className={iconButtonClass}
-          >
-            <Icon name="close" />
-          </button>
-        </header>
-        <div className="overflow-y-auto p-5">{children}</div>
-      </section>
+      {hint && <p className="text-[11px] leading-4 text-stone-500">{hint}</p>}
     </div>
   );
 }
@@ -339,13 +250,13 @@ function CashMutationTable({ mutations }: { mutations: CashMutation[] }) {
   if (mutations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-14 text-center">
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0ede8] text-[#82746d]">
-          <Icon name="receipt_long" className="text-2xl" />
+        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-100 text-stone-500">
+          <ReceiptText className="h-6 w-6" />
         </span>
-        <p className="mt-3 text-sm font-semibold text-[#50453e]">
+        <p className="mt-3 text-sm font-semibold text-stone-700">
           Tidak ada transaksi ditemukan
         </p>
-        <p className="mt-1 text-xs text-[#82746d]">
+        <p className="mt-1 text-xs text-stone-500">
           Coba ubah kata kunci atau filter yang digunakan.
         </p>
       </div>
@@ -353,89 +264,114 @@ function CashMutationTable({ mutations }: { mutations: CashMutation[] }) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[950px] border-collapse text-left text-sm">
-        <thead>
-          <tr className="border-y border-[#e5e2dd] bg-[#f5f1eb] text-[11px] font-semibold uppercase tracking-wide text-[#82746d]">
-            <th className="px-4 py-3">Tanggal</th>
-            <th className="px-3 py-3">Referensi</th>
-            <th className="px-4 py-3">Keterangan</th>
-            <th className="px-3 py-3">Kategori</th>
-            <th className="px-3 py-3">Rekening</th>
-            <th className="px-3 py-3 text-right">Masuk</th>
-            <th className="px-3 py-3 text-right">Keluar</th>
-            <th className="px-4 py-3 text-right">Saldo berjalan</th>
-          </tr>
-        </thead>
+    <div className="w-full overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-stone-50 hover:bg-stone-50">
+            <TableHead className="whitespace-nowrap px-4 text-xs font-semibold">
+              Tanggal
+            </TableHead>
+            <TableHead className="whitespace-nowrap text-xs font-semibold">
+              Referensi
+            </TableHead>
+            <TableHead className="min-w-[200px] text-xs font-semibold">
+              Keterangan
+            </TableHead>
+            <TableHead className="whitespace-nowrap text-xs font-semibold">
+              Kategori
+            </TableHead>
+            <TableHead className="whitespace-nowrap text-xs font-semibold">
+              Rekening
+            </TableHead>
+            <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
+              Masuk
+            </TableHead>
+            <TableHead className="whitespace-nowrap text-right text-xs font-semibold">
+              Keluar
+            </TableHead>
+            <TableHead className="whitespace-nowrap px-4 text-right text-xs font-semibold">
+              Saldo berjalan
+            </TableHead>
+          </TableRow>
+        </TableHeader>
 
-        <tbody className="divide-y divide-[#e5e2dd]">
+        <TableBody>
           {mutations.map((tx) => (
-            <tr key={tx.id} className="transition hover:bg-[#f7f3ed]">
-              <td className="whitespace-nowrap px-4 py-3.5">
-                <p className="font-medium text-[#1c1c19]">{tx.date}</p>
-                <p className="mt-1 text-xs text-[#82746d]">{tx.time}</p>
-              </td>
+            <TableRow
+              key={tx.id}
+              className="transition-colors hover:bg-stone-50/80"
+            >
+              <TableCell className="whitespace-nowrap px-4 py-3.5">
+                <p className="font-medium text-stone-900">{tx.date}</p>
+                <p className="mt-1 text-xs text-stone-500">{tx.time}</p>
+              </TableCell>
 
-              <td className="whitespace-nowrap px-3 py-3.5">
+              <TableCell className="whitespace-nowrap py-3.5">
                 <p className="font-mono text-xs font-semibold text-[#5f402a]">
                   {tx.refNumber}
                 </p>
                 {tx.tag && (
-                  <span className="mt-1.5 inline-flex rounded bg-[#f0ede8] px-1.5 py-1 text-[10px] text-[#82746d]">
+                  <Badge
+                    variant="secondary"
+                    className="mt-1.5 border-0 bg-stone-100 text-[10px] font-normal text-stone-500"
+                  >
                     {tx.tag}
-                  </span>
+                  </Badge>
                 )}
-              </td>
+              </TableCell>
 
-              <td className="max-w-[240px] px-4 py-3.5">
-                <p className="font-medium text-[#1c1c19]">{tx.description}</p>
-                <p className="mt-1 truncate text-xs text-[#82746d]">
+              <TableCell className="max-w-[260px] py-3.5">
+                <p className="font-medium text-stone-900">{tx.description}</p>
+                <p className="mt-1 truncate text-xs text-stone-500">
                   {tx.entity}
                 </p>
-              </td>
+              </TableCell>
 
-              <td className="px-3 py-3.5">
-                <span className="inline-flex rounded-md bg-[#f0ede8] px-2 py-1 text-xs text-[#50453e]">
+              <TableCell className="py-3.5">
+                <Badge
+                  variant="secondary"
+                  className="border-0 bg-stone-100 font-normal text-stone-600"
+                >
                   {tx.category}
-                </span>
-              </td>
+                </Badge>
+              </TableCell>
 
-              <td className="whitespace-nowrap px-3 py-3.5 text-xs font-medium text-[#50453e]">
+              <TableCell className="whitespace-nowrap py-3.5 text-xs font-medium text-stone-700">
                 {tx.account}
                 {tx.type === "TRANSFER" && tx.destAccount && (
-                  <p className="mt-1 text-[11px] text-[#82746d]">
+                  <p className="mt-1 text-[11px] text-stone-500">
                     Ke: {tx.destAccount}
                   </p>
                 )}
-              </td>
+              </TableCell>
 
-              <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono text-xs font-medium">
-                {tx.amountIn > 0 ? (
-                  <span className="text-[#45634a]">
+              <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
+                {tx.type === "IN" && tx.amountIn > 0 ? (
+                  <span className="text-emerald-700">
                     +{currency(tx.amountIn)}
                   </span>
                 ) : (
-                  <span className="text-[#b5ada5]">—</span>
+                  <span className="text-stone-300">—</span>
                 )}
-              </td>
+              </TableCell>
 
-              <td className="whitespace-nowrap px-3 py-3.5 text-right font-mono text-xs font-medium">
-                {tx.amountOut > 0 ? (
-                  <span className="text-[#a85348]">
+              <TableCell className="whitespace-nowrap py-3.5 text-right font-mono text-xs font-medium">
+                {tx.type === "OUT" && tx.amountOut > 0 ? (
+                  <span className="text-red-700">
                     −{currency(tx.amountOut)}
                   </span>
                 ) : (
-                  <span className="text-[#b5ada5]">—</span>
+                  <span className="text-stone-300">—</span>
                 )}
-              </td>
+              </TableCell>
 
-              <td className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-xs font-semibold text-[#1c1c19]">
+              <TableCell className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-xs font-semibold text-stone-900">
                 {currency(tx.runningBalance)}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -459,7 +395,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
   const [transferDest, setTransferDest] = useState<Account>("Kas Tunai");
   const [formError, setFormError] = useState("");
 
-  // Angka saldo awal masih berupa data contoh. Sesuaikan dengan data bisnis.
+  // Saldo awal masih data contoh. Nantinya ambil dari konfigurasi saldo awal.
   const initialBalance = 152_150_000;
 
   const totalInflow = useMemo(
@@ -478,8 +414,16 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
     [mutations],
   );
 
-  const inflowCount = mutations.filter((m) => m.type === "IN").length;
-  const outflowCount = mutations.filter((m) => m.type === "OUT").length;
+  const inflowCount = useMemo(
+    () => mutations.filter((mutation) => mutation.type === "IN").length,
+    [mutations],
+  );
+
+  const outflowCount = useMemo(
+    () => mutations.filter((mutation) => mutation.type === "OUT").length,
+    [mutations],
+  );
+
   const netCashFlow = totalInflow - totalOutflow;
   const currentTotalLiquidity = initialBalance + netCashFlow;
 
@@ -535,7 +479,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
     resetForm();
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -543,6 +487,13 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
 
     if (!Number.isFinite(amount) || amount <= 0) {
       setFormError("Masukkan nominal yang lebih besar dari nol.");
+      return;
+    }
+
+    if (!activeModal) return;
+
+    if (!formDesc.trim() && activeModal !== "TRANSFER") {
+      setFormError("Keterangan transaksi wajib diisi.");
       return;
     }
 
@@ -559,6 +510,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
     }
 
     const now = new Date();
+
     const common = {
       id: `tx-${now.getTime()}`,
       date: today(),
@@ -599,7 +551,7 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         runningBalance: currentTotalLiquidity - amount,
         tag: "Manual Entry",
       };
-    } else if (activeModal === "TRANSFER") {
+    } else {
       transaction = {
         ...common,
         refNumber: makeReference("TRANSFER"),
@@ -608,15 +560,13 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
         category: "Transfer Rekening",
         account: transferSource,
         type: "TRANSFER",
-        amountIn: amount,
-        amountOut: amount,
+        amountIn: 0,
+        amountOut: 0,
         runningBalance: currentTotalLiquidity,
         sourceAccount: transferSource,
         destAccount: transferDest,
         tag: "Internal Transfer",
       };
-    } else {
-      return;
     }
 
     onAddMutation(transaction);
@@ -639,119 +589,92 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
       ? "Catat uang yang benar-benar diterima bisnis."
       : "Catat uang yang benar-benar dibayarkan bisnis.";
 
-  const modalIcon = isTransfer
-    ? "swap_horiz"
+  const ModalIcon = isTransfer
+    ? ArrowLeftRight
     : isInflow
-      ? "south_west"
-      : "north_east";
+      ? ArrowDownLeft
+      : ArrowUpRight;
 
-  const accountLabel = (account: Account) =>
-    ACCOUNTS.find((item) => item.value === account)?.label ?? account;
+  const hasActiveFilters =
+    searchQuery.trim() !== "" ||
+    typeFilter !== "ALL" ||
+    selectedAccountFilter !== "ALL";
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setTypeFilter("ALL");
+    setSelectedAccountFilter("ALL");
+  };
 
   return (
-    <div className="flex w-full flex-col gap-6">
-      <header className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-        <p className="text-sm text-[#82746d]">
-          Catat uang masuk, uang keluar, dan pindah rekening.
-        </p>
+    <div className="flex w-full flex-col gap-5 text-stone-900">
+      {/* Page header */}
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight text-stone-900">
+            Arus Kas
+          </h1>
+          <p className="mt-1 text-sm leading-5 text-stone-500">
+            Pantau uang masuk, uang keluar, dan transfer antar rekening.
+          </p>
+        </div>
 
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={() => openModal("TRANSFER")}
-            className={`${buttonBase} border border-[#e5e2dd] bg-[#fcf9f4] text-[#50453e] hover:bg-white`}
+            className="border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
           >
-            <Icon name="swap_horiz" className="text-lg" />
+            <ArrowLeftRight className="mr-2 h-4 w-4" />
             Transfer
-          </button>
-          <button
+          </Button>
+
+          <Button
             type="button"
+            variant="outline"
             onClick={() => openModal("OUT")}
-            className={`${buttonBase} border border-[#e5e2dd] bg-[#fcf9f4] text-[#a85348] hover:bg-[#f5e9e5]`}
+            className="border-red-200 bg-white text-red-700 hover:bg-red-50"
           >
-            <Icon name="north_east" className="text-lg" />
+            <ArrowUpRight className="mr-2 h-4 w-4" />
             Pengeluaran
-          </button>
-          <button
+          </Button>
+
+          <Button
             type="button"
             onClick={() => openModal("IN")}
-            className={`${buttonBase} bg-[#5f402a] text-white hover:bg-[#795740]`}
+            className="bg-[#5f402a] text-white hover:bg-[#795740]"
           >
-            <Icon name="add" className="text-lg" />
+            <Plus className="mr-2 h-4 w-4" />
             Pemasukan
-          </button>
+          </Button>
         </div>
       </header>
 
-      <section>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-          <SummaryCard
-            label="Saldo awal"
-            amount={compactCurrency(initialBalance)}
-            detail="Saldo awal contoh, perlu disesuaikan"
-            icon="account_balance_wallet"
-          />
-          <SummaryCard
-            label="Total pemasukan"
-            amount={compactCurrency(totalInflow)}
-            detail={`${inflowCount} transaksi pemasukan`}
-            icon="south_west"
-            tone="positive"
-          />
-          <SummaryCard
-            label="Total pengeluaran"
-            amount={compactCurrency(totalOutflow)}
-            detail={`${outflowCount} transaksi pengeluaran`}
-            icon="north_east"
-            tone="negative"
-          />
-          <SummaryCard
-            label="Arus kas bersih"
-            amount={`${netCashFlow > 0 ? "+" : ""}${compactCurrency(netCashFlow)}`}
-            detail={
-              netCashFlow > 0
-                ? "Pemasukan melebihi pengeluaran"
-                : netCashFlow < 0
-                  ? "Pengeluaran melebihi pemasukan"
-                  : "Pemasukan dan pengeluaran seimbang"
-            }
-            icon="monitoring"
-            tone={netCashFlow < 0 ? "negative" : "default"}
-          />
-          <SummaryCard
-            label="Estimasi likuiditas"
-            amount={compactCurrency(currentTotalLiquidity)}
-            detail="Saldo awal + arus kas bersih"
-            icon="account_balance"
-            tone="featured"
-          />
-        </div>
-      </section>
-
-      <section>
+      {/* Bank accounts */}
+      <section className="space-y-4">
         <SectionHeading
-          title="Rekening"
+          title=""
+          description=""
           action={
             selectedAccountFilter !== "ALL" ? (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => setSelectedAccountFilter("ALL")}
-                className="self-start text-xs font-semibold text-[#5f402a] hover:text-[#795740]"
+                className="self-start text-[#5f402a] hover:bg-stone-100 hover:text-[#795740]"
               >
                 Tampilkan semua
-              </button>
+                <X className="ml-1 h-3.5 w-3.5" />
+              </Button>
             ) : undefined
           }
         />
 
-        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
           {BANK_ACCOUNTS.map((bank) => {
-            const account: Account =
-              bank.id === "bca"
-                ? "BCA"
-                : bank.id === "mandiri"
-                  ? "Mandiri"
-                  : "Kas Tunai";
+            const account = accountFromBankId(bank.id);
 
             return (
               <BankAccountCard
@@ -770,15 +693,15 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
       </section>
 
       {/* Transactions */}
-      <section className="overflow-hidden rounded-xl border border-[#e5e2dd] bg-[#fcf9f4]">
-        <div className="space-y-4 p-4 sm:p-5">
+      <Card className="overflow-hidden rounded-xl border-stone-200 bg-[#fcf9f4] shadow-none">
+        <CardHeader className="gap-4 border-b border-stone-200 px-4 py-4 sm:px-5">
           <SectionHeading
             title="Transaksi"
             description={`${filteredMutations.length} dari ${mutations.length} transaksi`}
           />
 
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex max-w-full gap-1 overflow-x-auto rounded-lg bg-[#f0ede8] p-1">
+            <div className="flex max-w-full gap-1 overflow-x-auto rounded-lg bg-stone-100 p-1">
               {(
                 [
                   ["ALL", "Semua"],
@@ -786,291 +709,361 @@ export const CashFlowView: React.FC<CashFlowViewProps> = ({
                   ["OUT", "Pengeluaran"],
                   ["TRANSFER", "Transfer"],
                 ] as const
-              ).map(([value, label]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setTypeFilter(value)}
-                  aria-pressed={typeFilter === value}
-                  className={`shrink-0 rounded-md px-3 py-2 text-xs font-medium transition ${
-                    typeFilter === value
-                      ? "bg-[#fcf9f4] text-[#5f402a] shadow-sm"
-                      : "text-[#82746d] hover:text-[#50453e]"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+              ).map(([value, label]) => {
+                const isActive = typeFilter === value;
+
+                return (
+                  <Button
+                    key={value}
+                    type="button"
+                    size="sm"
+                    variant={isActive ? "default" : "ghost"}
+                    onClick={() => setTypeFilter(value)}
+                    aria-pressed={isActive}
+                    className={
+                      isActive
+                        ? "shrink-0 bg-[#5f402a] text-white hover:bg-[#795740]"
+                        : "shrink-0 text-stone-600 hover:bg-white hover:text-stone-900"
+                    }
+                  >
+                    {label}
+                  </Button>
+                );
+              })}
             </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <label className="relative block min-w-0 flex-1 xl:w-64">
-                <Icon
-                  name="search"
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-lg text-[#82746d]"
-                />
-                <input
+            <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
+              <div className="relative min-w-0 flex-1 xl:w-64">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                <Input
                   type="search"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Cari transaksi..."
                   aria-label="Cari transaksi"
-                  className={`${inputClass} pl-10`}
+                  className={`${inputClass} pl-9`}
                 />
-              </label>
+              </div>
 
-              <select
+              <Select
                 value={selectedAccountFilter}
-                onChange={(event) =>
-                  setSelectedAccountFilter(event.target.value as AccountFilter)
+                onValueChange={(value) =>
+                  setSelectedAccountFilter(value as AccountFilter)
                 }
-                aria-label="Filter rekening"
-                className={`${inputClass} sm:w-48`}
               >
-                <option value="ALL">Semua rekening</option>
-                {ACCOUNTS.map((account) => (
-                  <option key={account.value} value={account.value}>
-                    {account.label}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  aria-label="Filter rekening"
+                  className={`${inputClass} w-full sm:w-52`}
+                >
+                  <SelectValue placeholder="Semua rekening" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">Semua rekening</SelectItem>
+                  {ACCOUNTS.map((account) => (
+                    <SelectItem key={account.value} value={account.value}>
+                      {account.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
-        </div>
+        </CardHeader>
 
-        <CashMutationTable mutations={filteredMutations} />
+        <CardContent className="p-0">
+          <CashMutationTable mutations={filteredMutations} />
+        </CardContent>
 
-        <div className="flex flex-col gap-2 border-t border-[#e5e2dd] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <p className="text-xs text-[#82746d]">
-            Menampilkan hasil berdasarkan filter aktif.
+        <div className="flex flex-col gap-2 border-t border-stone-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <p className="text-xs text-stone-500">
+            Menampilkan transaksi berdasarkan filter aktif.
           </p>
-          {(searchQuery ||
-            typeFilter !== "ALL" ||
-            selectedAccountFilter !== "ALL") && (
-            <button
+
+          {hasActiveFilters && (
+            <Button
               type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setTypeFilter("ALL");
-                setSelectedAccountFilter("ALL");
-              }}
-              className="self-start text-xs font-semibold text-[#5f402a] hover:underline"
+              variant="ghost"
+              size="sm"
+              onClick={resetFilters}
+              className="self-start text-[#5f402a] hover:bg-stone-100 hover:text-[#795740]"
             >
+              <X className="mr-1.5 h-3.5 w-3.5" />
               Hapus semua filter
-            </button>
+            </Button>
           )}
         </div>
-      </section>
+      </Card>
 
-      {/* Transaction modal */}
-      {activeModal && (
-        <ModalShell
-          title={modalTitle}
-          subtitle={modalSubtitle}
-          icon={modalIcon}
-          onClose={closeModal}
-        >
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {isTransfer ? (
-              <>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <FormField label="Rekening asal">
-                    <select
-                      value={transferSource}
-                      onChange={(event) =>
-                        setTransferSource(event.target.value as Account)
-                      }
-                      className={inputClass}
-                    >
-                      {ACCOUNTS.map((account) => (
-                        <option key={account.value} value={account.value}>
-                          {account.label}
-                        </option>
-                      ))}
-                    </select>
-                  </FormField>
+      {/* Transaction dialog */}
+      <Dialog
+        open={activeModal !== null}
+        onOpenChange={(open) => {
+          if (!open) closeModal();
+        }}
+      >
+        <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden border-stone-200 bg-[#fcf9f4] p-0 sm:max-w-lg">
+          <DialogHeader className="border-b border-stone-200 px-5 py-4 text-left">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-100 text-[#5f402a]">
+                <ModalIcon className="h-5 w-5" />
+              </span>
 
-                  <FormField label="Rekening tujuan">
-                    <select
-                      value={transferDest}
-                      onChange={(event) =>
-                        setTransferDest(event.target.value as Account)
-                      }
-                      className={inputClass}
-                    >
-                      {ACCOUNTS.map((account) => (
-                        <option key={account.value} value={account.value}>
-                          {account.label}
-                        </option>
-                      ))}
-                    </select>
-                  </FormField>
-                </div>
+              <div className="min-w-0">
+                <DialogTitle className="text-base font-semibold text-stone-900">
+                  {modalTitle}
+                </DialogTitle>
+                <DialogDescription className="mt-1 text-xs leading-5 text-stone-500">
+                  {modalSubtitle}
+                </DialogDescription>
+              </div>
+            </div>
+          </DialogHeader>
 
-                {transferSource === transferDest && (
-                  <p className="rounded-lg bg-[#f5e9e5] px-3 py-2 text-xs text-[#a85348]">
-                    Rekening asal dan tujuan tidak boleh sama.
-                  </p>
-                )}
+          <div className="overflow-y-auto p-5">
+            <form
+              id="cash-mutation-form"
+              onSubmit={handleSubmit}
+              className="space-y-4"
+            >
+              {isTransfer ? (
+                <>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <FormField label="Rekening asal">
+                      <Select
+                        value={transferSource}
+                        onValueChange={(value) =>
+                          setTransferSource(value as Account)
+                        }
+                      >
+                        <SelectTrigger className={inputClass}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ACCOUNTS.map((account) => (
+                            <SelectItem
+                              key={account.value}
+                              value={account.value}
+                            >
+                              {account.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormField>
 
-                <FormField label="Nominal transfer (Rp)">
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    required
-                    value={formAmount}
-                    onChange={(event) => setFormAmount(event.target.value)}
-                    placeholder="Contoh: 5000000"
-                    className={`${inputClass} font-mono`}
-                  />
-                </FormField>
+                    <FormField label="Rekening tujuan">
+                      <Select
+                        value={transferDest}
+                        onValueChange={(value) =>
+                          setTransferDest(value as Account)
+                        }
+                      >
+                        <SelectTrigger className={inputClass}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ACCOUNTS.map((account) => (
+                            <SelectItem
+                              key={account.value}
+                              value={account.value}
+                            >
+                              {account.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormField>
+                  </div>
 
-                <div className="rounded-lg border border-[#e5e2dd] bg-[#f5f1eb] p-3">
-                  <div className="flex items-start gap-2">
-                    <Icon
-                      name="info"
-                      className="mt-0.5 text-lg text-[#795740]"
+                  {transferSource === transferDest && (
+                    <Alert className="border-red-200 bg-red-50 text-red-800">
+                      <CircleAlert className="h-4 w-4" />
+                      <AlertDescription className="text-xs leading-5">
+                        Rekening asal dan tujuan tidak boleh sama.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  <FormField
+                    label="Nominal transfer (Rp)"
+                    htmlFor="transfer-amount"
+                  >
+                    <Input
+                      id="transfer-amount"
+                      type="number"
+                      min="1"
+                      step="1"
+                      required
+                      value={formAmount}
+                      onChange={(event) => setFormAmount(event.target.value)}
+                      placeholder="Contoh: 5000000"
+                      className={`${inputClass} font-mono`}
                     />
-                    <p className="text-xs leading-5 text-[#6f6258]">
+                  </FormField>
+
+                  <Alert className="border-stone-200 bg-stone-50 text-stone-700">
+                    <CircleAlert className="h-4 w-4 text-[#795740]" />
+                    <AlertDescription className="text-xs leading-5">
                       Transfer internal tidak menambah atau mengurangi total
                       uang bisnis dan tidak dihitung sebagai pendapatan atau
-                      beban. Saldo tiap rekening perlu diperbarui oleh sistem.
-                    </p>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <FormField
-                  label={`Nominal ${isInflow ? "pemasukan" : "pengeluaran"} (Rp)`}
-                >
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    required
-                    value={formAmount}
-                    onChange={(event) => setFormAmount(event.target.value)}
-                    placeholder="Masukkan nominal"
-                    className={`${inputClass} font-mono text-base font-semibold`}
-                  />
-                </FormField>
-
-                <FormField
-                  label={isInflow ? "Rekening tujuan" : "Rekening sumber"}
-                >
-                  <select
-                    value={formAccount}
-                    onChange={(event) =>
-                      setFormAccount(event.target.value as Account)
-                    }
-                    className={inputClass}
+                      beban. Saldo masing-masing rekening perlu diperbarui oleh
+                      sistem.
+                    </AlertDescription>
+                  </Alert>
+                </>
+              ) : (
+                <>
+                  <FormField
+                    label={`Nominal ${isInflow ? "pemasukan" : "pengeluaran"} (Rp)`}
+                    htmlFor="transaction-amount"
                   >
-                    {ACCOUNTS.map((account) => (
-                      <option key={account.value} value={account.value}>
-                        {account.label}
-                      </option>
-                    ))}
-                  </select>
-                </FormField>
+                    <Input
+                      id="transaction-amount"
+                      type="number"
+                      min="1"
+                      step="1"
+                      required
+                      value={formAmount}
+                      onChange={(event) => setFormAmount(event.target.value)}
+                      placeholder="Masukkan nominal"
+                      className={`${inputClass} font-mono text-base font-semibold`}
+                    />
+                  </FormField>
 
-                <FormField label="Kategori transaksi">
-                  <select
-                    value={formCategory}
-                    onChange={(event) => setFormCategory(event.target.value)}
-                    className={inputClass}
+                  <FormField
+                    label={isInflow ? "Rekening tujuan" : "Rekening sumber"}
                   >
-                    {(isInflow ? IN_CATEGORIES : OUT_CATEGORIES).map(
-                      (category) => (
-                        <option key={category.value} value={category.value}>
-                          {category.label}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </FormField>
+                    <Select
+                      value={formAccount}
+                      onValueChange={(value) =>
+                        setFormAccount(value as Account)
+                      }
+                    >
+                      <SelectTrigger className={inputClass}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ACCOUNTS.map((account) => (
+                          <SelectItem key={account.value} value={account.value}>
+                            {account.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormField>
 
-                <FormField label="Keterangan transaksi">
-                  <input
-                    type="text"
-                    required
-                    value={formDesc}
-                    onChange={(event) => setFormDesc(event.target.value)}
-                    placeholder={
-                      isInflow
-                        ? "Contoh: Pelunasan pesanan meja"
-                        : "Contoh: Pembelian bahan baku kayu"
+                  <FormField label="Kategori transaksi">
+                    <Select
+                      value={formCategory}
+                      onValueChange={(value) => setFormCategory(value ?? "")}
+                    >
+                      <SelectTrigger className={inputClass}>
+                        <SelectValue placeholder="Pilih kategori" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(isInflow ? IN_CATEGORIES : OUT_CATEGORIES).map(
+                          (category) => (
+                            <SelectItem
+                              key={category.value}
+                              value={category.value}
+                            >
+                              {category.label}
+                            </SelectItem>
+                          ),
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </FormField>
+
+                  <FormField
+                    label="Keterangan transaksi"
+                    htmlFor="transaction-description"
+                  >
+                    <Input
+                      id="transaction-description"
+                      type="text"
+                      required
+                      value={formDesc}
+                      onChange={(event) => setFormDesc(event.target.value)}
+                      placeholder={
+                        isInflow
+                          ? "Contoh: Pelunasan pesanan meja"
+                          : "Contoh: Pembelian bahan baku kayu"
+                      }
+                      className={inputClass}
+                    />
+                  </FormField>
+
+                  <FormField
+                    label={
+                      isInflow ? "Pelanggan / sumber dana" : "Penerima / vendor"
                     }
-                    className={inputClass}
-                  />
-                </FormField>
+                    htmlFor="transaction-entity"
+                    hint="Opsional, isi nama pelanggan atau pemasok."
+                  >
+                    <Input
+                      id="transaction-entity"
+                      type="text"
+                      value={formEntity}
+                      onChange={(event) => setFormEntity(event.target.value)}
+                      placeholder={
+                        isInflow
+                          ? "Nama pelanggan"
+                          : "Nama supplier atau vendor"
+                      }
+                      className={inputClass}
+                    />
+                  </FormField>
+                </>
+              )}
 
-                <FormField
-                  label={
-                    isInflow ? "Pelanggan / sumber dana" : "Penerima / vendor"
-                  }
-                  hint="Opsional, bisa diisi nama pelanggan atau pemasok."
-                >
-                  <input
-                    type="text"
-                    value={formEntity}
-                    onChange={(event) => setFormEntity(event.target.value)}
-                    placeholder={
-                      isInflow ? "Nama pelanggan" : "Nama supplier atau vendor"
-                    }
-                    className={inputClass}
-                  />
-                </FormField>
-              </>
-            )}
+              {formError && (
+                <Alert className="border-red-200 bg-red-50 text-red-800">
+                  <CircleAlert className="h-4 w-4" />
+                  <AlertDescription role="alert" className="text-xs leading-5">
+                    {formError}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </form>
+          </div>
 
-            {formError && (
-              <p
-                role="alert"
-                className="rounded-lg border border-[#e8c8c1] bg-[#f9efeb] px-3 py-2.5 text-xs leading-5 text-[#a85348]"
-              >
-                {formError}
-              </p>
-            )}
+          <DialogFooter className="flex-col-reverse gap-2 border-t border-stone-200 bg-stone-50 p-4 sm:flex-row sm:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={closeModal}
+              className="border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
+            >
+              Batal
+            </Button>
 
-            <div className="flex flex-col-reverse gap-2 border-t border-[#e5e2dd] pt-4 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={closeModal}
-                className={`${buttonBase} border border-[#e5e2dd] text-[#50453e] hover:bg-[#f0ede8]`}
-              >
-                Batal
-              </button>
-              <button
-                type="submit"
-                disabled={isTransfer && transferSource === transferDest}
-                className={`${buttonBase} ${
-                  isOutflow
-                    ? "bg-[#a85348] text-white hover:bg-[#91463d]"
-                    : "bg-[#5f402a] text-white hover:bg-[#795740]"
-                }`}
-              >
-                <Icon
-                  name={
-                    isTransfer
-                      ? "swap_horiz"
-                      : isInflow
-                        ? "south_west"
-                        : "north_east"
-                  }
-                  className="text-lg"
-                />
-                {isTransfer
-                  ? "Simpan transfer"
-                  : isInflow
-                    ? "Simpan pemasukan"
-                    : "Simpan pengeluaran"}
-              </button>
-            </div>
-          </form>
-        </ModalShell>
-      )}
+            <Button
+              type="submit"
+              form="cash-mutation-form"
+              disabled={isTransfer && transferSource === transferDest}
+              className={
+                isOutflow
+                  ? "bg-red-700 text-white hover:bg-red-800"
+                  : "bg-[#5f402a] text-white hover:bg-[#795740]"
+              }
+            >
+              {isTransfer ? (
+                <ArrowLeftRight className="mr-2 h-4 w-4" />
+              ) : isInflow ? (
+                <ArrowDownLeft className="mr-2 h-4 w-4" />
+              ) : (
+                <ArrowUpRight className="mr-2 h-4 w-4" />
+              )}
+              {isTransfer
+                ? "Simpan transfer"
+                : isInflow
+                  ? "Simpan pemasukan"
+                  : "Simpan pengeluaran"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

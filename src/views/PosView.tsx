@@ -1,4 +1,36 @@
+import {
+  Armchair,
+  ArrowRight,
+  Minus,
+  Plus,
+  Search,
+  SearchX,
+  ShoppingBasket,
+  ShoppingCart,
+  Trash2,
+  UserPlus,
+  X,
+} from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
+
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Checkbox } from "../components/ui/checkbox";
+import { Input } from "../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Separator } from "../components/ui/separator";
 import { Customer, PageView, Product } from "../types";
 
 export interface PosCartItem {
@@ -31,7 +63,7 @@ type CategoryFilter = "all" | "sofa" | "meja" | "kamar" | "po";
 const ONGKIR_COST = 250000;
 const RAKIT_COST = 150000;
 
-const C = {
+const COLORS = {
   ink: "#292720",
   muted: "#77746B",
   line: "#E9E6DF",
@@ -107,26 +139,51 @@ const newInvoiceNumber = () => {
   return `INV-${date}-${String(now.getTime()).slice(-4)}`;
 };
 
-const panel = "rounded-xl border border-[#E9E6DF] bg-white";
+const categoryFilters: { label: string; value: CategoryFilter }[] = [
+  { label: "Semua", value: "all" },
+  { label: "Sofa", value: "sofa" },
+  { label: "Meja & kursi", value: "meja" },
+  { label: "Kamar tidur", value: "kamar" },
+  { label: "Pre-order", value: "po" },
+];
 
-const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#795740] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40";
+function StockBadge({ product }: { product: Product }) {
+  const preOrder = isPreOrder(product);
+  const outOfStock = !preOrder && product.stockPhysical <= 0;
 
-const secondaryButton = `${buttonBase} border border-[#E9E6DF] bg-white text-[#292720] hover:bg-[#F8F7F3]`;
-
-const primaryButton = `${buttonBase} bg-[#795740] text-white hover:bg-[#5F402A]`;
-
-const inputClass =
-  "h-10 w-full rounded-lg border border-[#E9E6DF] bg-white px-3 text-sm text-[#292720] outline-none transition-colors placeholder:text-[#A19A90] focus:border-[#795740] focus:ring-1 focus:ring-[#795740]";
-
-function Icon({ name, className = "" }: { name: string; className?: string }) {
   return (
-    <span
-      aria-hidden="true"
-      className={cx("material-symbols-outlined select-none", className)}
+    <Badge
+      variant="outline"
+      className={cx(
+        "rounded-md border-0 px-2 py-1 text-[11px] font-medium",
+        preOrder && "bg-[#F8F0DF] text-[#936B2E]",
+        outOfStock && "bg-[#FBEDEA] text-[#B5473C]",
+        !preOrder && !outOfStock && "bg-[#EAF4ED] text-[#287653]",
+      )}
     >
-      {name}
-    </span>
+      {preOrder
+        ? "Pre-order"
+        : outOfStock
+          ? "Stok habis"
+          : `Stok ${product.stockPhysical}`}
+    </Badge>
+  );
+}
+
+function ProductImage({ product }: { product: Product }) {
+  return (
+    <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#E9E6DF] bg-[#F0EEE8] sm:size-16">
+      {product.image ? (
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <Armchair aria-hidden="true" className="size-7 text-[#A19A90]" />
+      )}
+    </div>
   );
 }
 
@@ -299,97 +356,109 @@ export const PosView: React.FC<PosViewProps> = ({
     });
   };
 
-  const filters: { label: string; value: CategoryFilter }[] = [
-    { label: "Semua", value: "all" },
-    { label: "Sofa", value: "sofa" },
-    { label: "Meja & kursi", value: "meja" },
-    { label: "Kamar tidur", value: "kamar" },
-    { label: "Pre-order", value: "po" },
-  ];
-
   return (
     <div className="flex w-full flex-col gap-4 text-[#292720]">
+      {/* Pemilihan pelanggan */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <label className="flex min-w-0 flex-1 items-center gap-3">
-          <span className="shrink-0 text-sm font-medium">Pelanggan</span>
-          <select
-            id="pos-customer"
-            value={customerId}
-            onChange={(event) => setCustomerId(event.target.value)}
-            className={inputClass}
+        <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
+          <label
+            htmlFor="pos-customer"
+            className="shrink-0 text-sm font-medium"
           >
-            {!customers.length && (
-              <option value="">Belum ada pelanggan</option>
-            )}
+            Pelanggan
+          </label>
 
-            {customers.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name} · {item.tier}
-              </option>
-            ))}
-          </select>
-        </label>
+          <Select
+            value={customerId}
+            onValueChange={(value) => setCustomerId(value ?? "")}
+            disabled={!customers.length}
+          >
+            <SelectTrigger
+              id="pos-customer"
+              className="h-10 min-w-0 flex-1 rounded-lg border-[#E9E6DF] bg-white"
+            >
+              <SelectValue placeholder="Pilih pelanggan" />
+            </SelectTrigger>
 
-        <button
+            <SelectContent>
+              {customers.map((item) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name} · {item.tier}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Button
           type="button"
+          variant="outline"
           onClick={() => onNavigate("customers")}
-          className={secondaryButton}
+          className="h-10 gap-2 border-[#E9E6DF] bg-white text-[#292720] hover:bg-[#F8F7F3]"
         >
-          <Icon name="person_add" className="text-base" />
+          <UserPlus className="size-4" />
           Tambah pelanggan
-        </button>
+        </Button>
       </div>
 
+      {/* Area produk dan keranjang */}
       <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <section className="min-w-0">
-          <div className={`${panel} p-4`}>
-            <div className="flex h-10 items-center gap-2 rounded-lg border border-[#E9E6DF] bg-white px-3 focus-within:border-[#795740]">
-              <Icon name="search" className="text-lg text-[#77746B]" />
+        {/* Katalog produk */}
+        <section className="min-w-0 space-y-3">
+          <Card className="gap-0 rounded-xl border-[#E9E6DF] bg-white py-0 shadow-none">
+            <CardContent className="p-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#77746B]" />
 
-              <input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Cari produk atau SKU"
-                aria-label="Cari produk"
-                className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#A19A90]"
-              />
+                <Input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Cari produk atau SKU"
+                  aria-label="Cari produk"
+                  className="h-10 rounded-lg border-[#E9E6DF] pl-9 pr-9 text-sm focus-visible:ring-[#795740]"
+                />
 
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  aria-label="Hapus pencarian"
-                  className="text-[#77746B] hover:text-[#292720]"
-                >
-                  <Icon name="close" className="text-lg" />
-                </button>
-              )}
-            </div>
+                {search && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setSearch("")}
+                    aria-label="Hapus pencarian"
+                    className="absolute right-1 top-1/2 size-8 -translate-y-1/2 text-[#77746B] hover:text-[#292720]"
+                  >
+                    <X className="size-4" />
+                  </Button>
+                )}
+              </div>
 
-            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-              {filters.map((filter) => (
-                <button
-                  key={filter.value}
-                  type="button"
-                  onClick={() => setCategory(filter.value)}
-                  aria-pressed={category === filter.value}
-                  className={cx(
-                    "shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
-                    category === filter.value
-                      ? "bg-[#795740] text-white"
-                      : "border border-[#E9E6DF] bg-white text-[#625E54] hover:bg-[#F8F7F3]",
-                  )}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-          </div>
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                {categoryFilters.map((filter) => (
+                  <Button
+                    key={filter.value}
+                    type="button"
+                    size="sm"
+                    variant={category === filter.value ? "default" : "outline"}
+                    onClick={() => setCategory(filter.value)}
+                    aria-pressed={category === filter.value}
+                    className={cx(
+                      "h-9 shrink-0 rounded-lg px-3 text-xs",
+                      category === filter.value
+                        ? "bg-[#795740] text-white hover:bg-[#5F402A]"
+                        : "border-[#E9E6DF] bg-white text-[#625E54] hover:bg-[#F8F7F3]",
+                    )}
+                  >
+                    {filter.label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="mt-3">
-            {filteredProducts.length === 0 ? (
-              <div className={`${panel} px-5 py-12 text-center`}>
-                <Icon name="search_off" className="text-3xl text-[#A19A90]" />
+          {filteredProducts.length === 0 ? (
+            <Card className="rounded-xl border-[#E9E6DF] bg-white shadow-none">
+              <CardContent className="flex flex-col items-center px-5 py-12 text-center">
+                <SearchX className="size-9 text-[#A19A90]" />
 
                 <p className="mt-3 text-sm font-semibold">
                   Produk tidak ditemukan
@@ -399,226 +468,181 @@ export const PosView: React.FC<PosViewProps> = ({
                   Coba kata kunci atau kategori lain.
                 </p>
 
-                <button
+                <Button
                   type="button"
+                  variant="link"
                   onClick={() => {
                     setSearch("");
                     setCategory("all");
                   }}
-                  className="mt-3 text-xs font-medium text-[#795740]"
+                  className="mt-2 text-xs text-[#795740]"
                 >
                   Reset pencarian
-                </button>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="gap-0 overflow-hidden rounded-xl border-[#E9E6DF] bg-white py-0 shadow-none">
+              <div className="hidden grid-cols-[minmax(0,1fr)_100px_150px_135px] items-center gap-4 border-b border-[#E9E6DF] bg-[#F8F7F3] px-4 py-3 text-[11px] font-medium text-[#77746B] md:grid">
+                <span>Produk</span>
+                <span className="text-center">Stok</span>
+                <span className="text-right">
+                  Harga {customer?.tier ?? "Retail"}
+                </span>
+                <span className="text-right">Aksi</span>
               </div>
-            ) : (
-              <div className={`${panel} overflow-hidden`}>
-                {/* Header list desktop */}
-                <div className="hidden grid-cols-[minmax(0,1fr)_100px_150px_135px] items-center gap-4 border-b border-[#E9E6DF] bg-[#F8F7F3] px-4 py-3 text-[11px] font-medium text-[#77746B] md:grid">
-                  <span>Produk</span>
-                  <span className="text-center">Stok</span>
-                  <span className="text-right">
-                    Harga {customer?.tier ?? "Retail"}
-                  </span>
-                  <span className="text-right">Aksi</span>
-                </div>
 
-                <div className="divide-y divide-[#F0EEE8]">
-                  {filteredProducts.map((product) => {
-                    const preOrder = isPreOrder(product);
-                    const outOfStock = !preOrder && product.stockPhysical <= 0;
+              <div className="divide-y divide-[#F0EEE8]">
+                {filteredProducts.map((product) => {
+                  const preOrder = isPreOrder(product);
+                  const outOfStock = !preOrder && product.stockPhysical <= 0;
 
-                    const inCart = items.find(
-                      (item) => item.product.id === product.id,
-                    );
+                  const inCart = items.find(
+                    (item) => item.product.id === product.id,
+                  );
 
-                    const price = priceForTier(product, customer?.tier);
+                  const price = priceForTier(product, customer?.tier);
 
-                    return (
-                      <article
-                        key={product.id}
-                        className={cx(
-                          "grid grid-cols-1 gap-3 px-3 py-3 transition-colors hover:bg-[#FCFBF9] sm:px-4",
-                          "md:grid-cols-[minmax(0,1fr)_100px_150px_135px] md:items-center md:gap-4",
-                        )}
-                      >
-                        {/* Informasi produk */}
-                        <div className="flex min-w-0 items-center gap-3">
-                          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[#E9E6DF] bg-[#F0EEE8] sm:h-16 sm:w-16">
-                            {product.image ? (
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                loading="lazy"
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-[#A19A90]">
-                                <Icon name="chair" className="text-2xl" />
-                              </div>
-                            )}
-                          </div>
+                  return (
+                    <article
+                      key={product.id}
+                      className="grid grid-cols-1 gap-3 px-3 py-3 transition-colors hover:bg-[#FCFBF9] sm:px-4 md:grid-cols-[minmax(0,1fr)_100px_150px_135px] md:items-center md:gap-4"
+                    >
+                      {/* Informasi produk */}
+                      <div className="flex min-w-0 items-center gap-3">
+                        <ProductImage product={product} />
 
-                          <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-sm font-medium text-[#292720]">
-                              {product.name}
-                            </h3>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="truncate text-sm font-medium text-[#292720]">
+                            {product.name}
+                          </h3>
 
-                            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#77746B]">
-                              <span>{product.sku || "Tanpa SKU"}</span>
+                          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#77746B]">
+                            <span>{product.sku || "Tanpa SKU"}</span>
 
-                              {(product.woodType || product.category) && (
-                                <>
-                                  <span aria-hidden="true">·</span>
-                                  <span>
-                                    {product.woodType || product.category}
-                                  </span>
-                                </>
-                              )}
-
-                              {product.dimensions && (
-                                <>
-                                  <span aria-hidden="true">·</span>
-                                  <span>{product.dimensions}</span>
-                                </>
-                              )}
-                            </div>
-
-                            {/* Harga dan stok pada tampilan mobile */}
-                            <div className="mt-2 flex flex-wrap items-center gap-2 md:hidden">
-                              <span className="text-sm font-semibold text-[#5F402A]">
-                                {money(price)}
-                              </span>
-
-                              <span
-                                className={cx(
-                                  "rounded px-1.5 py-0.5 text-[10px] font-medium",
-                                  preOrder
-                                    ? "bg-[#F8F0DF] text-[#936B2E]"
-                                    : outOfStock
-                                      ? "bg-[#FBEDEA] text-[#B5473C]"
-                                      : "bg-[#EAF4ED] text-[#287653]",
-                                )}
-                              >
-                                {preOrder
-                                  ? "Pre-order"
-                                  : outOfStock
-                                    ? "Stok habis"
-                                    : `Stok ${product.stockPhysical}`}
-                              </span>
-
-                              {inCart && (
-                                <span className="rounded bg-[#F1EAE3] px-1.5 py-0.5 text-[10px] font-medium text-[#795740]">
-                                  {inCart.quantity} di keranjang
+                            {(product.woodType || product.category) && (
+                              <>
+                                <span aria-hidden="true">·</span>
+                                <span>
+                                  {product.woodType || product.category}
                                 </span>
-                              )}
-                            </div>
+                              </>
+                            )}
+
+                            {product.dimensions && (
+                              <>
+                                <span aria-hidden="true">·</span>
+                                <span>{product.dimensions}</span>
+                              </>
+                            )}
+                          </div>
+
+                          <div className="mt-2 flex flex-wrap items-center gap-2 md:hidden">
+                            <span className="text-sm font-semibold text-[#5F402A]">
+                              {money(price)}
+                            </span>
+
+                            <StockBadge product={product} />
+
+                            {inCart && (
+                              <Badge
+                                variant="secondary"
+                                className="bg-[#F1EAE3] text-[10px] text-[#795740]"
+                              >
+                                {inCart.quantity} di keranjang
+                              </Badge>
+                            )}
                           </div>
                         </div>
+                      </div>
 
-                        {/* Stok desktop */}
-                        <div className="hidden justify-center md:flex">
-                          <span
-                            className={cx(
-                              "rounded-md px-2 py-1 text-[11px] font-medium",
-                              preOrder
-                                ? "bg-[#F8F0DF] text-[#936B2E]"
-                                : outOfStock
-                                  ? "bg-[#FBEDEA] text-[#B5473C]"
-                                  : "bg-[#EAF4ED] text-[#287653]",
-                            )}
-                          >
-                            {preOrder
-                              ? "Pre-order"
-                              : outOfStock
-                                ? "Habis"
-                                : product.stockPhysical}
-                          </span>
-                        </div>
+                      {/* Stok desktop */}
+                      <div className="hidden justify-center md:flex">
+                        <StockBadge product={product} />
+                      </div>
 
-                        {/* Harga desktop */}
-                        <div className="hidden text-right md:block">
-                          <p className="text-sm font-semibold tabular-nums text-[#5F402A]">
-                            {money(price)}
+                      {/* Harga desktop */}
+                      <div className="hidden text-right md:block">
+                        <p className="text-sm font-semibold tabular-nums text-[#5F402A]">
+                          {money(price)}
+                        </p>
+
+                        {inCart && (
+                          <p className="mt-1 text-[10px] text-[#77746B]">
+                            {inCart.quantity} unit di keranjang
                           </p>
+                        )}
+                      </div>
 
-                          {inCart && (
-                            <p className="mt-1 text-[10px] text-[#77746B]">
-                              {inCart.quantity} unit di keranjang
-                            </p>
+                      {/* Tambah ke keranjang */}
+                      <div className="flex items-center justify-between gap-3 md:justify-end">
+                        <p className="text-[11px] text-[#77746B] md:hidden">
+                          {customer ? `Harga ${customer.tier}` : "Harga Retail"}
+                        </p>
+
+                        <Button
+                          type="button"
+                          disabled={outOfStock}
+                          onClick={() => addProduct(product)}
+                          className={cx(
+                            "h-9 min-w-[120px] shrink-0 gap-2 rounded-lg px-3 text-xs",
+                            inCart
+                              ? "border border-[#D9C8B8] bg-[#F1EAE3] text-[#5F402A] hover:bg-[#E9DED3]"
+                              : "bg-[#795740] text-white hover:bg-[#5F402A]",
                           )}
-                        </div>
+                        >
+                          {inCart ? (
+                            <Plus className="size-4" />
+                          ) : (
+                            <ShoppingCart className="size-4" />
+                          )}
 
-                        {/* Tombol keranjang */}
-                        <div className="flex items-center justify-between gap-3 md:justify-end">
-                          <div className="min-w-0 md:hidden">
-                            <p className="text-[11px] text-[#77746B]">
-                              {customer
-                                ? `Harga ${customer.tier}`
-                                : "Harga Retail"}
-                            </p>
-                          </div>
-
-                          <button
-                            type="button"
-                            disabled={outOfStock}
-                            onClick={() => addProduct(product)}
-                            className={cx(
-                              buttonBase,
-                              "min-w-[120px] shrink-0",
-                              inCart
-                                ? "border border-[#D9C8B8] bg-[#F1EAE3] text-[#5F402A] hover:bg-[#E9DED3]"
-                                : "bg-[#795740] text-white hover:bg-[#5F402A]",
-                            )}
-                          >
-                            <Icon
-                              name={inCart ? "add" : "add_shopping_cart"}
-                              className="text-base"
-                            />
-
-                            {inCart
-                              ? `Tambah (${inCart.quantity})`
-                              : "Ke keranjang"}
-                          </button>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-
+                          {inCart
+                            ? `Tambah (${inCart.quantity})`
+                            : "Ke keranjang"}
+                        </Button>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
-            )}
-          </div>
+            </Card>
+          )}
         </section>
 
-        {/* Keranjang pesanan */}
+        {/* Keranjang */}
         <aside className="min-w-0 xl:sticky xl:top-20">
-          <section className={`${panel} overflow-hidden`}>
-            {/* Header keranjang */}
-            <div className="border-b border-[#E9E6DF] p-4">
+          <Card className="gap-0 overflow-hidden rounded-xl border-[#E9E6DF] bg-white py-0 shadow-none">
+            <CardHeader className="border-b border-[#E9E6DF] p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-sm font-semibold">Keranjang</h2>
+                  <CardTitle className="text-sm font-semibold">
+                    Keranjang
+                  </CardTitle>
+
                   <p className="mt-1 text-xs text-[#77746B]">{invoiceNumber}</p>
                 </div>
 
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={clearCart}
                   disabled={!items.length}
                   aria-label="Kosongkan keranjang"
-                  className="rounded-lg border border-[#E9E6DF] p-2 text-[#77746B] transition-colors hover:bg-[#F8F7F3] hover:text-[#B5473C] disabled:opacity-40"
+                  className="size-9 border-[#E9E6DF] text-[#77746B] hover:bg-[#F8F7F3] hover:text-[#B5473C]"
                 >
-                  <Icon name="delete_outline" className="text-lg" />
-                </button>
+                  <Trash2 className="size-4" />
+                </Button>
               </div>
 
               <div className="mt-3 flex items-center justify-between rounded-lg bg-[#F8F7F3] px-3 py-2.5 text-xs">
                 <span className="text-[#77746B]">Jumlah barang</span>
                 <span className="font-semibold">{totalQuantity} unit</span>
               </div>
-            </div>
+            </CardHeader>
 
-            <div className="space-y-4 p-4">
+            <CardContent className="space-y-4 p-4">
               {customer && (
                 <p className="text-xs text-[#77746B]">
                   Harga memakai kategori {customer.tier}
@@ -628,7 +652,6 @@ export const PosView: React.FC<PosViewProps> = ({
               <section>
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <h3 className="text-xs font-semibold">Daftar barang</h3>
-
                   <span className="text-xs text-[#77746B]">
                     {items.length} jenis
                   </span>
@@ -636,10 +659,7 @@ export const PosView: React.FC<PosViewProps> = ({
 
                 {!items.length ? (
                   <div className="rounded-lg border border-dashed border-[#D9D3CA] bg-[#F8F7F3] px-3 py-7 text-center">
-                    <Icon
-                      name="shopping_basket"
-                      className="text-3xl text-[#A19A90]"
-                    />
+                    <ShoppingBasket className="mx-auto size-8 text-[#A19A90]" />
 
                     <p className="mt-2 text-xs font-medium">
                       Keranjang masih kosong
@@ -670,35 +690,41 @@ export const PosView: React.FC<PosViewProps> = ({
                               </p>
                             </div>
 
-                            <button
+                            <Button
                               type="button"
+                              variant="ghost"
+                              size="icon"
                               onClick={() => removeProduct(item.product.id)}
                               aria-label={`Hapus ${item.product.name}`}
-                              className="shrink-0 rounded p-1 text-[#A19A90] hover:bg-[#FBEDEA] hover:text-[#B5473C]"
+                              className="size-8 shrink-0 text-[#A19A90] hover:bg-[#FBEDEA] hover:text-[#B5473C]"
                             >
-                              <Icon name="close" className="text-base" />
-                            </button>
+                              <X className="size-4" />
+                            </Button>
                           </div>
 
                           <div className="mt-2 flex items-center justify-between gap-3">
                             <div className="flex h-8 items-center rounded-lg border border-[#E9E6DF]">
-                              <button
+                              <Button
                                 type="button"
+                                variant="ghost"
+                                size="icon"
                                 onClick={() =>
                                   changeQuantity(item.product.id, -1)
                                 }
                                 aria-label="Kurangi jumlah"
-                                className="flex h-7 w-7 items-center justify-center rounded-l-lg hover:bg-[#F8F7F3]"
+                                className="size-7 rounded-r-none text-[#292720] hover:bg-[#F8F7F3]"
                               >
-                                <Icon name="remove" className="text-base" />
-                              </button>
+                                <Minus className="size-3.5" />
+                              </Button>
 
                               <span className="min-w-7 text-center text-xs font-semibold tabular-nums">
                                 {item.quantity}
                               </span>
 
-                              <button
+                              <Button
                                 type="button"
+                                variant="ghost"
+                                size="icon"
                                 disabled={
                                   !isPreOrder(item.product) &&
                                   item.quantity >= item.product.stockPhysical
@@ -707,10 +733,10 @@ export const PosView: React.FC<PosViewProps> = ({
                                   changeQuantity(item.product.id, 1)
                                 }
                                 aria-label="Tambah jumlah"
-                                className="flex h-7 w-7 items-center justify-center rounded-r-lg hover:bg-[#F8F7F3] disabled:opacity-30"
+                                className="size-7 rounded-l-none text-[#292720] hover:bg-[#F8F7F3] disabled:opacity-30"
                               >
-                                <Icon name="add" className="text-base" />
-                              </button>
+                                <Plus className="size-3.5" />
+                              </Button>
                             </div>
 
                             <p className="text-xs font-semibold tabular-nums">
@@ -724,18 +750,19 @@ export const PosView: React.FC<PosViewProps> = ({
                 )}
               </section>
 
-              <div className="border-t border-[#E9E6DF]" />
+              <Separator className="bg-[#E9E6DF]" />
 
               {/* Layanan tambahan */}
-              <section className="space-y-2.5">
+              <section className="space-y-3">
                 <p className="text-xs font-semibold">Layanan tambahan</p>
 
                 <label className="flex cursor-pointer items-center gap-2.5">
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={includeOngkir}
-                    onChange={(event) => setIncludeOngkir(event.target.checked)}
-                    className="h-4 w-4 accent-[#795740]"
+                    onCheckedChange={(checked) =>
+                      setIncludeOngkir(checked === true)
+                    }
+                    aria-label="Ongkos kirim"
                   />
 
                   <span className="flex-1 text-xs">Ongkos kirim</span>
@@ -746,11 +773,12 @@ export const PosView: React.FC<PosViewProps> = ({
                 </label>
 
                 <label className="flex cursor-pointer items-center gap-2.5">
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={includeRakit}
-                    onChange={(event) => setIncludeRakit(event.target.checked)}
-                    className="h-4 w-4 accent-[#795740]"
+                    onCheckedChange={(checked) =>
+                      setIncludeRakit(checked === true)
+                    }
+                    aria-label="Rakit dan pemasangan"
                   />
 
                   <span className="flex-1 text-xs">Rakit & pemasangan</span>
@@ -761,13 +789,12 @@ export const PosView: React.FC<PosViewProps> = ({
                 </label>
               </section>
 
-              <div className="border-t border-[#E9E6DF]" />
+              <Separator className="bg-[#E9E6DF]" />
 
-              {/* Total */}
-              <section className="space-y-2">
+              {/* Ringkasan total */}
+              <section className="space-y-3">
                 <div className="flex items-center justify-between gap-3 text-xs">
                   <span className="text-[#77746B]">Subtotal</span>
-
                   <span className="font-medium tabular-nums">
                     {money(subtotal)}
                   </span>
@@ -776,34 +803,34 @@ export const PosView: React.FC<PosViewProps> = ({
                 {additionalCost > 0 && (
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <span className="text-[#77746B]">Layanan tambahan</span>
-
                     <span className="font-medium tabular-nums">
                       {money(additionalCost)}
                     </span>
                   </div>
                 )}
 
-                <div className="flex items-end justify-between gap-3 border-t border-[#E9E6DF] pt-3">
+                <Separator className="bg-[#E9E6DF]" />
+
+                <div className="flex items-end justify-between gap-3">
                   <span className="text-sm font-semibold">Total</span>
 
-                  <span className="text-lg font-semibold tracking-[-0.03em] text-[#5F402A] tabular-nums">
+                  <span className="text-lg font-semibold tracking-tight text-[#5F402A] tabular-nums">
                     {money(total)}
                   </span>
                 </div>
               </section>
 
-              <button
+              <Button
                 type="button"
                 onClick={proceedToCheckout}
                 disabled={!customer || items.length === 0}
-                className={`${primaryButton} h-11 w-full text-sm`}
+                className="h-11 w-full gap-2 rounded-lg bg-[#795740] text-sm text-white hover:bg-[#5F402A] disabled:opacity-40"
               >
                 Lanjut checkout
-                <Icon name="arrow_forward" className="text-base" />
-              </button>
-
-            </div>
-          </section>
+                <ArrowRight className="size-4" />
+              </Button>
+            </CardContent>
+          </Card>
         </aside>
       </div>
     </div>
